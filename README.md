@@ -1,1 +1,1 @@
-# SlugDex
+https://trello.com/w/slugdex
