@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(google_maps_flutter_tutorial LANGUAGES CXX)
+project(slugdex LANGUAGES CXX)
 
-set(BINARY_NAME "google_maps_flutter_tutorial")
+set(BINARY_NAME "slugdex")
 
 cmake_policy(SET CMP0063 NEW)
 

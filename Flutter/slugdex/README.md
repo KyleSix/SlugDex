@@ -1,16 +1,12 @@
-# google_maps_flutter_tutorial
 
-A new Flutter project.
+Have you ever wondered if you were missing out on seeing all that campus has to offer? Discover and collect iconic locations, flora and fauna, and hidden spots around campus!
 
-## Getting Started
+Our app will consist of: - Finite number of "entries" containing flavorful descriptions - Location tracking via GPS to mark entries as 'found' - QR Code scanner - Score based on percentage of entries found - User-taken pictures at discovery time
 
-This project is a starting point for a Flutter application.
+Other components: - Hidden QR codes at physical locations
 
-A few resources to get you started if this is your first Flutter project:
+Audience: Current and prospective UCSC students, as well as anyone interested in the campus.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Technologies: React Native or Flutter (cross platform app): GPS location tracking, QR Code Reading, Potential object detection w computer vision, Google Forms
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Project Board: https://trello.com/w/slugdex
