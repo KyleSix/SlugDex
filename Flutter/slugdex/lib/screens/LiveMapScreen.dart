@@ -40,6 +40,10 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
+                  rotateGesturesEnabled: false,
+                  scrollGesturesEnabled: false,
+                  tiltGesturesEnabled: false,
+                  zoomGesturesEnabled: false,
                   onMapCreated: (GoogleMapController controller){
                   },
                 ),
