@@ -5,7 +5,12 @@ class dexEntryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('SlugDex'),),
+      appBar: AppBar(
+        title: const Text('SlugDex'),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        ),
       body: Container(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
@@ -24,7 +29,7 @@ class dexEntryPage extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.blue, width: 3.0),
+                      border: Border.all(color: Colors.blue.shade800, width: 3.0),
                       color: Colors.yellow.shade700,
                     ),
                     child: Column(

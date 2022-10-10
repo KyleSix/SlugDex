@@ -19,38 +19,50 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Live Map"),
+        title: const Text("SlugDex", style: TextStyle(color: Colors.black)),
         centerTitle: true,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.white,
       ),
       body: googleMapUI(),
-      );
+    );
   }
 
   Widget googleMapUI() {
     return Consumer<LocationProvider>(
       builder: (consumerContext, model, child) {
         if(model.locationPosition != null){
-          return Column(
-            children: [
-              Expanded(
-                child: GoogleMap(
-                  mapType: MapType.hybrid,
-                  initialCameraPosition: CameraPosition(
-                      target: model.locationPosition,
-                      zoom: 18
+          return Scaffold(
+            body: Center(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: GoogleMap(
+                      mapType: MapType.hybrid,
+                      initialCameraPosition: CameraPosition(
+                          target: model.locationPosition,
+                          zoom: 18
+                      ),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      rotateGesturesEnabled: false,
+                      scrollGesturesEnabled: false,
+                      tiltGesturesEnabled: false,
+                      zoomGesturesEnabled: false,
+                      onMapCreated: (GoogleMapController controller){
+                      },
+                    ),
                   ),
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                  rotateGesturesEnabled: false,
-                  scrollGesturesEnabled: false,
-                  tiltGesturesEnabled: false,
-                  zoomGesturesEnabled: false,
-                  onMapCreated: (GoogleMapController controller){
-                  },
-                ),
-              )
-            ],
+                ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.white,
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryPage()));
+              },
+              child: const Icon(Icons.menu, color: Colors.black)
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );
         }
         return Container(
