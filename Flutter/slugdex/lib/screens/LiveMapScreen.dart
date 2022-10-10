@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/provider/location_provider.dart';
+import 'package:slugdex/screens/DexEntryPage.dart';
 
 class LiveMapScreen extends StatefulWidget {
   @override
@@ -22,7 +23,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         centerTitle: true,
         backgroundColor: Colors.red,
       ),
-      body: googleMapUI());
+      body: googleMapUI(),
+      );
   }
 
   Widget googleMapUI() {
