@@ -102,8 +102,8 @@ class dexEntryView extends StatelessWidget {
               ],
             )
           ),
-      ],
-    ),
+        ],
+      ),
     );
   }
 }
