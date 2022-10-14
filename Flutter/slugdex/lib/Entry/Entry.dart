@@ -1,10 +1,14 @@
-import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'dart:io';
+enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON, POPULAR }
 
-enum Rarity { ULTRA_RARE, RARE, UNCOMMON, COMMON, POPULAR }
-
+/**************************************************************
+ * Class to store each location entry
+ * ------------------------------------------------------------
+ * Notes: 
+ * - iD - UNIQUE number assocated with location
+ * - discovered - 0 if the entry is undiscovered
+ *              - 1 if the entry is discovered
+ * - rarity - Uses enum Rarity 
+ *************************************************************/
 class Entry {
   int? iD;
   String? name;

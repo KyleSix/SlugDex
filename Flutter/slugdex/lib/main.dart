@@ -7,12 +7,14 @@ import 'dart:convert';
 import 'dart:core';
 import 'package:flutter/services.dart' show rootBundle;
 
-Future<String> _loadAEntryAsset() async {
+//Load Entry List as a string from Json
+Future<String> _loadEntryAsset() async {
   return await rootBundle.loadString('assets\\json\\EntryInput.json');
 }
 
+//Create List of entries from the Json string
 Future<List<Entry>> loadEntry() async {
-  String jsonString = await _loadAEntryAsset();
+  String jsonString = await _loadEntryAsset();
   final json = jsonDecode(jsonString);
 
   List<Entry> entryList =
@@ -21,9 +23,13 @@ Future<List<Entry>> loadEntry() async {
   return entryList;
 }
 
+List<Entry> entryList = [];
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  List<Entry> entryList = await loadEntry();
+  entryList = await loadEntry();
+
+  //DEBUGGING - Print entry values
   for (int i = 0; i < entryList.length; i++) {
     print(entryList[i].toString());
   }
