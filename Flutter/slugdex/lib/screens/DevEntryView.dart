@@ -6,12 +6,26 @@ class dexEntryView extends StatelessWidget {
   final dexEntry entry;
   @override
   Widget build(BuildContext context) {
-    String date = entry.discoveredDate;
+    String name = entry.name;
+    String description = entry.description;
+    String rarity = "Legendary";
+    String img = 'https://i.imgur.com/MbanEeE.png';
+    String date = "10/22/2022";
+    double trayHeight = MediaQuery.of(context).size.height / 2.90;
     Color backColor;
-    if(entry.rarity == 0) {
-      backColor = Colors.purple;
+    if(entry.discovered) {
+      if(entry.rarity == 0) {
+        backColor = Colors.purple;
+      } else {
+        backColor = Colors.amber.shade400;
+      }
     } else {
-      backColor = Colors.amber.shade400;
+      backColor = Colors.grey;
+      name = '??????';
+      description = '??????';
+      rarity = '??????';
+      date = '??????';
+      img = 'https://i.imgur.com/9eaDFaP.png';
     }
     return Scaffold(
       backgroundColor: backColor,
@@ -26,7 +40,7 @@ class dexEntryView extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Positioned(
-            top: MediaQuery.of(context).size.height / 2.90,
+            top: trayHeight,
             child: Container(
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -38,42 +52,10 @@ class dexEntryView extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(10, 35, 0, 10),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Rarity: Legendary", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Description:", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(entry.description, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text("Discovered: " + date, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
-                      ),
-                    ),
-                  ],
-                ),
             ),
           ),
           Positioned(
-            top: 10,
+            top: trayHeight-260,
             child: Column(
               children: [
                 Container(
@@ -82,7 +64,7 @@ class dexEntryView extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
-                        child: Text(entry.name, style: const TextStyle(fontSize: 50, fontWeight: FontWeight.w500, color: Colors.white),),
+                        child: Text(name, style: const TextStyle(fontSize: 50, fontWeight: FontWeight.w500, color: Colors.white),),
                       ),
                       Container(
                         width: 225.0,
@@ -92,7 +74,7 @@ class dexEntryView extends StatelessWidget {
                             //shape: BoxShape.circle,
                             image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: NetworkImage(entry.image),
+                            image: NetworkImage(img),
                             )
                         ),
                       ),
@@ -101,6 +83,45 @@ class dexEntryView extends StatelessWidget {
                 ),
               ],
             )
+          ),
+          Positioned(
+            top: trayHeight,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 35, 0, 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Rarity: " + rarity, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Description:", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(description, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Discovered: " + date, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

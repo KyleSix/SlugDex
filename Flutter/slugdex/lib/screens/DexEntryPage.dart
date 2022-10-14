@@ -85,10 +85,12 @@ class dexEntryPage extends StatelessWidget {
                 } else {
                   boxColor = Colors.amber.shade400;
                 }
-                img = dexEntries[index].image;
+                //Replace with entry image
+                img = 'https://i.imgur.com/MbanEeE.png';
                 entryname = dexEntries[index].name;
               } else {
                 boxColor = Colors.grey;
+                //Replace with question image
                 img = "https://i.imgur.com/9eaDFaP.png";
                 entryname = "Undiscovered";
               }
@@ -100,32 +102,27 @@ class dexEntryPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       color: boxColor,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 125.0,
-                          height: 125.0,
-                          decoration: BoxDecoration(
-                              //border: Border.all(color: Colors.white, width: 3.0),
-                              //shape: BoxShape.circle,
-                              image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(img),
-                              )
-                          )
-                        ),
-                        //Image.asset(subjects[index].subjectImage, fit: BoxFit.cover, height: 50, width: 50,),
-                        //Sub "Entry name for: dexEntrys[index].entryName or similar"
-                        Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
-                      ],
+                    child: FittedBox(
+                      //fit: BoxFit.fill,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            //Change to Image.asset for local
+                            child: Image.network(img, width: 125.0, height: 125.0,),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   onTap: () {
-                    if(dexEntries[index].discovered) {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: dexEntries[index])));
-                    } 
                   },
                 ),
               );
