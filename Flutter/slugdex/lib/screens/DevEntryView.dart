@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:slugdex/screens/DexEntryPage.dart';
+import 'package:slugdex/Entry/Entry.dart';
 
 class dexEntryView extends StatelessWidget {
   const dexEntryView({required this.entry});
-  final dexEntry entry;
+  final Entry entry;
   @override
   Widget build(BuildContext context) {
-    String name = entry.name;
-    String description = entry.description;
-    String rarity = "Legendary";
+    String name = entry.name.toString();
+    String description = entry.description.toString();
+    String rarity = "None";
     String img = 'https://i.imgur.com/MbanEeE.png';
     String date = "10/22/2022";
     double trayHeight = MediaQuery.of(context).size.height / 2.90;
     Color backColor;
-    if(entry.discovered) {
-      if(entry.rarity == 0) {
-        backColor = Colors.purple;
-      } else {
+    if(entry.discovered == 1) {
+      if(entry.rarity == Rarity.MYTHICAL) {
         backColor = Colors.amber.shade400;
+        rarity = "Mythical";
+      } else {
+        backColor = Colors.purple;
       }
     } else {
       backColor = Colors.grey;
