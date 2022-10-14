@@ -38,13 +38,13 @@ class Entry {
   String toString() {
     StringBuffer entryString = StringBuffer();
 
-    entryString.write("ID:   ${this.iD}\n");
-    entryString.write("name: ${this.name}\n");
-    entryString.write("lat:  ${this.latitude}\n");
-    entryString.write("long: ${this.longitude}\n");
-    entryString.write("desc: ${this.description}\n");
-    entryString.write("disc: ${this.discovered}\n");
-    entryString.write("rare: ${this.rarity}\n\n");
+    entryString.write("ID:   $iD\n");
+    entryString.write("name: $name\n");
+    entryString.write("lat:  $latitude\n");
+    entryString.write("long: $longitude\n");
+    entryString.write("desc: $description\n");
+    entryString.write("disc: $discovered\n");
+    entryString.write("rare: $rarity\n\n");
 
     return entryString.toString();
   }

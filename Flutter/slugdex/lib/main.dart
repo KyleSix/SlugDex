@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/provider/location_provider.dart';
 import 'Entry/Entry.dart';
 import 'dart:convert';
 import 'dart:core';
-import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
 
 Future<String> _loadAEntryAsset() async {
