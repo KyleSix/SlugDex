@@ -18,10 +18,33 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("SlugDex", style: TextStyle(color: Colors.black)),
+        title: const Text("SlugDex", style: TextStyle(
+            inherit: true,
+            shadows: [
+              Shadow(
+                  offset: Offset(-1.5, 1.5),
+                  color: Colors.black
+              ),
+              Shadow(
+                  offset: Offset(1.5, -1.5),
+                  color: Colors.black
+              ),
+              Shadow(
+                  offset: Offset(1.5, 1.5),
+                  color: Colors.black
+              ),
+              Shadow(
+                  offset: Offset(-1.5, -1.5),
+                  color: Colors.black
+              ),
+            ]
+        )),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: googleMapUI(),
     );
@@ -47,7 +70,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       rotateGesturesEnabled: false,
                       scrollGesturesEnabled: false,
                       tiltGesturesEnabled: false,
-                      zoomGesturesEnabled: false,
+                      zoomGesturesEnabled: true,
+                      minMaxZoomPreference: MinMaxZoomPreference(16,19),
                       onMapCreated: (GoogleMapController controller){
                       },
                     ),
