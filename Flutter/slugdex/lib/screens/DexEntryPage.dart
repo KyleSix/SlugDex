@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:slugdex/Entry/Entry.dart';
 import 'DevEntryView.dart';
+import 'package:slugdex/main.dart';
 
 class dexEntryPage extends StatelessWidget {
   @override
@@ -8,8 +10,9 @@ class dexEntryPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('SlugDex'),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
+        elevation: 0,
         ),
       body: Container(
         padding: const EdgeInsets.all(8.0),
@@ -20,44 +23,55 @@ class dexEntryPage extends StatelessWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             ),
-            // Sub 10 for: dexEntrys.length or such
-            itemCount: 10,
+            itemCount: entryList.length,
             itemBuilder: (BuildContext context, int index) {
+              Color boxColor;
+              String img;
+              String entryname;
+              if(entryList[index].discovered == 1){
+                if(entryList[index].rarity == Rarity.MYTHICAL) {
+                  boxColor = Colors.amber.shade400;
+                } else {
+                  boxColor = Colors.purple;
+                }
+                //Replace with entry image
+                img = 'https://i.imgur.com/MbanEeE.png';
+                entryname = entryList[index].name.toString();
+              } else {
+                boxColor = Colors.grey;
+                //Replace with question image
+                img = "https://i.imgur.com/9eaDFaP.png";
+                entryname = "Undiscovered";
+              }
               return Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: InkWell(
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.blue.shade800, width: 3.0),
-                      color: Colors.yellow.shade700,
+                      borderRadius: BorderRadius.circular(20),
+                      color: boxColor,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 125.0,
-                          height: 125.0,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 3.0),
-                              shape: BoxShape.circle,
-                              image: const DecorationImage(
-                              fit: BoxFit.fill,
-                              image: NetworkImage(
-                                    "https://i.imgur.com/YFoAUPD.jpg")
-                                    )
-                          )
-                        ),
-                        //Image.asset(subjects[index].subjectImage, fit: BoxFit.cover, height: 50, width: 50,),
-                        const SizedBox(height: 15,),
-                        //Sub "Entry name for: dexEntrys[index].entryName or similar"
-                        Text("Entry $index", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
-                      ],
+                    child: FittedBox(
+                      //fit: BoxFit.fill,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            //Change to Image.asset for local
+                            child: Image.network(img, width: 125.0, height: 125.0,),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: entryList[index])));
                   },
                 ),
               );
