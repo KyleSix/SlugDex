@@ -9,7 +9,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 //Load Entry List as a string from Json
 Future<String> _loadEntryAsset() async {
-  return await rootBundle.loadString('assets\\json\\EntryInput.json');
+  return await rootBundle.loadString('assets/json/EntryInput.json');
 }
 
 //Create List of entries from the Json string
