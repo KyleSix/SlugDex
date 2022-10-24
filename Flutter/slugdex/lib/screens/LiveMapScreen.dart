@@ -1,8 +1,13 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/provider/location_provider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
+import 'package:slugdex/main.dart';
+
+var clientDiscoveredMarkersList = [];
+final Set<Marker> _markers = new Set();
 
 class LiveMapScreen extends StatefulWidget {
   @override
@@ -10,11 +15,13 @@ class LiveMapScreen extends StatefulWidget {
 }
 
 class _LiveMapScreenState extends State<LiveMapScreen> {
+  late GoogleMapController mapController;
   @override
   void initState() {
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,12 +75,16 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       myLocationEnabled: true,
                       myLocationButtonEnabled: true,
                       rotateGesturesEnabled: false,
-                      scrollGesturesEnabled: false,
+                      scrollGesturesEnabled: true,
                       tiltGesturesEnabled: false,
                       zoomGesturesEnabled: true,
                       zoomControlsEnabled: false,
                       minMaxZoomPreference: MinMaxZoomPreference(16,19),
-                      onMapCreated: (GoogleMapController controller){
+                      markers: populateClientMarkers(),
+                      onMapCreated: (controller){
+                        setState(() {
+                          mapController = controller;
+                        });
                       },
                     ),
                   ),
@@ -96,4 +107,28 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       }
     );
   }
+}
+
+void addMarker(entryList, i){
+  _markers.add(
+      Marker(
+          markerId: MarkerId(entryList[i].iD.toString()),
+          position: LatLng(entryList[i].latitude!, entryList[i].longitude!),
+          // TODO Change bitmapdescriptor color of marker by agreed rarity color later
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+          infoWindow: InfoWindow(
+              title: entryList[i].name
+          )
+      )
+  );
+}
+
+Set<Marker> populateClientMarkers() {
+  for (int i = 0; i < entryList.length; ++i) {
+    if(entryList[i].discovered != 0){
+      clientDiscoveredMarkersList.add(entryList[i]);
+      addMarker(entryList, i);
+    }
+  }
+  return _markers;
 }
