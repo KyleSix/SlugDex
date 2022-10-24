@@ -71,6 +71,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       scrollGesturesEnabled: false,
                       tiltGesturesEnabled: false,
                       zoomGesturesEnabled: true,
+                      zoomControlsEnabled: false,
                       minMaxZoomPreference: MinMaxZoomPreference(16,19),
                       onMapCreated: (GoogleMapController controller){
                       },

@@ -51,5 +51,7 @@
 
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>So I can track you at all times</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>
