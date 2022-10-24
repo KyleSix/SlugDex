@@ -17,7 +17,7 @@ class dexEntryView extends StatelessWidget {
       img = 'https://i.imgur.com/MbanEeE.png';
       name = entry.name.toString();
       description = entry.description.toString();
-      date = "10/22/2022";
+      date = entry.dateDiscovered.toString();
       if(entry.rarity == Rarity.MYTHICAL) {
         backColor = Colors.amber.shade400;
         rarity = "Mythical";
