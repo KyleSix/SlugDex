@@ -6,27 +6,34 @@ class dexEntryView extends StatelessWidget {
   final Entry entry;
   @override
   Widget build(BuildContext context) {
-    String name = entry.name.toString();
-    String description = entry.description.toString();
-    String rarity = "None";
-    String img = 'https://i.imgur.com/MbanEeE.png';
-    String date = "10/22/2022";
+    String name = '??????';
+    String description = '??????';
+    String rarity = '??????';
+    String img = 'https://i.imgur.com/9eaDFaP.png';
+    String date = '??????';
     double trayHeight = MediaQuery.of(context).size.height / 2.90;
-    Color backColor;
+    Color backColor = Colors.grey.shade700;
     if(entry.discovered == 1) {
+      img = 'https://i.imgur.com/MbanEeE.png';
+      name = entry.name.toString();
+      description = entry.description.toString();
+      date = "10/22/2022";
       if(entry.rarity == Rarity.MYTHICAL) {
         backColor = Colors.amber.shade400;
         rarity = "Mythical";
-      } else {
+      } else if(entry.rarity == Rarity.LEGENDARY){
         backColor = Colors.purple;
+        rarity = "Legendary";
+      } else if(entry.rarity == Rarity.RARE){
+        backColor = Colors.blue;
+        rarity = "Rare";
+      } else if(entry.rarity == Rarity.UNCOMMON){
+        backColor = Colors.green;
+        rarity = "Uncommon";
+      } else if(entry.rarity == Rarity.COMMON){
+        backColor = Colors.grey.shade400;
+        rarity = "Common";
       }
-    } else {
-      backColor = Colors.grey;
-      name = '??????';
-      description = '??????';
-      rarity = '??????';
-      date = '??????';
-      img = 'https://i.imgur.com/9eaDFaP.png';
     }
     return Scaffold(
       backgroundColor: backColor,
@@ -126,6 +133,22 @@ class dexEntryView extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: _getHintButton(entry, backColor),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+}
+
+Widget _getHintButton(Entry entry, Color backColor) {
+  if(entry.discovered == 1) {
+    return Container();
+  } else {
+    return FloatingActionButton(
+              backgroundColor: backColor,
+              onPressed: () {
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryPage()));
+              },
+              child: const Icon(Icons.question_mark, color: Colors.white)
+      );
   }
 }
