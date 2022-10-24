@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON}
+enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON, POPULAR }
 
 /**************************************************************
  * Class to store each location entry
@@ -20,8 +20,10 @@ class Entry {
   double? latitude;
   double? longitude;
   String? description;
-  int? discovered;
   Rarity? rarity;
+
+  //USER DEPENDENT DATA
+  int? discovered = 0;
   String? dateDiscovered;
 
   //CONSTRUCTORS
@@ -31,7 +33,6 @@ class Entry {
       this.latitude,
       this.longitude,
       this.description,
-      this.discovered,
       this.rarity,
       this.dateDiscovered});
 
@@ -42,9 +43,12 @@ class Entry {
         latitude: parsedJson['latitude'],
         longitude: parsedJson['longitude'],
         description: parsedJson['description'],
-        discovered: parsedJson['discovered'],
-        rarity: Rarity.values[parsedJson['rarity']],
-        dateDiscovered: parsedJson['dateDiscovered']);
+        rarity: Rarity.values[parsedJson['rarity']]);
+  }
+
+  factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
+    return Entry(
+        iD: parsedJson['ID'], dateDiscovered: parsedJson['dateDiscovered']);
   }
 
   //Print the values of the entry object
