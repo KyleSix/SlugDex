@@ -60,9 +60,6 @@ class Entry {
     entryString.write("disc: $discovered\n");
     entryString.write("rare: $rarity\n\n");
 
-    //Delete - used for testing
-    //setDiscoveredDate();
-
     return entryString.toString();
   }
 
@@ -72,6 +69,5 @@ class Entry {
     DateFormat format = DateFormat('MM/dd/yyyy');
 
     dateDiscovered = format.format(now);
-    //print("date: $dateDiscovered");
   }
 }
