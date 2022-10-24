@@ -30,9 +30,9 @@ Future<void> main() async {
   entryList = await loadEntry();
 
   //DEBUGGING - Print entry values
-  //for (int i = 0; i < entryList.length; i++) {
-    //print(entryList[i].toString());
-  //}
+  // for (int i = 0; i < entryList.length; i++) {
+  //   print(entryList[i].toString());
+  // }
   runApp(MyApp());
 }
 

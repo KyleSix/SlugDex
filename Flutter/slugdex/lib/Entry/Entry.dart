@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON}
 
 /**************************************************************
@@ -9,6 +11,9 @@ enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON}
  *              - 1 if the entry is discovered
  * - rarity - Uses enum Rarity 
  *************************************************************/
+
+//Read discovered and dateDiscovered attribute from separate file since
+//it contains independent user data
 class Entry {
   int? iD;
   String? name;
@@ -17,7 +22,9 @@ class Entry {
   String? description;
   int? discovered;
   Rarity? rarity;
+  String? dateDiscovered;
 
+  //CONSTRUCTORS
   Entry(
       {this.iD,
       this.name,
@@ -25,7 +32,8 @@ class Entry {
       this.longitude,
       this.description,
       this.discovered,
-      this.rarity});
+      this.rarity,
+      this.dateDiscovered});
 
   factory Entry.fromJson(Map<String, dynamic> parsedJson) {
     return Entry(
@@ -35,9 +43,11 @@ class Entry {
         longitude: parsedJson['longitude'],
         description: parsedJson['description'],
         discovered: parsedJson['discovered'],
-        rarity: Rarity.values[parsedJson['rarity']]);
+        rarity: Rarity.values[parsedJson['rarity']],
+        dateDiscovered: parsedJson['dateDiscovered']);
   }
 
+  //Print the values of the entry object
   @override
   String toString() {
     StringBuffer entryString = StringBuffer();
@@ -51,5 +61,13 @@ class Entry {
     entryString.write("rare: $rarity\n\n");
 
     return entryString.toString();
+  }
+
+  //Set the date discovered of an entry to current day
+  void setDiscoveredDate() {
+    DateTime now = DateTime.now();
+    DateFormat format = DateFormat('MM/dd/yyyy');
+
+    dateDiscovered = format.format(now);
   }
 }
