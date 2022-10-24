@@ -25,23 +25,24 @@ class dexEntryPage extends StatelessWidget {
             ),
             itemCount: entryList.length,
             itemBuilder: (BuildContext context, int index) {
-              Color boxColor;
-              String img;
-              String entryname;
+              Color boxColor = Colors.grey.shade700;
+              String img = "https://i.imgur.com/9eaDFaP.png";
+              String entryname = "Undiscovered";
               if(entryList[index].discovered == 1){
                 if(entryList[index].rarity == Rarity.MYTHICAL) {
                   boxColor = Colors.amber.shade400;
-                } else {
+                } else if(entryList[index].rarity == Rarity.LEGENDARY){
                   boxColor = Colors.purple;
+                } else if(entryList[index].rarity == Rarity.RARE){
+                  boxColor = Colors.blue;
+                } else if(entryList[index].rarity == Rarity.UNCOMMON){
+                  boxColor = Colors.green;
+                } else if(entryList[index].rarity == Rarity.COMMON){
+                  boxColor = Colors.grey.shade400;
                 }
                 //Replace with entry image
                 img = 'https://i.imgur.com/MbanEeE.png';
                 entryname = entryList[index].name.toString();
-              } else {
-                boxColor = Colors.grey;
-                //Replace with question image
-                img = "https://i.imgur.com/9eaDFaP.png";
-                entryname = "Undiscovered";
               }
               return Padding(
                 padding: const EdgeInsets.all(2.0),
