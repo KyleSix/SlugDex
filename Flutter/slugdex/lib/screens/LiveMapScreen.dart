@@ -109,13 +109,13 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   }
 }
 
-void addMarker(entryList, i){
+void addMarker(i){
   _markers.add(
       Marker(
           markerId: MarkerId(entryList[i].iD.toString()),
           position: LatLng(entryList[i].latitude!, entryList[i].longitude!),
           // TODO Change bitmapdescriptor color of marker by agreed rarity color later
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           infoWindow: InfoWindow(
               title: entryList[i].name
           )
@@ -127,7 +127,7 @@ Set<Marker> populateClientMarkers() {
   for (int i = 0; i < entryList.length; ++i) {
     if(entryList[i].discovered != 0){
       clientDiscoveredMarkersList.add(entryList[i]);
-      addMarker(entryList, i);
+      addMarker(i);
     }
   }
   return _markers;
