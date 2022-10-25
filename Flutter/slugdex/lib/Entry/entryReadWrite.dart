@@ -16,10 +16,11 @@ Future<String> _loadUserAsset() async {
   String fileContents;
   try {
     fileContents = await file.readAsString();
-  } catch(_) {
+  } catch (_) {
     File(await getUserDataFilePath()).create();
     file = File(await getUserDataFilePath());
-    file.writeAsString(await rootBundle.loadString('assets/json/UserDataDefault.json'));
+    file.writeAsString(
+        await rootBundle.loadString('assets/json/UserDataDefault.json'));
     fileContents = await file.readAsString();
   }
   return fileContents;
@@ -46,15 +47,32 @@ Future<List<Entry>> loadEntry() async {
   return entryList;
 }
 
-void markDiscovered(entryList, i) {
+void markDiscovered(entryList, i) async {
   entryList[i].discovered = 1;
+  entryList[i].setDiscoveredDate();
+
+  List<dynamic> discovered = [];
+
   //Store in JSON
+  for (int index = 0; index < entryList.length; index++) {
+    if (entryList[index].discovered == 1) {
+      discovered.add(entryList[index].toJson());
+    } //end for
+  } //end for
+
+  Map<String, dynamic> toEncode = {'entries': discovered};
+  String entryJson = jsonEncode(toEncode);
+
+  print(entryJson);
+
+  File file = File(await getUserDataFilePath());
+  file.writeAsString(entryJson);
 }
 
 Future<String> getUserDataFilePath() async {
-    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
-    String appDocumentsPath = appDocumentsDirectory.path.substring(1);
-    String filePath = '$appDocumentsPath/UserData.json';
+  Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+  String appDocumentsPath = appDocumentsDirectory.path.substring(1);
+  String filePath = '$appDocumentsPath/UserData.json';
 
-    return filePath;
+  return filePath;
 }
