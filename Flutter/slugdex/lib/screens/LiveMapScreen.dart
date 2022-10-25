@@ -8,6 +8,7 @@ import 'package:slugdex/main.dart';
 
 var clientDiscoveredMarkersList = [];
 final Set<Marker> _markers = new Set();
+final Set<Circle> _circles = new Set(); // For the hint radii
 
 class LiveMapScreen extends StatefulWidget {
   @override
@@ -81,6 +82,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       zoomControlsEnabled: false,
                       minMaxZoomPreference: MinMaxZoomPreference(16,19),
                       markers: populateClientMarkers(),
+                      circles: populateHintCircles(),
                       onMapCreated: (controller){
                         setState(() {
                           mapController = controller;
@@ -107,7 +109,42 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       }
     );
   }
+
+  void showHint(int id) async { // Function is async so camera animation doesn't block
+    //mapController.moveCamera(CameraUpdate.newLatLng(LatLng(entryList[id].latitude!, entryList[id].longitude!)))
+
+    // Animate camera to desired position and location
+    newPosition = CameraPosition(
+      target: LatLng(entryList[id].latitude!, entryList[id].longitude!),
+      zoom: 18, // change to desired zoom level
+    );
+    moveDuration = 200; // in milliseconds
+
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(newPosition), // Camera position, zoom and tilt 
+      moveDuration,                                // Animation duration 
+      showHintRadius(id)                           // Callback when animation is finished
+    );
+  }
+  void showHintRadius(int id) {
+    //Un-hide desired circle
+  }
 }
+
+Set<Circle> populateHintCircles() {
+  // Circle({required CircleId circleId, 
+  // bool consumeTapEvents = false, 
+  // Color fillColor = Colors.transparent, 
+  // LatLng center = const LatLng(0.0, 0.0), 
+  // double radius = 0, 
+  // Color strokeColor = Colors.black, 
+  // int strokeWidth = 10, 
+  // bool visible = true, 
+  // int zIndex = 0, 
+  // VoidCallback? onTap});
+}
+
+
 
 void addMarker(i){
   _markers.add(
