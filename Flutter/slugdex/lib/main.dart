@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
-import 'package:slugdex/provider/location_provider.dart';
+import 'package:slugdex/provider/LocationProvider.dart';
 import 'Entry/Entry.dart';
 import 'dart:convert';
 import 'dart:core';
