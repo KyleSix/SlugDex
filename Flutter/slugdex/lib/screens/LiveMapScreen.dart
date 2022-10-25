@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:slugdex/Entry/Entry.dart';
+import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
@@ -88,12 +88,13 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
 void addMarker(intId) {
   double rarityColor = 0.0;
-  switch(entryList[intId].rarity) {
+  switch(entryList[intId].rarity!) {
     case Rarity.MYTHICAL: rarityColor = BitmapDescriptor.hueYellow; break;
     case Rarity.LEGENDARY: rarityColor = BitmapDescriptor.hueViolet; break;
     case Rarity.RARE: rarityColor = BitmapDescriptor.hueBlue; break;
     case Rarity.UNCOMMON: rarityColor = BitmapDescriptor.hueGreen; break;
     case Rarity.COMMON: rarityColor = BitmapDescriptor.hueOrange; break;
+    default: break;
   }
   _markers.add(
       Marker(
