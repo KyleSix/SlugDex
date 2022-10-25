@@ -16,7 +16,7 @@
     "longitude": -122.0652298,
     "description": "Legends say a starving Porter resident had to make a tough choice here.",
     "discovered": 1,
-    "rarity": 0
+    "rarity": 1
   },
   {
     "ID": 3,
@@ -24,8 +24,8 @@
     "latitude": 36.9942047,
     "longitude": -122.0601648,
     "description": "What's growing is not what he asked for.- But it's thriving.",
-    "discovered": 0,
-    "rarity": 0
+    "discovered": 1,
+    "rarity": 2
   },
   {
     "ID": 4,
@@ -33,8 +33,8 @@
     "latitude": 37.01001182,
     "longitude": -122.0662185,
     "description": "Watch the murals change and stay up to date with the newest wave of artists.",
-    "discovered": 0,
-    "rarity": 0
+    "discovered": 1,
+    "rarity": 3
   },
   {
     "ID": 5,
@@ -42,8 +42,8 @@
     "latitude": 37.00661915,
     "longitude": -122.0600713,
     "description": "There's one rule: bring an offering.",
-    "discovered": 0,
-    "rarity": 0
+    "discovered": 1,
+    "rarity": 4
   },
   {
     "ID": 6,
@@ -51,8 +51,8 @@
     "latitude": 37.00469735,
     "longitude": -122.0600572,
     "description": "",
-    "discovered": 0,
-    "rarity": 0
+    "discovered": 1,
+    "rarity": 5
   },
   {
     "ID": 7,

@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:slugdex/screens/LiveMapScreen.dart';
 
 class LocationProvider with ChangeNotifier {
   late Location _location;
-
   Location get location => _location;
+
   late LatLng _locationPosition;
   LatLng get locationPosition => _locationPosition;
 
@@ -23,11 +22,10 @@ class LocationProvider with ChangeNotifier {
   getUserLocation() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-
     _serviceEnabled = await location.serviceEnabled();
+
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
-
       if (!_serviceEnabled) {
         return;
       }
@@ -46,7 +44,8 @@ class LocationProvider with ChangeNotifier {
       // This will update / add the markers every time the user moves,
       // not as efficient since it reloads markers over and over
       // but it will be needed later for closeness to marker
-      //populateClientMarkers();
+
+      // populateClientMarkers();
       notifyListeners();
     });
   }
