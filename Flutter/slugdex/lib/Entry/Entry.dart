@@ -26,7 +26,9 @@ class Entry {
   int? discovered = 0;
   String? dateDiscovered;
 
+  //============================================================================
   //CONSTRUCTORS
+  //============================================================================
   Entry(
       {this.iD,
       this.name,
@@ -36,6 +38,7 @@ class Entry {
       this.rarity,
       this.dateDiscovered});
 
+  //Will pull all entry data from Json and create entries
   factory Entry.fromJson(Map<String, dynamic> parsedJson) {
     return Entry(
         iD: parsedJson['ID'],
@@ -46,12 +49,14 @@ class Entry {
         rarity: Rarity.values[parsedJson['rarity']]);
   }
 
+  //Will pull user data from User data Json
   factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
     return Entry(
         iD: parsedJson['ID'], dateDiscovered: parsedJson['dateDiscovered']);
   }
 
-  Map<String, dynamic> toJson() {
+  //Convert Entry data to Json for User Data
+  Map<String, dynamic> toUserJson() {
     return {"ID": iD, "dateDiscovered": dateDiscovered};
   }
 

@@ -14,6 +14,9 @@ Future<String> _loadEntryAsset() async {
 Future<String> _loadUserAsset() async {
   File file = File(await getUserDataFilePath());
   String fileContents;
+
+  //Create user data file if it does not exist
+  //If an exception is thrown, catch and create user data file
   try {
     fileContents = await file.readAsString();
   } catch (_) {
@@ -56,7 +59,7 @@ void markDiscovered(entryList, i) async {
   //Store in JSON
   for (int index = 0; index < entryList.length; index++) {
     if (entryList[index].discovered == 1) {
-      discovered.add(entryList[index].toJson());
+      discovered.add(entryList[index].toUserJson());
     } //end for
   } //end for
 
