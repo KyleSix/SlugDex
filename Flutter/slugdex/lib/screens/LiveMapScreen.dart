@@ -86,9 +86,9 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   }
 }
 
-void addMarker(intId) {
+void addMarker(index) {
   double rarityColor = 0.0;
-  switch(entryList[intId].rarity!) {
+  switch(entryList[index].rarity!) {
     case Rarity.MYTHICAL: rarityColor = BitmapDescriptor.hueYellow; break;
     case Rarity.LEGENDARY: rarityColor = BitmapDescriptor.hueViolet; break;
     case Rarity.RARE: rarityColor = BitmapDescriptor.hueBlue; break;
@@ -98,25 +98,25 @@ void addMarker(intId) {
   }
   _markers.add(
       Marker(
-          markerId: MarkerId(entryList[intId].iD.toString()),
-          position: LatLng(entryList[intId].latitude!, entryList[intId].longitude!),
+          markerId: MarkerId(entryList[index].iD.toString()),
+          position: LatLng(entryList[index].latitude!, entryList[index].longitude!),
           icon: BitmapDescriptor.defaultMarkerWithHue(rarityColor),
-          infoWindow: InfoWindow( title: entryList[intId].name )
+          infoWindow: InfoWindow( title: entryList[index].name )
       )
   );
 }
 
 Set<Marker> populateClientMarkers() {
-  for (int id = 0; id < entryList.length; ++id) {     // Iterates through the Global "entryList" from main
-    if(entryList[id].discovered != 0) addMarker(id);  // If the user has discoverd a target location
+  for (int index = 0; index < entryList.length; ++index) {     // Iterates through the Global "entryList" from main
+    if(entryList[index].discovered != 0) addMarker(index);  // If the user has discoverd a target location
   }                                                   // Mark that location on the map with a marker
   return _markers;
 }
 
 // Maybe useful for hints to show all markers on the map, I used it for testing
 Set<Marker> populateAllMarkers() {
-  for (int id = 0; id < entryList.length; ++id) {
-      addMarker(id);
+  for (int index = 0; index < entryList.length; ++index) {
+      addMarker(index);
   }
   return _markers;
 }
