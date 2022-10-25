@@ -10,6 +10,7 @@ Future<String> _loadEntryAsset() async {
   return await rootBundle.loadString('assets/json/EntryInput.json');
 }
 
+//Load User Data if it exist, if not create a save file with default entries
 Future<String> _loadUserAsset() async {
   File file = File(await getFilePath());
   String fileContents;
@@ -18,7 +19,7 @@ Future<String> _loadUserAsset() async {
   } catch(_) {
     File(await getFilePath()).create();
     file = File(await getFilePath());
-    file.writeAsString(""); //CREATE A BLANK JSON
+    file.writeAsString(await rootBundle.loadString('assets/json/UserDataDefault.json'));
     fileContents = await file.readAsString();
   }
   return fileContents;
@@ -47,7 +48,7 @@ Future<List<Entry>> loadEntry() async {
 
 void markDiscovered(entryList, i) {
   entryList[i].discovered = 1;
-  //Write to JSON
+  //Store in JSON
 }
 
 Future<String> getFilePath() async {
