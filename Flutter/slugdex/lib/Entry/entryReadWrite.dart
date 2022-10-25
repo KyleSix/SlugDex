@@ -38,10 +38,10 @@ Future<List<Entry>> loadEntry() async {
 
   List<Entry> entryList =
       List<Entry>.from(json["entries"].map((x) => Entry.fromJson(x)));
-
   List<Entry> userList =
       List<Entry>.from(userJson["entries"].map((x) => Entry.fromUserJson(x)));
 
+  //Set entry discovered data the user discovered them
   for (int i = 0; i < userList.length; i++) {
     entryList[userList[i].iD! - 1].discovered = 1;
     entryList[userList[i].iD! - 1].dateDiscovered = userList[i].dateDiscovered;
@@ -50,26 +50,30 @@ Future<List<Entry>> loadEntry() async {
   return entryList;
 }
 
-void markDiscovered(entryList, i) async {
-  entryList[i].discovered = 1;
-  entryList[i].setDiscoveredDate();
+//Marks entries as discovered, updating discovery date
+//Updates user data file with new discovered locations
+void markDiscovered(entryList, index) async {
+  //Set discovery
+  entryList[index].discovered = 1;
+  entryList[index].setDiscoveredDate();
 
-  List<dynamic> discovered = [];
+  List<dynamic> discoveredEntries = [];
+  Map<String, dynamic> toEncode = <String, dynamic>{};
+  String encodedString; //user data
 
-  //Store in JSON
-  for (int index = 0; index < entryList.length; index++) {
-    if (entryList[index].discovered == 1) {
-      discovered.add(entryList[index].toUserJson());
-    } //end for
+  //Get all discovered entries in a list
+  for (int i = 0; i < entryList.length; i++) {
+    if (entryList[i].discovered == 1) {
+      discoveredEntries.add(entryList[i].toUserJson());
+    } //end if
   } //end for
 
-  Map<String, dynamic> toEncode = {'entries': discovered};
-  String entryJson = jsonEncode(toEncode);
-
-  print(entryJson);
+  //Write data to Json
+  toEncode = {'entries': discoveredEntries};
+  encodedString = jsonEncode(toEncode);
 
   File file = File(await getUserDataFilePath());
-  file.writeAsString(entryJson);
+  file.writeAsString(encodedString);
 }
 
 Future<String> getUserDataFilePath() async {

@@ -6,16 +6,12 @@ import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'Entry/entry.dart';
 import 'dart:core';
 
-List<Entry> entryList = [];
+List<Entry> entryList = []; //Global ist of all entries
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   entryList = await loadEntry();
 
-  //DEBUGGING - Print entry values
-  //for (int i = 0; i < entryList.length; i++) {
-  //  print(entryList[i].toString());
-  //}
   runApp(MyApp());
 }
 
