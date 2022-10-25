@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slugdex/Entry/Entry.dart';
+import 'package:slugdex/Entry/entry.dart';
 
 class dexEntryView extends StatelessWidget {
   const dexEntryView({required this.entry});

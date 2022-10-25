@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON, POPULAR }
+enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON}
 
 /**************************************************************
  * Class to store each location entry

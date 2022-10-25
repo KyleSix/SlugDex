@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slugdex/Entry/Entry.dart';
+import 'package:slugdex/Entry/entry.dart';
 import 'DevEntryView.dart';
 import 'package:slugdex/main.dart';
 
