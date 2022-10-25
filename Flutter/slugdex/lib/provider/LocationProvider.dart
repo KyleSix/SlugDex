@@ -4,8 +4,8 @@ import 'package:location/location.dart';
 
 class LocationProvider with ChangeNotifier {
   late Location _location;
-
   Location get location => _location;
+
   late LatLng _locationPosition;
   LatLng get locationPosition => _locationPosition;
 
@@ -22,11 +22,10 @@ class LocationProvider with ChangeNotifier {
   getUserLocation() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-
     _serviceEnabled = await location.serviceEnabled();
+
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
-
       if (!_serviceEnabled) {
         return;
       }
@@ -41,6 +40,12 @@ class LocationProvider with ChangeNotifier {
     location.onLocationChanged.listen((LocationData currentLocation) {
       _locationPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
       /// print(_locationPosition);
+
+      // This will update / add the markers every time the user moves,
+      // not as efficient since it reloads markers over and over
+      // but it will be needed later for closeness to marker
+
+      // populateClientMarkers();
       notifyListeners();
     });
   }
