@@ -11,7 +11,17 @@ Future<String> _loadEntryAsset() async {
 }
 
 Future<String> _loadUserAsset() async {
-  return await rootBundle.loadString('assets/json/UserData.json');
+  File file = File(await getFilePath());
+  String fileContents;
+  try {
+    fileContents = await file.readAsString();
+  } catch(_) {
+    File(await getFilePath()).create();
+    file = File(await getFilePath());
+    file.writeAsString(""); //CREATE A BLANK JSON
+    fileContents = await file.readAsString();
+  }
+  return fileContents;
 }
 
 //Create List of entries from the Json string
@@ -38,4 +48,13 @@ Future<List<Entry>> loadEntry() async {
 void markDiscovered(entryList, i) {
   entryList[i].discovered = 1;
   //Write to JSON
+}
+
+Future<String> getFilePath() async {
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+    String appDocumentsPath = appDocumentsDirectory.path.substring(1);
+    //print(appDocumentsPath);
+    String filePath = '$appDocumentsPath/UserData.json';
+
+    return filePath;
 }
