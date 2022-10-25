@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON}
+enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON }
 
 /**************************************************************
  * Class to store each location entry
@@ -20,21 +20,25 @@ class Entry {
   double? latitude;
   double? longitude;
   String? description;
-  int? discovered;
   Rarity? rarity;
+
+  //USER DEPENDENT DATA
+  int? discovered = 0;
   String? dateDiscovered;
 
+  //============================================================================
   //CONSTRUCTORS
+  //============================================================================
   Entry(
       {this.iD,
       this.name,
       this.latitude,
       this.longitude,
       this.description,
-      this.discovered,
       this.rarity,
       this.dateDiscovered});
 
+  //Will pull all entry data from Json and create entries
   factory Entry.fromJson(Map<String, dynamic> parsedJson) {
     return Entry(
         iD: parsedJson['ID'],
@@ -42,9 +46,18 @@ class Entry {
         latitude: parsedJson['latitude'],
         longitude: parsedJson['longitude'],
         description: parsedJson['description'],
-        discovered: parsedJson['discovered'],
-        rarity: Rarity.values[parsedJson['rarity']],
-        dateDiscovered: parsedJson['dateDiscovered']);
+        rarity: Rarity.values[parsedJson['rarity']]);
+  }
+
+  //Will pull user data from User data Json
+  factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
+    return Entry(
+        iD: parsedJson['ID'], dateDiscovered: parsedJson['dateDiscovered']);
+  }
+
+  //Convert Entry data to Json for User Data
+  Map<String, dynamic> toUserJson() {
+    return {"ID": iD, "dateDiscovered": dateDiscovered};
   }
 
   //Print the values of the entry object

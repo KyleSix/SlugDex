@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slugdex/Entry/Entry.dart';
+import 'package:slugdex/Entry/entry.dart';
 
 class dexEntryView extends StatelessWidget {
   const dexEntryView({required this.entry});
@@ -17,7 +17,7 @@ class dexEntryView extends StatelessWidget {
       img = 'https://i.imgur.com/MbanEeE.png';
       name = entry.name.toString();
       description = entry.description.toString();
-      date = "10/22/2022";
+      date = entry.dateDiscovered.toString();
       if(entry.rarity == Rarity.MYTHICAL) {
         backColor = Colors.amber.shade400;
         rarity = "Mythical";
