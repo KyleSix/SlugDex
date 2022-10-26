@@ -5,6 +5,7 @@ import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
+import "package:slugdex/screens/DevEntryView.dart";
 
 final Set<Marker> _markers = new Set();
 
@@ -18,7 +19,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 
   @override
   void initState() { super.initState();
-    Provider.of<LocationProvider>(context, listen: false).initialization();
+  Provider.of<LocationProvider>(context, listen: false).initialization();
   }
 
   @override Widget build(BuildContext context) {
@@ -38,11 +39,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: googleMapUI(),
+      body: googleMapUI(context),
     );
   }
 
-  Widget googleMapUI() { return Consumer<LocationProvider>(
+  Widget googleMapUI(context) { return Consumer<LocationProvider>(
       builder: (consumerContext, model, child) {
         if(model.locationPosition != null) {
           return Scaffold(
@@ -64,8 +65,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       zoomGesturesEnabled: true,
                       zoomControlsEnabled: false,
                       minMaxZoomPreference: MinMaxZoomPreference(16,19),
-                      //markers: populateAllMarkers(), // Populates all markers to hidden locations
-                      markers: populateClientMarkers(), // Populates only client discovered markers
+                      //markers: populateAllMarkers(context), // Populates all markers to hidden locations
+                      markers: populateClientMarkers(context), // Populates only client discovered markers
                       onMapCreated: (controller) { setState(() { mapController = controller;});},
                     ),
                   ),
@@ -82,11 +83,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         }
         return Container( child: Center(child: CircularProgressIndicator(),), );
       }
-      );
+  );
   }
 }
 
-void addMarker(index) {
+void addMarker(index,context) {
   double rarityColor = 0.0;
   switch(entryList[index].rarity!) {
     case Rarity.MYTHICAL: rarityColor = BitmapDescriptor.hueYellow; break;
@@ -101,22 +102,25 @@ void addMarker(index) {
           markerId: MarkerId(entryList[index].iD.toString()),
           position: LatLng(entryList[index].latitude!, entryList[index].longitude!),
           icon: BitmapDescriptor.defaultMarkerWithHue(rarityColor),
-          infoWindow: InfoWindow( title: entryList[index].name )
+          infoWindow: InfoWindow( title: entryList[index].name ),
+          onTap:() { // On tap marker, opens its Dex Entry
+            Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: entryList[index])));
+          }
       )
   );
 }
 
-Set<Marker> populateClientMarkers() {
+Set<Marker> populateClientMarkers(context) {
   for (int index = 0; index < entryList.length; ++index) {     // Iterates through the Global "entryList" from main
-    if(entryList[index].discovered != 0) addMarker(index);  // If the user has discoverd a target location
+    if(entryList[index].discovered != 0) addMarker(index, context);  // If the user has discoverd a target location
   }                                                   // Mark that location on the map with a marker
   return _markers;
 }
 
 // Maybe useful for hints to show all markers on the map, I used it for testing
-Set<Marker> populateAllMarkers() {
+Set<Marker> populateAllMarkers(context) {
   for (int index = 0; index < entryList.length; ++index) {
-      addMarker(index);
+    addMarker(index, context);
   }
   return _markers;
 }
