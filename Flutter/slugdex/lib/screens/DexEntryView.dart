@@ -7,7 +7,8 @@ class dexEntryView extends StatelessWidget {
   final Entry entry;
   @override
   Widget build(BuildContext context) {
-    String name = '??????';
+    int entryID =entry.iD!;
+    String name = 'Entry $entryID';
     String description = '??????';
     String rarity = '??????';
     String img = 'assets/images/undiscovered.png';
@@ -80,7 +81,7 @@ class dexEntryView extends StatelessWidget {
                           width: 225.0,
                           height: 225.0,
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 3.0),
+                              border: getBorderForImageView(entry),
                               shape: BoxShape.circle,
                               image: DecorationImage(
                             fit: BoxFit.fill,
@@ -160,5 +161,13 @@ Widget _getHintButton(Entry entry, Color backColor, BuildContext context) {
         },
               child: const Icon(Icons.question_mark, color: Colors.white)
       );
+  }
+}
+
+Border getBorderForImageView(Entry entry) {
+  if(entry.discovered == 1) {
+    return Border.all(color: Colors.white, width: 3.0);
+  } else {
+    return Border.all(color: Colors.transparent, width: 0.0);
   }
 }

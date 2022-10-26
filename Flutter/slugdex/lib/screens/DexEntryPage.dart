@@ -27,7 +27,8 @@ class dexEntryPage extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               Color boxColor = Colors.grey.shade700;
               String img = "assets/images/undiscovered.png";
-              String entryname = "Undiscovered";
+              int entryID = entryList[index].iD!;
+              String entryname = "Entry $entryID";
               if(entryList[index].discovered == 1){
                 if(entryList[index].rarity == Rarity.MYTHICAL) {
                   boxColor = Colors.amber.shade400;
@@ -60,11 +61,22 @@ class dexEntryPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Image.asset(img, width: 125.0, height: 125.0,),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 125.0,
+                              height: 125.0,
+                              decoration: BoxDecoration(
+                                border: getBorderForImagePage(entryList[index]),
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(img),
+                                )
+                              )
+                            )
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 10.0),
                             child: Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
                           ),
                         ],
@@ -80,5 +92,13 @@ class dexEntryPage extends StatelessWidget {
           ),
         ),
     );
+  }
+}
+
+Border getBorderForImagePage(Entry entry) {
+  if(entry.discovered == 1) {
+    return Border.all(color: Colors.white, width: 3.0);
+  } else {
+    return Border.all(color: Colors.transparent, width: 0.0);
   }
 }
