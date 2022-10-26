@@ -26,7 +26,7 @@ class dexEntryPage extends StatelessWidget {
             itemCount: entryList.length,
             itemBuilder: (BuildContext context, int index) {
               Color boxColor = Colors.grey.shade700;
-              String img = "https://i.imgur.com/9eaDFaP.png";
+              String img = "assets/images/undiscovered.png";
               String entryname = "Undiscovered";
               if(entryList[index].discovered == 1){
                 if(entryList[index].rarity == Rarity.MYTHICAL) {
@@ -41,7 +41,8 @@ class dexEntryPage extends StatelessWidget {
                   boxColor = Colors.grey.shade400;
                 }
                 //Replace with entry image
-                img = 'https://i.imgur.com/MbanEeE.png';
+                String filename = entryList[index].getFileName();
+                img = 'assets/images/$filename';
                 entryname = entryList[index].name.toString();
               }
               return Padding(
@@ -60,8 +61,7 @@ class dexEntryPage extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(2.0),
-                            //Change to Image.asset for local
-                            child: Image.network(img, width: 125.0, height: 125.0,),
+                            child: Image.asset(img, width: 125.0, height: 125.0,),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(10.0),
