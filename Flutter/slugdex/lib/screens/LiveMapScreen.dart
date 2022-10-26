@@ -156,10 +156,10 @@ Set<Marker> populateAllMarkers(context) {
 
 Set<Circle> populateHintCircles() {
   for (Entry entry in entryList) {
-    Color rarityColor = Colors.orange;
+    Color rarityColor = Colors.grey.shade400;
     switch (entry.rarity) {
       case Rarity.MYTHICAL:
-        rarityColor = Colors.yellow;
+        rarityColor = Colors.amber.shade400;
         break;
       case Rarity.LEGENDARY:
         rarityColor = Colors.purple;
@@ -171,7 +171,7 @@ Set<Circle> populateHintCircles() {
         rarityColor = Colors.green;
         break;
       case Rarity.COMMON:
-        rarityColor = Colors.orange;
+        rarityColor = Colors.grey.shade400;
         break;
       default:
         break;
