@@ -5,7 +5,7 @@ import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
-import "package:slugdex/screens/DevEntryView.dart";
+import "package:slugdex/screens/DexEntryView.dart";
 
 final Set<Marker> _markers = new Set();
 
