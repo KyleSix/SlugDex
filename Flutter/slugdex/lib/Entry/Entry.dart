@@ -83,4 +83,10 @@ class Entry {
 
     dateDiscovered = format.format(now);
   }
+
+  String getFileName() {
+    StringBuffer fileName = StringBuffer();
+    fileName.write("$iD - $name.jpg");
+    return fileName.toString();
+  }
 }
