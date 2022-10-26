@@ -54,7 +54,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     child: GoogleMap(
                       mapType: MapType.hybrid,
                       initialCameraPosition: CameraPosition(
-                          target: model.locationPosition,
+                          target: model.locationPosition!,
                           zoom: 18
                       ),
                       myLocationEnabled: true,
@@ -64,7 +64,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       tiltGesturesEnabled: false,
                       zoomGesturesEnabled: true,
                       zoomControlsEnabled: false,
-                      minMaxZoomPreference: MinMaxZoomPreference(16,19),
+                      minMaxZoomPreference: const MinMaxZoomPreference(16,19),
                       //markers: populateAllMarkers(context), // Populates all markers to hidden locations
                       markers: populateClientMarkers(context), // Populates only client discovered markers
                       onMapCreated: (controller) { setState(() { mapController = controller;});},
@@ -81,7 +81,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );
         }
-        return Container( child: Center(child: CircularProgressIndicator(),), );
+        return const Center(child: CircularProgressIndicator(color: Colors.black,),);
       }
   );
   }

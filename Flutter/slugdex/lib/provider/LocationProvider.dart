@@ -6,8 +6,8 @@ class LocationProvider with ChangeNotifier {
   late Location _location;
   Location get location => _location;
 
-  late LatLng _locationPosition;
-  LatLng get locationPosition => _locationPosition;
+  LatLng? _locationPosition;
+  LatLng? get locationPosition => _locationPosition;
 
   bool locationServiceActive = true;
 
