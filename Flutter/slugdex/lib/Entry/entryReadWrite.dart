@@ -4,6 +4,7 @@ import 'dart:core';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
+import 'package:slugdex/main.dart';
 
 //Load Entry List as a string from Json
 Future<String> _loadEntryAsset() async {
@@ -52,7 +53,7 @@ Future<List<Entry>> loadEntry() async {
 
 //Marks entries as discovered, updating discovery date
 //Updates user data file with new discovered locations
-void markDiscovered(entryList, index) async {
+void markDiscovered(index) async {
   //Set discovery
   entryList[index].discovered = 1;
   entryList[index].setDiscoveredDate();
