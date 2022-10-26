@@ -9,12 +9,13 @@ class dexEntryView extends StatelessWidget {
     String name = '??????';
     String description = '??????';
     String rarity = '??????';
-    String img = 'https://i.imgur.com/9eaDFaP.png';
+    String img = 'assets/images/undiscovered.png';
     String date = '??????';
     double trayHeight = MediaQuery.of(context).size.height / 2.90;
     Color backColor = Colors.grey.shade700;
     if(entry.discovered == 1) {
-      img = 'https://i.imgur.com/MbanEeE.png';
+      String filename = entry.getFileName();
+      img = 'assets/images/$filename';
       name = entry.name.toString();
       description = entry.description.toString();
       date = entry.dateDiscovered.toString();
@@ -82,7 +83,7 @@ class dexEntryView extends StatelessWidget {
                             //shape: BoxShape.circle,
                             image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: NetworkImage(img),
+                            image: AssetImage(img),
                             )
                         ),
                       ),
