@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slugdex/Entry/entry.dart';
-import 'DevEntryView.dart';
+import 'DexEntryView.dart';
 import 'package:slugdex/main.dart';
 
 class dexEntryPage extends StatelessWidget {
