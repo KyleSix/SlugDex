@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slugdex/Entry/Entry.dart';
+import 'package:slugdex/screens/LiveMapScreen.dart';
 
 class dexEntryView extends StatelessWidget {
   const dexEntryView({required this.entry});
@@ -51,45 +52,45 @@ class dexEntryView extends StatelessWidget {
             top: trayHeight,
             child: Container(
               decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                  color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
                 ),
-                alignment: Alignment.bottomCenter,
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+              ),
+              alignment: Alignment.bottomCenter,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
             ),
           ),
           Positioned(
             top: trayHeight-260,
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.topCenter,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topCenter,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
                         child: Text(name, style: const TextStyle(fontSize: 50, fontWeight: FontWeight.w500, color: Colors.white),),
-                      ),
-                      Container(
-                        width: 225.0,
-                        height: 225.0,
-                        decoration: BoxDecoration(
-                            //border: Border.all(color: Colors.black, width: 3.0),
-                            //shape: BoxShape.circle,
-                            image: DecorationImage(
+                        ),
+                        Container(
+                          width: 225.0,
+                          height: 225.0,
+                          decoration: BoxDecoration(
+                              //border: Border.all(color: Colors.black, width: 3.0),
+                              //shape: BoxShape.circle,
+                              image: DecorationImage(
                             fit: BoxFit.fill,
                             image: NetworkImage(img),
                             )
                         ),
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
             )
           ),
           Positioned(
@@ -133,21 +134,29 @@ class dexEntryView extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: _getHintButton(entry, backColor),
+      floatingActionButton: _getHintButton(entry, backColor, context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
 
-Widget _getHintButton(Entry entry, Color backColor) {
-  if(entry.discovered == 1) {
+Widget _getHintButton(Entry entry, Color backColor, BuildContext context) {
+  if (entry.discovered == 1) {
     return Container();
   } else {
     return FloatingActionButton(
-              backgroundColor: backColor,
-              onPressed: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryPage()));
-              },
+        backgroundColor: backColor,
+        onPressed: () {
+          Navigator.pushAndRemoveUntil(
+              // Goes to the LiveMapScreen and removes all previous navigations
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LiveMapScreen(
+                        // Pass in the entry ID to move to
+                        entryID: entry.iD!,
+                      )),
+              (Route<dynamic> route) => false);
+        },
               child: const Icon(Icons.question_mark, color: Colors.white)
       );
   }

@@ -5,20 +5,28 @@ import 'package:provider/provider.dart';
 import 'package:slugdex/provider/location_provider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
+import 'package:slugdex/Entry/Entry.dart';
 
 var clientDiscoveredMarkersList = [];
 final Set<Marker> _markers = new Set();
 final Set<Circle> _circles = new Set(); // For the hint radii
+double HINT_RADIUS = 25; // In Meters
 
 class LiveMapScreen extends StatefulWidget {
+  const LiveMapScreen(
+      {this.entryID =
+          -1}); // Sentinel value when loading screen not from a hint
+  final int entryID;
   @override
   _LiveMapScreenState createState() => _LiveMapScreenState();
 }
 
 class _LiveMapScreenState extends State<LiveMapScreen> {
   late GoogleMapController mapController;
+  int? id;
   @override
   void initState() {
+    id = widget.entryID; // set id member to class parameter
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
   }
@@ -62,38 +70,42 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     return Consumer<LocationProvider>(
       builder: (consumerContext, model, child) {
         if(model.locationPosition != null){
-          return Scaffold(
-            body: Center(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: GoogleMap(
-                      mapType: MapType.hybrid,
-                      initialCameraPosition: CameraPosition(
+        return Scaffold(
+          body: Center(
+            child: Column(
+              children: [
+                Expanded(
+                  child: GoogleMap(
+                    mapType: MapType.hybrid,
+                    initialCameraPosition: CameraPosition(
                           target: model.locationPosition,
                           zoom: 18
                       ),
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: true,
-                      rotateGesturesEnabled: false,
-                      scrollGesturesEnabled: true,
-                      tiltGesturesEnabled: false,
-                      zoomGesturesEnabled: true,
-                      zoomControlsEnabled: false,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    rotateGesturesEnabled: false,
+                    scrollGesturesEnabled: true,
+                    tiltGesturesEnabled: false,
+                    zoomGesturesEnabled: true,
+                    zoomControlsEnabled: false,
                       minMaxZoomPreference: MinMaxZoomPreference(16,19),
-                      markers: populateClientMarkers(),
-                      circles: populateHintCircles(),
+                    markers: populateClientMarkers(),
+                    circles: populateHintCircles(),
                       onMapCreated: (controller){
-                        setState(() {
-                          mapController = controller;
-                        });
-                      },
-                    ),
+                      setState(() {
+                        mapController = controller;
+                      });
+                      if (id != -1) {
+                        // if we came from an entry hint, let's nav to it
+                        navigateHint(id!);
+                      }
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            floatingActionButton: FloatingActionButton(
+          ),
+          floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryPage()));
@@ -101,58 +113,35 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               child: const Icon(Icons.menu, color: Colors.black)
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          );
-        }
-        return Container(
-          child: Center(child: CircularProgressIndicator(),),
         );
+      }
+      return Container(
+          child: Center(child: CircularProgressIndicator(),),
+      );
       }
     );
   }
 
-  void showHint(int id) async { // Function is async so camera animation doesn't block
-    //mapController.moveCamera(CameraUpdate.newLatLng(LatLng(entryList[id].latitude!, entryList[id].longitude!)))
-
-    // Animate camera to desired position and location
-    newPosition = CameraPosition(
+  void navigateHint(int id) async {
+    // is async so camera animation doesn't block
+    // Animate camera to desired position and zoom
+    CameraPosition newPosition = CameraPosition(
       target: LatLng(entryList[id].latitude!, entryList[id].longitude!),
-      zoom: 18, // change to desired zoom level
+      zoom: 18.0, // change to desired zoom level
     );
-    moveDuration = 200; // in milliseconds
 
-    mapController.animateCamera(
-      CameraUpdate.newCameraPosition(newPosition), // Camera position, zoom and tilt 
-      moveDuration,                                // Animation duration 
-      showHintRadius(id)                           // Callback when animation is finished
-    );
-  }
-  void showHintRadius(int id) {
-    //Un-hide desired circle
+    //await Future.delayed(Duration(milliseconds: 500)); // Waits before moving camera.
+    mapController.animateCamera(CameraUpdate.newCameraPosition(
+        newPosition)); // There's no longer an animation duration :(
   }
 }
 
-Set<Circle> populateHintCircles() {
-  // Circle({required CircleId circleId, 
-  // bool consumeTapEvents = false, 
-  // Color fillColor = Colors.transparent, 
-  // LatLng center = const LatLng(0.0, 0.0), 
-  // double radius = 0, 
-  // Color strokeColor = Colors.black, 
-  // int strokeWidth = 10, 
-  // bool visible = true, 
-  // int zIndex = 0, 
-  // VoidCallback? onTap});
-}
-
-
-
-void addMarker(i){
-  _markers.add(
-      Marker(
-          markerId: MarkerId(entryList[i].iD.toString()),
-          position: LatLng(entryList[i].latitude!, entryList[i].longitude!),
-          // TODO Change bitmapdescriptor color of marker by agreed rarity color later
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+void addMarker(i) {
+  _markers.add(Marker(
+      markerId: MarkerId(entryList[i].iD.toString()),
+      position: LatLng(entryList[i].latitude!, entryList[i].longitude!),
+      // TODO Change bitmapdescriptor color of marker by agreed rarity color later
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           infoWindow: InfoWindow(
               title: entryList[i].name
           )
@@ -168,4 +157,48 @@ Set<Marker> populateClientMarkers() {
     }
   }
   return _markers;
+}
+
+Set<Circle> populateHintCircles() {
+  for (Entry entry in entryList) {
+    Color rarityColor = Colors.orange;
+    switch (entry.rarity) {
+      case Rarity.MYTHICAL:
+        rarityColor = Colors.yellow;
+        break;
+      case Rarity.LEGENDARY:
+        rarityColor = Colors.purple;
+        break;
+      case Rarity.RARE:
+        rarityColor = Colors.blue;
+        break;
+      case Rarity.UNCOMMON:
+        rarityColor = Colors.green;
+        break;
+      case Rarity.COMMON:
+        rarityColor = Colors.orange;
+        break;
+      default:
+        break;
+    }
+    if (clientDiscoveredMarkersList.contains(entry) == false) {
+      _circles.add(Circle(
+          circleId:
+              CircleId(entry.iD.toString()), // Entry ID # is the Circle ID
+          consumeTapEvents: true,
+          fillColor: rarityColor.withOpacity(0.2),
+          center: LatLng(entry.latitude!, entry.longitude!),
+          radius: HINT_RADIUS, // Radius in Meters
+          strokeColor: rarityColor,
+          strokeWidth: 1, // Width of outline in screen points
+          visible: true, // All circles are hidden by default
+          zIndex: 0,
+          onTap: () {
+            // Check if in user is inside radius and mark as discovered
+            print("Hi from hint " + entry.iD.toString());
+            // _circles.removeWhere((element) => element.circleId == (CircleId(entry.iD.toString())));
+          }));
+    }
+  }
+  return _circles;
 }
