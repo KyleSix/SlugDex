@@ -25,6 +25,9 @@
             "rarity": 0
         }
     ],
-    "listName": "",
-    "listColor": null
+    "listName": "Example List",
+    "a": 45,
+    "r": 233,
+    "g": 14,
+    "b": 222
 }

@@ -17,7 +17,7 @@ Future<void> main() async {
   entryList = await loadEntry();
   userList.userLists = await loadUserEntries();
 
-  print("Printing userList: ${userList.toString()}");
+  print("Printing userList:\n${userList.toString()}");
 
   runApp(MyApp());
 }
