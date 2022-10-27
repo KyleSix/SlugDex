@@ -15,7 +15,7 @@ UserList userList = UserList();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   entryList = await loadEntry();
-  userList.userLists = await loadUserEntries();
+  userList = await loadUserEntries();
 
   print("Printing userList:\n${userList.toString()}");
 

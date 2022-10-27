@@ -19,11 +19,16 @@ class UserList {
   //============================================================================
   //CONSTRUCTORS
   //============================================================================
-  UserList({this.userLists, this.listName, this.a: 45, this.r: 233, this.g: 14, this.b: 222});
+  UserList(
+      {this.userLists,
+      this.listName,
+      this.a: 45,
+      this.r: 233,
+      this.g: 14,
+      this.b: 222});
 
   factory UserList.fromJson(Map<String, dynamic> parsedJson) {
     return UserList(
-        userLists: parsedJson['userLists'],
         listName: parsedJson['listName'],
         a: parsedJson['a'],
         r: parsedJson['r'],
@@ -43,7 +48,8 @@ class UserList {
       listString.write(userLists![i].toString());
     }
     listString.write("listName: $listName\n");
-    listString.write("listColor: ${getColor().toString()} == Color($a, $r, $g, $b)\n");
+    listString.write(
+        "listColor: ${getColor().toString()} == Color($a, $r, $g, $b)\n");
 
     return listString.toString();
   }
@@ -69,18 +75,25 @@ Future<String> _loadUserListAsset() async {
 }
 
 //Create List of entries from the Json string
-Future<List<Entry>> loadUserEntries() async {
+Future<UserList> loadUserEntries() async {
   String userString = await _loadUserListAsset();
   final userListJson = jsonDecode(userString);
 
-  return List<Entry>.from(
-      userListJson["entries"].map((x) => Entry.fromJson(x)));
+  print("userString: $userString");
+  print("userListJson: $userListJson");
+
+  UserList userList = UserList.fromJson(userListJson);
+
+  userList.userLists =
+      List<Entry>.from(userListJson["entries"].map((x) => Entry.fromJson(x)));
+
+  return userList;
 }
 
 Future<String> getUserDataFilePath() async {
   Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
   String appDocumentsPath = appDocumentsDirectory.path.substring(1);
-  String filePath = '$appDocumentsPath/UserListData.json';
+  String filePath = '$appDocumentsPath/UserListDataDefault.json';
 
   return filePath;
 }
