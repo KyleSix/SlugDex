@@ -1,0 +1,30 @@
+{
+    "entries": [
+        {
+            "ID": 1,
+            "name": "The Squiggle",
+            "latitude": 36.99318732,
+            "longitude": -122.065164,
+            "description": "Stand on the wave of the horizon and the icon of West campus.",
+            "rarity": 0
+        },
+        {
+            "ID": 2,
+            "name": "Porter Koi Pond",
+            "latitude": 36.99413468,
+            "longitude": -122.0652298,
+            "description": "Legends say a starving Porter resident had to make a tough choice here.",
+            "rarity": 0
+        },
+        {
+            "ID": 3,
+            "name": "Solitary Garden",
+            "latitude": 36.9942047,
+            "longitude": -122.0601648,
+            "description": "What's growing is not what he asked for.- But it's thriving.",
+            "rarity": 0
+        }
+    ],
+    "listName": "",
+    "listColor": null
+}

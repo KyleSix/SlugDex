@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:slugdex/Entry/UserList.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'Entry/entry.dart';
@@ -9,10 +10,14 @@ import 'dart:core';
 import 'package:path/path.dart';
 
 List<Entry> entryList = []; //Global ist of all entries
+UserList userList = UserList();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   entryList = await loadEntry();
+  userList.userLists = await loadUserEntries();
+
+  print("Printing userList: ${userList.toString()}");
 
   runApp(MyApp());
 }

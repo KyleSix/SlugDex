@@ -6,7 +6,7 @@ import 'package:slugdex/provider/LocationProvider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
-import 'UserMadeList.dart';
+import 'DIsplayUserLists.dart';
 
 final Set<Marker> _markers = new Set();
 final Set<Circle> _circles = new Set(); // For the hint radii
