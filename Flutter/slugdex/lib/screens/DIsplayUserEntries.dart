@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slugdex/Entry/UserList.dart';
 import 'package:slugdex/Entry/entry.dart';
 import 'DexEntryView.dart';
 import 'package:slugdex/main.dart';
@@ -84,9 +85,13 @@ List<Entry> userList3 = [
       discovered: 1),
 ];
 
-List<List<Entry>> listOfLists = [userList, userList2, userList3];
+UserList userEntries1 = UserList(userLists: userList, listName: "First List");
+UserList userEntries2 = UserList(userLists: userList2, listName: "Second List");
+UserList userEntries3 = UserList(userLists: userList3, listName: "Third List");
 
-class UserMadeList extends StatelessWidget {
+List<UserList> listOfLists = [userEntries1, userEntries2, userEntries3];
+
+class UserCreatedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,19 +111,28 @@ class UserMadeList extends StatelessWidget {
               String img = "";
 
               String entryname = userList[index].name.toString();
-              if (userList[index].discovered == 1) {
-                switch(userList[index].rarity) {
-                case Rarity.MYTHICAL: boxColor = Colors.amber.shade400; break;
-                case Rarity.LEGENDARY: boxColor = boxColor = Colors.purple; break;
-                case Rarity.RARE: boxColor = Colors.blue; break;
-                case Rarity.UNCOMMON: boxColor = Colors.green; break;
-                case Rarity.COMMON: boxColor = Colors.grey.shade400; break;
-                default: break;
-                } 
+                switch (userList[index].rarity) {
+                  case Rarity.MYTHICAL:
+                    boxColor = Colors.amber.shade400;
+                    break;
+                  case Rarity.LEGENDARY:
+                    boxColor = boxColor = Colors.purple;
+                    break;
+                  case Rarity.RARE:
+                    boxColor = Colors.blue;
+                    break;
+                  case Rarity.UNCOMMON:
+                    boxColor = Colors.green;
+                    break;
+                  case Rarity.COMMON:
+                    boxColor = Colors.grey.shade400;
+                    break;
+                  default:
+                    break;
+                }
                 //Replace with entry image
                 img = 'assets/images/${userList[index].getFileName()}';
                 entryname = userList[index].name.toString();
-              }
               return Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: InkWell(
