@@ -102,26 +102,21 @@ class UserMadeList extends StatelessWidget {
         child: ListView.builder(
             itemCount: userList.length,
             itemBuilder: (BuildContext context, int index) {
-              Color boxColor = Colors.grey.shade700;
-              String img = "assets/images/undiscovered.png";
-              int entryID = userList[index].iD!;
+              Color boxColor = Color(0);
+              String img = "";
 
               String entryname = userList[index].name.toString();
               if (userList[index].discovered == 1) {
-                if (userList[index].rarity == Rarity.MYTHICAL) {
-                  boxColor = Colors.amber.shade400;
-                } else if (userList[index].rarity == Rarity.LEGENDARY) {
-                  boxColor = Colors.purple;
-                } else if (userList[index].rarity == Rarity.RARE) {
-                  boxColor = Colors.blue;
-                } else if (userList[index].rarity == Rarity.UNCOMMON) {
-                  boxColor = Colors.green;
-                } else if (userList[index].rarity == Rarity.COMMON) {
-                  boxColor = Colors.grey.shade400;
-                }
+                switch(userList[index].rarity) {
+                case Rarity.MYTHICAL: boxColor = Colors.amber.shade400; break;
+                case Rarity.LEGENDARY: boxColor = boxColor = Colors.purple; break;
+                case Rarity.RARE: boxColor = Colors.blue; break;
+                case Rarity.UNCOMMON: boxColor = Colors.green; break;
+                case Rarity.COMMON: boxColor = Colors.grey.shade400; break;
+                default: break;
+                } 
                 //Replace with entry image
-                String filename = userList[index].getFileName();
-                img = 'assets/images/$filename';
+                img = 'assets/images/${userList[index].getFileName()}';
                 entryname = userList[index].name.toString();
               }
               return Padding(
