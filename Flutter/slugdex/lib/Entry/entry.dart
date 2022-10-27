@@ -36,6 +36,7 @@ class Entry {
       this.longitude,
       this.description,
       this.rarity,
+      this.discovered,
       this.dateDiscovered});
 
   //Will pull all entry data from Json and create entries

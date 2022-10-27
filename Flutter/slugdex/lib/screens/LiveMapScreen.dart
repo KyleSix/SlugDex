@@ -6,6 +6,7 @@ import 'package:slugdex/provider/LocationProvider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
+import 'UserMadeList.dart';
 
 final Set<Marker> _markers = new Set();
 final Set<Circle> _circles = new Set(); // For the hint radii
@@ -89,12 +90,26 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               ],
             ),
           ),
-            floatingActionButton: FloatingActionButton(
-                backgroundColor: Colors.white,
-                onPressed:() { Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryPage()));},
-                child: const Icon(Icons.menu, color: Colors.black)
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Padding(
+              padding: EdgeInsets.only(left: 30),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed:() { Navigator.push(context, MaterialPageRoute(builder: (context) => UserMadeList()));},
+                  child: const Icon(Icons.add, color: Colors.black)),
+                  Expanded(child: Container()),
+
+                  FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed:() { Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryPage()));},
+                  child: const Icon(Icons.menu, color: Colors.black)
+              )
+              //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                ],
+              ),
+            )
           );
         }
         return const Center(child: CircularProgressIndicator(color: Colors.black,),);
@@ -156,10 +171,10 @@ Set<Marker> populateAllMarkers(context) {
 
 Set<Circle> populateHintCircles() {
   for (Entry entry in entryList) {
-    Color rarityColor = Colors.grey.shade400;
+    Color rarityColor = Colors.orange;
     switch (entry.rarity) {
       case Rarity.MYTHICAL:
-        rarityColor = Colors.amber.shade400;
+        rarityColor = Colors.yellow;
         break;
       case Rarity.LEGENDARY:
         rarityColor = Colors.purple;
@@ -171,7 +186,7 @@ Set<Circle> populateHintCircles() {
         rarityColor = Colors.green;
         break;
       case Rarity.COMMON:
-        rarityColor = Colors.grey.shade400;
+        rarityColor = Colors.orange;
         break;
       default:
         break;
