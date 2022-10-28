@@ -6,7 +6,7 @@ import 'Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'dart:core';
 
-List<Entry> entryList = []; //Global list of all entries
+List<Entry> entryList = []; //Global ist of all entries
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

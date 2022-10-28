@@ -76,9 +76,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       circles: populateHintCircles(context),
 
                       onMapCreated: (controller){
-                        if (id != -1) { navigateHint(id!); } // if we came from an entry hint, let's nav to it
                         setState(() { mapController = controller; });
-                        //if (id != -1) { navigateHint(id!); } // if we came from an entry hint, let's nav to it
+                        if (id != -1) { navigateHint(id!); } // if we came from an entry hint, let's nav to it
                       },
                     ),
                   ),
