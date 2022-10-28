@@ -4,11 +4,9 @@ import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
-import 'dart:convert';
 import 'dart:core';
-import 'package:path/path.dart';
 
-List<Entry> entryList = []; //Global ist of all entries
+List<Entry> entryList = []; //Global list of all entries
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

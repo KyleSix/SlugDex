@@ -39,13 +39,6 @@ class LocationProvider with ChangeNotifier {
     }
     location.onLocationChanged.listen((LocationData currentLocation) {
       _locationPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
-      /// print(_locationPosition);
-
-      // This will update / add the markers every time the user moves,
-      // not as efficient since it reloads markers over and over
-      // but it will be needed later for closeness to marker
-
-      // populateClientMarkers();
       notifyListeners();
     });
   }

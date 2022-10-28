@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/Entry/entry.dart';
@@ -10,7 +11,7 @@ import 'package:slugdex/Entry/entryReadWrite.dart';
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-
+double _radius = 40.0; // Distance in meters
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen({this.entryID = -1}); // Sentinel value when loading screen not from a hint
   final int entryID;
@@ -75,8 +76,9 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       circles: populateHintCircles(context),
 
                       onMapCreated: (controller){
-                        setState(() { mapController = controller; });
                         if (id != -1) { navigateHint(id!); } // if we came from an entry hint, let's nav to it
+                        setState(() { mapController = controller; });
+                        //if (id != -1) { navigateHint(id!); } // if we came from an entry hint, let's nav to it
                       },
                     ),
                   ),
@@ -138,6 +140,11 @@ Set<Marker> populateClientMarkers(context) {
 // Clear All Hint Circles : variable _circles is an empty set of type Circle
 Set<Circle> clearHintCircles(){ _circles.clear(); return _circles; }
 
+Position ?_currentPosition;
+getUserLocation() async { //Use Geolocator to find the current location(latitude & longitude)
+  _currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+}
+
 Set<Circle> populateHintCircles(context) {
   _circles = clearHintCircles();
   for (Entry thisEntry in entryList) {
@@ -157,13 +164,17 @@ Set<Circle> populateHintCircles(context) {
               consumeTapEvents: true,
               fillColor: rarityColor.withOpacity(0.2),
               center: LatLng(thisEntry.latitude!, thisEntry.longitude!),
-              radius: 25, // Radius in Meters
+              radius: _radius, // Radius in Meters
               strokeColor: rarityColor,
               strokeWidth: 1, // Width of outline in screen points
               visible: true, // All circles are hidden by default
               zIndex: 0,
               onTap: () {
-                if(true) { /// TODO Check if user is inside radius
+                getUserLocation();
+                double distance = Geolocator.distanceBetween(_currentPosition!.latitude, _currentPosition!.longitude,
+                    thisEntry.latitude!.toDouble(), thisEntry.longitude!.toDouble());
+
+                if( distance <= _radius) { // if user is inside 25 meter radius
                   markDiscovered(thisEntry.iD!.toInt() - 1); // Mark Entry List[index] to discovered
                   Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: thisEntry)));
                 }
