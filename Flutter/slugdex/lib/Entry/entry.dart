@@ -1,4 +1,6 @@
-enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON, POPULAR }
+import 'package:intl/intl.dart';
+
+enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON }
 
 /**************************************************************
  * Class to store each location entry
@@ -9,24 +11,34 @@ enum Rarity { MYTHICAL, LEGENDARY, RARE, UNCOMMON, COMMON, POPULAR }
  *              - 1 if the entry is discovered
  * - rarity - Uses enum Rarity 
  *************************************************************/
+
+//Read discovered and dateDiscovered attribute from separate file since
+//it contains independent user data
 class Entry {
   int? iD;
   String? name;
   double? latitude;
   double? longitude;
   String? description;
-  int? discovered;
   Rarity? rarity;
 
+  //USER DEPENDENT DATA
+  int? discovered = 0;
+  String? dateDiscovered;
+
+  //============================================================================
+  //CONSTRUCTORS
+  //============================================================================
   Entry(
       {this.iD,
       this.name,
       this.latitude,
       this.longitude,
       this.description,
-      this.discovered,
-      this.rarity});
+      this.rarity,
+      this.dateDiscovered});
 
+  //Will pull all entry data from Json and create entries
   factory Entry.fromJson(Map<String, dynamic> parsedJson) {
     return Entry(
         iD: parsedJson['ID'],
@@ -34,10 +46,21 @@ class Entry {
         latitude: parsedJson['latitude'],
         longitude: parsedJson['longitude'],
         description: parsedJson['description'],
-        discovered: parsedJson['discovered'],
         rarity: Rarity.values[parsedJson['rarity']]);
   }
 
+  //Will pull user data from User data Json
+  factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
+    return Entry(
+        iD: parsedJson['ID'], dateDiscovered: parsedJson['dateDiscovered']);
+  }
+
+  //Convert Entry data to Json for User Data
+  Map<String, dynamic> toUserJson() {
+    return {"ID": iD, "dateDiscovered": dateDiscovered};
+  }
+
+  //Print the values of the entry object
   @override
   String toString() {
     StringBuffer entryString = StringBuffer();
@@ -51,5 +74,19 @@ class Entry {
     entryString.write("rare: $rarity\n\n");
 
     return entryString.toString();
+  }
+
+  //Set the date discovered of an entry to current day
+  void setDiscoveredDate() {
+    DateTime now = DateTime.now();
+    DateFormat format = DateFormat('MM/dd/yyyy');
+
+    dateDiscovered = format.format(now);
+  }
+
+  String getFileName() {
+    StringBuffer fileName = StringBuffer();
+    fileName.write("$iD - $name.jpg");
+    return fileName.toString();
   }
 }

@@ -4,10 +4,10 @@ import 'package:location/location.dart';
 
 class LocationProvider with ChangeNotifier {
   late Location _location;
-
   Location get location => _location;
-  late LatLng _locationPosition;
-  LatLng get locationPosition => _locationPosition;
+
+  LatLng? _locationPosition;
+  LatLng? get locationPosition => _locationPosition;
 
   bool locationServiceActive = true;
 
@@ -22,11 +22,10 @@ class LocationProvider with ChangeNotifier {
   getUserLocation() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-
     _serviceEnabled = await location.serviceEnabled();
+
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
-
       if (!_serviceEnabled) {
         return;
       }
@@ -40,7 +39,6 @@ class LocationProvider with ChangeNotifier {
     }
     location.onLocationChanged.listen((LocationData currentLocation) {
       _locationPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
-      /// print(_locationPosition);
       notifyListeners();
     });
   }
