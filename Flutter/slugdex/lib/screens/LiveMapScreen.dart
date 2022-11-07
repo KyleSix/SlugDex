@@ -11,7 +11,7 @@ import 'package:slugdex/Entry/entryReadWrite.dart';
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-double _radius = 40.0; // Distance in meters
+double _radius = 60.0; // Distance in meters
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen({this.entryID = -1}); // Sentinel value when loading screen not from a hint
   final int entryID;
@@ -144,6 +144,28 @@ getUserLocation() async { //Use Geolocator to find the current location(latitude
   _currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 }
 
+Widget _buildPopupDialog(BuildContext context, _title, _message, thisEntry) {
+  return new AlertDialog(
+    title: Text(_title),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(_message),
+      ],
+    ),
+    actions: <Widget>[
+      new TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: thisEntry)));
+        },
+        child: const Text("Ok"),
+      ),
+    ],
+  );
+}
+
 Set<Circle> populateHintCircles(context) {
   _circles = clearHintCircles();
   for (Entry thisEntry in entryList) {
@@ -174,8 +196,8 @@ Set<Circle> populateHintCircles(context) {
                     thisEntry.latitude!.toDouble(), thisEntry.longitude!.toDouble());
 
                 if( distance <= _radius) { // if user is inside 25 meter radius
+                  showDialog(context: context, builder: (BuildContext context) => _buildPopupDialog(context, "A new Discovery! ", "Name: " + thisEntry.name.toString(), thisEntry),);
                   markDiscovered(thisEntry.iD!.toInt() - 1); // Mark Entry List[index] to discovered
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: thisEntry)));
                 }
               }
           )
