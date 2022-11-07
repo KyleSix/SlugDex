@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "310005112075",
+    "project_id": "firebase-slugdex",
+    "storage_bucket": "firebase-slugdex.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310005112075:android:4edc56a5e02fd456a4160e",
+        "android_client_info": {
+          "package_name": "com.example.slugdex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310005112075-ag3v66elhrsq0mft8r7pe8ssuiujsn0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANicUBDF65aXfZceD7Fiy0qKAxkzLSuTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310005112075-ag3v66elhrsq0mft8r7pe8ssuiujsn0v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "310005112075-l6ekqit5phi6o3p8n0u98bm6ttjnmvet.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.slugdex"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
