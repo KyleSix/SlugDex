@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/screens/createAccountScreen.dart';
 import 'package:slugdex/screens/loginScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class authPage extends StatefulWidget {
   const authPage({Key? key}) : super(key:key);
