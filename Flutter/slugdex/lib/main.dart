@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
+import 'package:slugdex/auth/authPage.dart';
 import 'Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'dart:core';
 //Firebase Imports
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';//Firebabse Authentication
 
 
 List<Entry> entryList = []; //Global ist of all entries
@@ -29,8 +28,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(providers: [
       ChangeNotifierProvider(
         create: (context) => LocationProvider(),
-        child: LiveMapScreen(),
+        child: checkLogin(),
       )
-    ], child: MaterialApp(title: 'SlugDex', home: LiveMapScreen()));
+    ], child: MaterialApp(debugShowCheckedModeBanner: false, title: 'SlugDex', home: checkLogin()));
   }
 }
