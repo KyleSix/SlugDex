@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final user = FirebaseAuth.instance.currentUser;
-final email = user?.email; //Get the user's email address
-final uid = user?.uid;
+User? user = FirebaseAuth.instance.currentUser;
+String? email = user?.email; //Get the user's email address
+String? uid = user?.uid;
 
 Future updateUserData(List<dynamic> discoveredEntries) async {
   print("EMAIL IS $email");

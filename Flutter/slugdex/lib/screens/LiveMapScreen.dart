@@ -10,8 +10,8 @@ import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/Entry/entryReadWrite.dart';
 
-final user = FirebaseAuth.instance.currentUser;
-final email = user?.email;
+User? user = FirebaseAuth.instance.currentUser;
+String? email = user?.email;
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
