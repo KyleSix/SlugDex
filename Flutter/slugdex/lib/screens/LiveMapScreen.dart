@@ -89,7 +89,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
             ),
             floatingActionButton: FloatingActionButton(
                 backgroundColor: Colors.white,
-                onPressed:() {Navigator.of(context).push(openDexPage());},
+                onPressed: () {Navigator.of(context).push(openDexPage());},
                 child: const Icon(Icons.menu, color: Colors.black)
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
