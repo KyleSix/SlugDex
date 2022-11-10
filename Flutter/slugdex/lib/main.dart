@@ -6,12 +6,12 @@ import 'Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'dart:core';
 
-List<Entry> entryList = []; //Global ist of all entries
+List<Entry> entryList = []; //Global List of all entries
+bool Debug = true;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   entryList = await loadEntry();
-
   runApp(MyApp());
 }
 
@@ -24,6 +24,6 @@ class MyApp extends StatelessWidget {
         create: (context) => LocationProvider(),
         child: LiveMapScreen(),
       )
-    ], child: MaterialApp(title: 'SlugDex', home: LiveMapScreen()));
+    ], child: MaterialApp(title: 'SlugDex', debugShowCheckedModeBanner: false, home: LiveMapScreen()));
   }
 }
