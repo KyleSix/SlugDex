@@ -6,3 +6,13 @@ Flutter/slugdex/macos/Flutter/GeneratedPluginRegistrant.swift
 Flutter/slugdex/windows/flutter/generated_plugin_registrant.cc
 Flutter/slugdex/windows/flutter/generated_plugin_registrant.h
 Flutter/slugdex/windows/flutter/generated_plugins.cmake
+Flutter/slugdex/linux/flutter/generated_plugin_registrant.cc
+Flutter/slugdex/linux/flutter/generated_plugin_registrant.h
+Flutter/slugdex/linux/flutter/generated_plugins.cmake
+Flutter/slugdex/linux/flutter/ephemeral/.plugin_symlinks/package_info_plus
+Flutter/slugdex/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux
+Flutter/slugdex/linux/flutter/ephemeral/.plugin_symlinks/shared_preferences_linux
+Flutter/slugdex/macos/Flutter/GeneratedPluginRegistrant.swift
+Flutter/slugdex/windows/flutter/generated_plugin_registrant.cc
+Flutter/slugdex/windows/flutter/generated_plugin_registrant.h
+Flutter/slugdex/windows/flutter/generated_plugins.cmake
