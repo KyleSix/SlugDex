@@ -34,23 +34,24 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
 
-  provider:
+  provider: ^6.0.4
 
-  google_maps_flutter: ^2.2.0
-  location: ^4.2.0
+  google_maps_flutter: ^2.2.1
+  location: ^4.4.0
 
-  geolocator: ^9.0.1
+  geolocator: ^9.0.2
 
   flutter_google_places: ^0.3.0
 
-  awesome_snackbar_content: ^0.0.8
+  awesome_snackbar_content: ^0.0.9
 
-  http: ^0.13.4
+  http: ^0.13.5
   intl: ^0.17.0
   path_provider: ^2.0.11
   firebase_core: ^2.1.1
   firebase_auth: ^4.1.1
   cloud_firestore: ^4.0.4
+  flutter_settings_screens: ^0.3.3-null-safety+2
 
 dev_dependencies:
   flutter_test:
