@@ -16,38 +16,62 @@ class _loginScreenState extends State<loginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  bool loginFailed = false;
+
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: _emailController.text.trim(), 
       password: _passwordController.text.trim()
     );
+    } catch (_) {
+      setState(() {
+        loginFailed = true;
+      });
+    }
+  }
+
+  Widget getErrorMessage() {
+    if(loginFailed) {
+      return Text("Email Or Password Is Incorrect", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),);
+    } else {
+      return Container ();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                  padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+                  child: const Text('SlugDex',
+                    style: TextStyle( inherit: true,
+                      color: Colors.white,
+                      fontSize: 75,
+                      shadows: [
+                        Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
+                        Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
+                        Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
+                        Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
+                      ]
+                    )
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey.shade200,
-                      border: Border.all(color: Colors.black),
+                      border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
                       child: TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
@@ -59,15 +83,15 @@ class _loginScreenState extends State<loginScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey.shade200,
-                      border: Border.all(color: Colors.black),
+                      border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
                       child: TextField(
                         obscureText: true,
                         controller: _passwordController,
@@ -79,9 +103,13 @@ class _loginScreenState extends State<loginScreen> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
+                  child: getErrorMessage(),
+                ),
                 InkWell(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 15.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 15.0),
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.black,
@@ -90,7 +118,10 @@ class _loginScreenState extends State<loginScreen> {
                       ),
                       child: Center(
                         child: Container(
-                          child: Text("Login", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text("Login", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
+                          ),
                         )
                       ),
                     ),
