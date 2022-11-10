@@ -11,10 +11,11 @@ import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/Entry/entryReadWrite.dart';
 
 final user = FirebaseAuth.instance.currentUser;
+final email = user?.email;
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-double _radius = 60.0; // Distance in meters
+double _radius = 200.0; // Distance in meters
 
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen(
@@ -95,7 +96,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
-                Navigator.of(context).push(openDexPage());
+                //Navigator.of(context).push(openDexPage());
+                FirebaseAuth.instance.signOut();
               },
               child: const Icon(Icons.menu, color: Colors.black)),
           floatingActionButtonLocation:
