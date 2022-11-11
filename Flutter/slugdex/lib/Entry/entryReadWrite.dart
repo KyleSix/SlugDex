@@ -53,6 +53,17 @@ Future<List<Entry>> loadEntry() async {
   return entryList;
 }
 
+List<dynamic> populateDiscovered() {
+  List<dynamic> discoveredEntries = [];
+  //Get all discovered entries in a list
+  for (int i = 0; i < entryList.length; i++) {
+    if (entryList[i].discovered == 1) {
+      discoveredEntries.add(entryList[i].toUserJson());
+    } //end if
+  } //end for
+  return discoveredEntries;
+}
+
 //Marks entries as discovered, updating discovery date
 //Updates user data file with new discovered locations
 void markDiscovered(index) async {
@@ -60,16 +71,9 @@ void markDiscovered(index) async {
   entryList[index].discovered = 1;
   entryList[index].setDiscoveredDate();
 
-  List<dynamic> discoveredEntries = [];
+  List<dynamic> discoveredEntries = populateDiscovered();
   Map<String, dynamic> toEncode = <String, dynamic>{};
   String encodedString; //user data
-
-  //Get all discovered entries in a list
-  for (int i = 0; i < entryList.length; i++) {
-    if (entryList[i].discovered == 1) {
-      discoveredEntries.add(entryList[i].toUserJson());
-    } //end if
-  } //end for
 
   //Load items into into user entry in firebase
   updateUserData(discoveredEntries);

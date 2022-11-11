@@ -9,13 +9,14 @@ import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/Entry/entryReadWrite.dart';
+import 'package:slugdex/db/ManageUserData.dart';
 
 User? user = FirebaseAuth.instance.currentUser;
 String? email = user?.email;
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-double _radius = 200.0; // Distance in meters
+double _radius = 60.0; // Distance in meters
 
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen(
@@ -35,6 +36,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     id = widget.entryID; // set id member to class parameter
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
+    //delete - used for testing
+    updateUserData(populateDiscovered());
   }
 
   @override

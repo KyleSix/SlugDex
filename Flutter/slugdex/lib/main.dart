@@ -11,8 +11,6 @@ import 'dart:core';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-
 List<Entry> entryList = []; //Global ist of all entries
 var db = FirebaseFirestore.instance;
 
@@ -23,8 +21,7 @@ Future<void> main() async {
   );
   entryList = await loadEntry();
 
-  String? email = FirebaseAuth.instance.currentUser?.email; //Get user email
-  getUserData(email.toString());
+  getDocIds();
 
   runApp(MyApp());
 }
