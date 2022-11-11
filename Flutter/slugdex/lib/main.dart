@@ -9,15 +9,22 @@ import 'dart:core';
 //Firebase Imports
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
+// Settings Imports
+import 'package:flutter_settings_screens/flutter_settings_screens.dart' as fss; //Naming conflict arose, so use prefix fss
 
 List<Entry> entryList = []; //Global ist of all entries
 var db = FirebaseFirestore.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   entryList = await loadEntry();
+
+  // Initialize the settings plugin
+  await fss.Settings.init();
+
   runApp(MyApp());
 }
 
@@ -26,10 +33,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
-      ChangeNotifierProvider(
-        create: (context) => LocationProvider(),
-        child: checkLogin(),
-      )
+          ChangeNotifierProvider(
+            create: (context) => LocationProvider(),
+            child: checkLogin(),
+          )
     ], child: MaterialApp(debugShowCheckedModeBanner: false, title: 'SlugDex', home: checkLogin()));
   }
 }
