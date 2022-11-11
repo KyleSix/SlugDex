@@ -6,7 +6,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/db/ManageUserData.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 //Load Entry List as a string from Json
 Future<String> _loadEntryAsset() async {

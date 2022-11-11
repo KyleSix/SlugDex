@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/auth/authPage.dart';
-import 'package:slugdex/db/ManageUserData.dart';
 import 'Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'dart:core';

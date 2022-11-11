@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/rendering.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 
 Future updateUserData(List<dynamic> discoveredEntries) async {
