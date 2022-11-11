@@ -5,14 +5,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
-import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 
-User? user = FirebaseAuth.instance.currentUser;
-String? email = user?.email;
+Map<String, dynamic> userData = {};
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
@@ -36,8 +34,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     id = widget.entryID; // set id member to class parameter
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
-    //delete - used for testing
-    updateUserData(populateDiscovered());
+    userData = getUserData();
   }
 
   @override

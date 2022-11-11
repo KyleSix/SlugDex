@@ -21,8 +21,6 @@ Future<void> main() async {
   );
   entryList = await loadEntry();
 
-  getDocIds();
-
   runApp(MyApp());
 }
 

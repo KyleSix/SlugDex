@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
+import 'package:slugdex/screens/LiveMapScreen.dart';
 
 Future updateUserData(List<dynamic> discoveredEntries) async {
   String? email = FirebaseAuth.instance.currentUser?.email;
@@ -13,7 +15,7 @@ Future updateUserData(List<dynamic> discoveredEntries) async {
   });
 }
 
-Future <List<String>> getDocIds() async {
+Future<List<String>> getDocIds() async {
   List<String> docIDs = [];
   await FirebaseFirestore.instance
       .collection('userData')
@@ -25,28 +27,25 @@ Future <List<String>> getDocIds() async {
   return docIDs;
 }
 
-// String getUserEmail(User currentUser) {
-//   List<String> docIDs = getDocIds()
-// }
-
-Future getUserData() async {
+Map<String, dynamic> getUserData() {
   User? user = FirebaseAuth.instance.currentUser;
   String? email = user?.email; //Get the user's email address
   String? uid = user?.uid;
   print(
       "--------------------------------------------------\n\n\n\n\n\n\n\n\n\n\ninside get userdata");
-  await FirebaseFirestore.instance
+  FirebaseFirestore.instance
       .collection('userData')
-      .doc(uid)
+      .doc(email)
       .get()
-      .then((DocumentSnapshot documentSnapshot) {
-    if (documentSnapshot.exists) {
+      .then((snapshot) {
+    if (snapshot.exists) {
       print('User email $email, uid = $uid found in database');
-      Map<String, dynamic> userData =
-          documentSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
       print("UserData = ${userData.toString()}");
     } else {
       print("User email $email, uid = $uid NOT found in database");
     } //end if else
   });
+
+  return userData;
 }
