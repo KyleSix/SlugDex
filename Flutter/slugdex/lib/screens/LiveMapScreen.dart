@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,6 +8,7 @@ import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
+import 'DexEntryPage.dart';
 
 Map<String, dynamic> userData = {};
 
@@ -96,8 +96,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
-                //Navigator.of(context).push(openDexPage());
-                FirebaseAuth.instance.signOut();
+                Navigator.of(context).push(openDexPage());
               },
               child: const Icon(Icons.menu, color: Colors.black)),
           floatingActionButtonLocation:
