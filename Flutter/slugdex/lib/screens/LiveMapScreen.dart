@@ -140,6 +140,28 @@ getUserLocation() async { //Use Geo locator to find the current location(latitud
   _currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 }
 
+Widget _buildPopupDialog(BuildContext context, _title, _message, thisEntry) {
+  return new AlertDialog(
+    title: Text(_title),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(_message),
+      ],
+    ),
+    actions: <Widget>[
+      new TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: thisEntry)));
+        },
+        child: const Text("Ok"),
+      ),
+    ],
+  );
+}
+
 Set<Circle> populateHintCircles(context) {
   _circles = clearHintCircles();
   for (Entry thisEntry in entryList) {
