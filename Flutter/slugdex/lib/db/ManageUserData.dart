@@ -7,7 +7,7 @@ Future updateUserData(List<dynamic> discoveredEntries) async {
   print("EMAIL IS $email");
   print("discoveredEntries = ${discoveredEntries.toList()}");
 
-  await FirebaseFirestore.instance.collection('userData').add({
+  await FirebaseFirestore.instance.collection('userData').doc(email).set({
     'email': email,
     'discovered': discoveredEntries.toList(),
   });
