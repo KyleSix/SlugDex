@@ -12,7 +12,8 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';//Firebabse Authentication
 
 
-List<Entry> entryList = []; //Global ist of all entries
+List<Entry> entryList = []; //Global List of all entries
+bool Debug = true;
 var db = FirebaseFirestore.instance;
 
 Future<void> main() async {
@@ -31,6 +32,6 @@ class MyApp extends StatelessWidget {
         create: (context) => LocationProvider(),
         child: LiveMapScreen(),
       )
-    ], child: MaterialApp(title: 'SlugDex', home: LiveMapScreen()));
+    ], child: MaterialApp(title: 'SlugDex', debugShowCheckedModeBanner: false, home: LiveMapScreen()));
   }
 }

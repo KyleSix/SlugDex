@@ -7,11 +7,13 @@ import 'package:slugdex/provider/LocationProvider.dart';
 import 'package:slugdex/screens/DexEntryPage.dart';
 import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
+import 'package:slugdex/screens/Animations.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-double _radius = 60.0; // Distance in meters
+double _radius = 25.0; // Distance in meters
+
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen({this.entryID = -1}); // Sentinel value when loading screen not from a hint
   final int entryID;
@@ -34,19 +36,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar( title: const Text("SlugDex",
-          style: TextStyle( inherit: true,
-              shadows: [
-                Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
-                Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
-                Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
-                Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
-              ]
-          )
-      ),
+      appBar: AppBar(
+        title: const Text("SlugDex", style: TextStyle( inherit: true,)),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: googleMapUI(context),
@@ -74,7 +68,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       minMaxZoomPreference: const MinMaxZoomPreference(16,19),
                       markers: populateClientMarkers(context),
                       circles: populateHintCircles(context),
-
                       onMapCreated: (controller){
                         setState(() { mapController = controller; });
                         if (id != -1) { navigateHint(id!); } // if we came from an entry hint, let's nav to it
@@ -86,13 +79,16 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
             ),
             floatingActionButton: FloatingActionButton(
                 backgroundColor: Colors.white,
-                onPressed:() {Navigator.of(context).push(openDexPage());},
+                onPressed:() {
+                  Navigator.of(context).push(openDexPage());
+                  },
                 child: const Icon(Icons.menu, color: Colors.black)
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );
         }
-        return const Center(child: CircularProgressIndicator(color: Colors.black,),);
+        return Center(child: LoadingScreen(),);
+        //return const Center(child: CircularProgressIndicator(color: Colors.black,),);
       }
   );
   }
@@ -140,7 +136,7 @@ Set<Marker> populateClientMarkers(context) {
 Set<Circle> clearHintCircles(){ _circles.clear(); return _circles; }
 
 Position ?_currentPosition;
-getUserLocation() async { //Use Geolocator to find the current location(latitude & longitude)
+getUserLocation() async { //Use Geo locator to find the current location(latitude & longitude)
   _currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 }
 
@@ -191,13 +187,21 @@ Set<Circle> populateHintCircles(context) {
               visible: true, // All circles are hidden by default
               zIndex: 0,
               onTap: () {
-                getUserLocation();
-                double distance = Geolocator.distanceBetween(_currentPosition!.latitude, _currentPosition!.longitude,
+                getUserLocation(); // Sets _currentPosition variables lat / lng members to current position lat / lng
+                double distance = Geolocator.distanceBetween(_currentPosition?.latitude ?? 0, _currentPosition?.longitude ?? 0,
                     thisEntry.latitude!.toDouble(), thisEntry.longitude!.toDouble());
 
+                if(Debug == true) { // TODO When debugging we want to test without leaving our current location
+                  _radius = 10000.0; // So Set Large Radius Value For Testing to reach the Locations
+                }
+
                 if( distance <= _radius) { // if user is inside 25 meter radius
-                  showDialog(context: context, builder: (BuildContext context) => _buildPopupDialog(context, "A new Discovery! ", "Name: " + thisEntry.name.toString(), thisEntry),);
-                  markDiscovered(thisEntry.iD!.toInt() - 1); // Mark Entry List[index] to discovered
+                  if( Debug == false ){ // TODO We don't want to Mark Entry Locations in debug mode : For Testing
+                    markDiscovered(thisEntry.iD!.toInt() - 1); // Mark Entry List[index] to discovered
+                  }
+
+                  showDialog(context: context, builder: (BuildContext context) => dexEntryView(entry: thisEntry),);
+                  showDialog(context: context, builder: (BuildContext context) => DiscoveryAnimation(),);
                 }
               }
           )
