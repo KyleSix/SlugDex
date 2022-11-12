@@ -25,6 +25,9 @@ Future<void> main() async {
   );
   entryList = await loadEntry();
 
+  //Print statement for debugging
+  await Future.forEach(entryList, (element) => print('${element.toString()}'));
+
   // Initialize the settings plugin
   await fss.Settings.init();
 

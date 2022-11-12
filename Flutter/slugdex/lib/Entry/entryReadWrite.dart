@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:slugdex/screens/LiveMapScreen.dart';
+
 import 'entry.dart';
 import 'dart:convert';
 import 'dart:core';
@@ -34,8 +38,21 @@ Future<String> _loadEntryAsset() async {
 //Create default list of
 
 //Create List of entries from the Json string
-Future<List<Entry>> loadEntry() async {
-  List<Entry> entryList = [];
+Future <List<dynamic>> loadEntry() async {
+  List<dynamic> entryList = [];
+
+  await FirebaseFirestore.instance
+      .collection('entries')
+      .doc('entries')
+      .get()
+      .then((snapshot) {
+    if (snapshot.exists) {
+      Map<String, dynamic> entryData = snapshot.data() as Map<String, dynamic>;
+      entryList = entryData['entryList'];
+      print("entryList in loadEntry() = ${entryList.toString()}");
+      return entryList;
+    }
+  });
 
   return entryList;
 }
