@@ -10,6 +10,9 @@ import 'dart:core';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+// Settings Imports
+import 'package:flutter_settings_screens/flutter_settings_screens.dart' as fss; //Naming conflict arose, so use prefix fss
+
 List<Entry> entryList = []; //Global ist of all entries
 var db = FirebaseFirestore.instance;
 
@@ -20,6 +23,10 @@ Future<void> main() async {
   );
   entryList = await loadEntry();
 
+
+  // Initialize the settings plugin
+  await fss.Settings.init();
+
   runApp(MyApp());
 }
 
@@ -27,16 +34,12 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
+
+    return MultiProvider(providers: [
           ChangeNotifierProvider(
             create: (context) => LocationProvider(),
             child: checkLogin(),
           )
-        ],
-        child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'SlugDex',
-            home: checkLogin()));
+    ], child: MaterialApp(debugShowCheckedModeBanner: false, title: 'SlugDex', home: checkLogin()));
   }
 }

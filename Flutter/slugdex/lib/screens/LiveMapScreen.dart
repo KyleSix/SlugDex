@@ -9,6 +9,7 @@ import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'DexEntryPage.dart';
+import 'package:slugdex/screens/settingsPage.dart';
 
 Map<String, dynamic> userData = {};
 
@@ -55,12 +56,22 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         elevation: 0,
       ),
       body: googleMapUI(context),
+      floatingActionButton: FloatingActionButton(
+          heroTag: "SettingsBtn",
+          backgroundColor: Colors.white,
+          onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => SettingsPage()));
+          },
+          child: const Icon(Icons.person, color: Colors.black)),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
     );
   } // End widget
 
-  Widget googleMapUI(context) {
-    return Consumer<LocationProvider>(builder: (consumerContext, model, child) {
-      if (model.locationPosition != null) {
+
+  Widget googleMapUI(context) { return Consumer<LocationProvider>(
+      builder: (consumerContext, model, child) {
+        if(model.locationPosition != null){
         return Scaffold(
           body: Center(
             child: Column(
@@ -68,8 +79,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                 Expanded(
                   child: GoogleMap(
                     mapType: MapType.hybrid,
-                    initialCameraPosition: CameraPosition(
-                        target: model.locationPosition!, zoom: 18),
+                      initialCameraPosition: CameraPosition( target: model.locationPosition!, zoom: 18 ),
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
                     rotateGesturesEnabled: false,
@@ -77,36 +87,38 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     tiltGesturesEnabled: false,
                     zoomGesturesEnabled: true,
                     zoomControlsEnabled: false,
-                    minMaxZoomPreference: const MinMaxZoomPreference(16, 19),
+                      minMaxZoomPreference: const MinMaxZoomPreference(16,19),
                     markers: populateClientMarkers(context),
                     circles: populateHintCircles(context),
-                    onMapCreated: (controller) {
-                      setState(() {
-                        mapController = controller;
-                      });
-                      if (id != -1) {
-                        navigateHint(id!);
-                      } // if we came from an entry hint, let's nav to it
+
+                      onMapCreated: (controller){
+                        setState(() { mapController = controller; });
+                        if (id != -1) { navigateHint(id!); } // if we came from an entry hint, let's nav to it
                     },
                   ),
                 ),
               ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            heroTag: "DexViewBtn",
+              backgroundColor: Colors.white,
+              onPressed: () {
+                Navigator.of(context).push(openDexPage());
+              },
+              label: Row(
+                children: [
+                  Icon(Icons.menu, color: Colors.black)],
+                )
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-                backgroundColor: Colors.white,
-                onPressed: () {Navigator.of(context).push(openDexPage());},
-                child: const Icon(Icons.menu, color: Colors.black)
-            ),
-           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+              
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
         );
       }
-      return const Center(
-        child: CircularProgressIndicator(
-          color: Colors.black,
-        ),
+        return const Center(child: CircularProgressIndicator(color: Colors.black,),);
+      }
       );
-    });
   }
 
   void navigateHint(int id) async {
@@ -140,18 +152,17 @@ void addMarker(index, context) {
     default:
       break;
   }
-  _markers.add(Marker(
+  _markers.add(
+      Marker(
       markerId: MarkerId(entryList[index].iD.toString()),
       position: LatLng(entryList[index].latitude!, entryList[index].longitude!),
       icon: BitmapDescriptor.defaultMarkerWithHue(rarityColor),
-      infoWindow: InfoWindow(title: entryList[index].name),
-      onTap: () {
-        // On tap marker, opens its Dex Entry
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => dexEntryView(entry: entryList[index])));
-      }));
+          infoWindow: InfoWindow( title: entryList[index].name ),
+          onTap:() { // On tap marker, opens its Dex Entry
+            Navigator.push(context, MaterialPageRoute(builder: (context) => dexEntryView(entry: entryList[index])));
+          }
+      )
+  );
 }
 
 Set<Marker> populateClientMarkers(context) {
@@ -224,11 +235,10 @@ Set<Circle> populateHintCircles(context) {
       default:
         break;
     }
-    if (thisEntry.discovered == 0) {
-      // if not discovered
-      _circles.add(Circle(
-          circleId:
-              CircleId(thisEntry.iD.toString()), // Entry ID # is the Circle ID
+    if (thisEntry.discovered == 0) { // if not discovered
+      _circles.add(
+          Circle(
+              circleId: CircleId(thisEntry.iD.toString()), // Entry ID # is the Circle ID
           consumeTapEvents: true,
           fillColor: rarityColor.withOpacity(0.2),
           center: LatLng(thisEntry.latitude!, thisEntry.longitude!),
@@ -239,26 +249,16 @@ Set<Circle> populateHintCircles(context) {
           zIndex: 0,
           onTap: () {
             getUserLocation();
-            double distance = Geolocator.distanceBetween(
-                _currentPosition!.latitude,
-                _currentPosition!.longitude,
-                thisEntry.latitude!.toDouble(),
-                thisEntry.longitude!.toDouble());
+                double distance = Geolocator.distanceBetween(_currentPosition!.latitude, _currentPosition!.longitude,
+                    thisEntry.latitude!.toDouble(), thisEntry.longitude!.toDouble());
 
-            if (distance <= _radius) {
-              // if user is inside 25 meter radius
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => _buildPopupDialog(
-                    context,
-                    "A new Discovery! ",
-                    "Name: " + thisEntry.name.toString(),
-                    thisEntry),
-              );
-              markDiscovered(thisEntry.iD!.toInt() -
-                  1); // Mark Entry List[index] to discovered
+                if( distance <= _radius) { // if user is inside 25 meter radius
+                  showDialog(context: context, builder: (BuildContext context) => _buildPopupDialog(context, "A new Discovery! ", "Name: " + thisEntry.name.toString(), thisEntry),);
+                  markDiscovered(thisEntry.iD!.toInt() - 1); // Mark Entry List[index] to discovered
             }
-          })); // End add(Circle)
+              }
+          )
+      ); // End add(Circle)
     } // End if(Not Discovered)
   } // End For(Each Entry)
   return _circles;
