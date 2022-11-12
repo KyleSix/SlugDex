@@ -49,6 +49,18 @@ class Entry {
         rarity: Rarity.values[parsedJson['rarity']]);
   }
 
+  //Convert entry to json
+  Map<String, dynamic> toJson() {
+    return {
+      "ID": iD,
+      "name": name,
+      "latitude": latitude,
+      "longitude": longitude,
+      "description": description,
+      "rarity": rarity?.index.toInt()
+    };
+  }
+
   //Will pull user data from User data Json
   factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
     return Entry(

@@ -13,41 +13,29 @@ Future<String> _loadEntryAsset() async {
 }
 
 //Load User Data if it exist, if not create a save file with default entries
-Future<String> _loadUserAsset() async {
-  File file = File(await getUserDataFilePath());
-  String fileContents;
+// Future<String> _loadUserAsset() async {
+//   File file = File(await getUserDataFilePath());
+//   String fileContents;
 
-  //Create user data file if it does not exist
-  //If an exception is thrown, catch and create user data file
-  try {
-    fileContents = await file.readAsString();
-  } catch (_) {
-    File(await getUserDataFilePath()).create();
-    file = File(await getUserDataFilePath());
-    file.writeAsString(
-        await rootBundle.loadString('assets/json/UserDataDefault.json'));
-    fileContents = await file.readAsString();
-  }
-  return fileContents;
-}
+//   //Create user data file if it does not exist
+//   //If an exception is thrown, catch and create user data file
+//   try {
+//     fileContents = await file.readAsString();
+//   } catch (_) {
+//     File(await getUserDataFilePath()).create();
+//     file = File(await getUserDataFilePath());
+//     file.writeAsString(
+//         await rootBundle.loadString('assets/json/UserDataDefault.json'));
+//     fileContents = await file.readAsString();
+//   }
+//   return fileContents;
+// }
+
+//Create default list of
 
 //Create List of entries from the Json string
 Future<List<Entry>> loadEntry() async {
-  String jsonString = await _loadEntryAsset();
-  String userString = await _loadUserAsset();
-  final json = jsonDecode(jsonString);
-  final userJson = jsonDecode(userString);
-
-  List<Entry> entryList =
-      List<Entry>.from(json["entries"].map((x) => Entry.fromJson(x)));
-  List<Entry> userList =
-      List<Entry>.from(userJson["entries"].map((x) => Entry.fromUserJson(x)));
-
-  //Set entry discovered data the user discovered them
-  for (int i = 0; i < userList.length; i++) {
-    entryList[userList[i].iD! - 1].discovered = 1;
-    entryList[userList[i].iD! - 1].dateDiscovered = userList[i].dateDiscovered;
-  } //end for
+  List<Entry> entryList = [];
 
   return entryList;
 }
@@ -76,18 +64,8 @@ void markDiscovered(index) async {
   updateEntryListDiscovered(index);
 
   List<dynamic> discoveredEntries = populateDiscovered();
-  Map<String, dynamic> toEncode = <String, dynamic>{};
-  String encodedString; //user data
-
   //Load items into into user entry in firebase
   updateUserData(discoveredEntries);
-
-  //Write data to Json
-  toEncode = {'entries': discoveredEntries};
-  encodedString = jsonEncode(toEncode);
-
-  File file = File(await getUserDataFilePath());
-  file.writeAsString(encodedString);
 }
 
 Future<String> getUserDataFilePath() async {
