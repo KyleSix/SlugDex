@@ -63,12 +63,17 @@ List<dynamic> populateDiscovered() {
   return discoveredEntries;
 }
 
+//Update the entryList to have discovered
+void updateEntryListDiscovered(index) {
+  entryList[index].discovered = 1;
+  entryList[index].setDiscoveredDate();
+}
+
 //Marks entries as discovered, updating discovery date
 //Updates user data file with new discovered locations
 void markDiscovered(index) async {
   //Set discovery
-  entryList[index].discovered = 1;
-  entryList[index].setDiscoveredDate();
+  updateEntryListDiscovered(index);
 
   List<dynamic> discoveredEntries = populateDiscovered();
   Map<String, dynamic> toEncode = <String, dynamic>{};
