@@ -41,10 +41,10 @@ class Entry {
   //Will pull all entry data from Json and create entries
   factory Entry.fromJson(Map<String, dynamic> parsedJson) {
     return Entry(
-        iD: parsedJson['ID'],
+        iD: parsedJson['ID'].toInt(),
         name: parsedJson['name'],
-        latitude: parsedJson['latitude'],
-        longitude: parsedJson['longitude'],
+        latitude: parsedJson['latitude'].toDouble(),
+        longitude: parsedJson['longitude'].toDouble(),
         description: parsedJson['description'],
         rarity: Rarity.values[parsedJson['rarity']]);
   }
@@ -64,7 +64,7 @@ class Entry {
   //Will pull user data from User data Json
   factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
     return Entry(
-        iD: parsedJson['ID'], dateDiscovered: parsedJson['dateDiscovered']);
+        iD: parsedJson['ID'].toInt(), dateDiscovered: parsedJson['dateDiscovered']);
   }
 
   //Convert Entry data to Json for User Data
