@@ -5,14 +5,13 @@ import 'package:slugdex/screens/createAccountScreen.dart';
 import 'package:slugdex/screens/loginScreen.dart';
 
 class authPage extends StatefulWidget {
-  const authPage({Key? key}) : super(key:key);
+  const authPage({Key? key}) : super(key: key);
 
   @override
   State<authPage> createState() => _authPageState();
 }
 
 class _authPageState extends State<authPage> {
-
   bool showLogin = true;
 
   void toggleScreens() {
@@ -23,7 +22,7 @@ class _authPageState extends State<authPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(showLogin) {
+    if (showLogin) {
       return loginScreen(showCreateAccountScreen: toggleScreens);
     } else {
       return createAccountScreen(showLoginScreen: toggleScreens);
@@ -32,19 +31,18 @@ class _authPageState extends State<authPage> {
 }
 
 class checkLogin extends StatelessWidget {
-  const checkLogin({Key? key}) : super(key:key);
+  const checkLogin({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return LiveMapScreen();
-        } else {
-          return authPage();
-        }
-      }
-    );
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return LiveMapScreen();
+          } else {
+            return authPage();
+          }
+        });
   }
 }
