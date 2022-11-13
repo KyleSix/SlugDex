@@ -35,7 +35,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     id = widget.entryID; // set id member to class parameter
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
-    userData = getUserData();
+    //userData = getUserData();
   }
 
   @override

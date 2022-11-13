@@ -11,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 
+List<int> defaultIds = [1, 5, 10, 15]; //Default Entry IDs given to user
+
 //Load Entry List as a string from Json
 Future<String> _loadEntryAsset() async {
   return await rootBundle.loadString('assets/json/EntryInput.json');
@@ -37,9 +39,9 @@ Future<String> _loadEntryAsset() async {
 
 //Create default list of
 
-//Create List of entries from the Json string
-Future <List<dynamic>> loadEntry() async {
-  List<dynamic> entryList = [];
+//Pull entries from Firebase and create List<Entry> entryList
+Future<List<Entry>> loadEntry() async {
+  List<Entry> entryList = [];
 
   await FirebaseFirestore.instance
       .collection('entries')
@@ -48,8 +50,9 @@ Future <List<dynamic>> loadEntry() async {
       .then((snapshot) {
     if (snapshot.exists) {
       Map<String, dynamic> entryData = snapshot.data() as Map<String, dynamic>;
-      entryList = entryData['entryList'];
-      print("entryList in loadEntry() = ${entryList.toString()}");
+      entryList = List<Entry>.from(
+          entryData["entryList"].map((x) => Entry.fromJson(x)));
+      ;
       return entryList;
     }
   });
@@ -57,30 +60,41 @@ Future <List<dynamic>> loadEntry() async {
   return entryList;
 }
 
-List<dynamic> populateDiscovered() {
-  List<dynamic> discoveredEntries = [];
+//Create default discovered locations (used for newly created accounts)
+void initializeDiscovered(Map<int, dynamic> discoveredEntries) {
+  for (int i = 0; i < defaultIds.length; i++) {
+    Entry e = Entry.fromUserJson({'ID': defaultIds[i], 'dateDiscovered': setDiscoveredDate()});
+    discoveredEntries[defaultIds[i]] = e.toUserJson();
+  }
+}
+
+//Add the discovered locations to entryList
+void populateDiscovered(Map<int, dynamic> discoveredEntries) {
+  //print("in populateDiscovered");
+  //Future.forEach(entryList, (element) => print('${element.toString()}'));
+
   //Get all discovered entries in a list
   for (int i = 0; i < entryList.length; i++) {
-    if (entryList[i].discovered == 1) {
-      discoveredEntries.add(entryList[i].toUserJson());
+    if (discoveredEntries.keys.contains(i + 1)) {
+      entryList[i].discovered = 1;
+      entryList[i].dateDiscovered = discoveredEntries[i + 1]['dateDiscovered'];
     } //end if
   } //end for
-  return discoveredEntries;
 }
 
 //Update the entryList to have discovered
 void updateEntryListDiscovered(index) {
   entryList[index].discovered = 1;
-  entryList[index].setDiscoveredDate();
+  entryList[index].dateDiscovered = setDiscoveredDate();
 }
 
 //Marks entries as discovered, updating discovery date
 //Updates user data file with new discovered locations
-void markDiscovered(index) async {
+void markDiscovered(/*Map<int, dynamic> discoveredEntries,*/ int index) async {
   //Set discovery
+  discoveredEntries[index + 1] = setDiscoveredDate();
   updateEntryListDiscovered(index);
 
-  List<dynamic> discoveredEntries = populateDiscovered();
   //Load items into into user entry in firebase
   updateUserData(discoveredEntries);
 }

@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 
-Future updateUserData(List<dynamic> discoveredEntries) async {
+Future updateUserData(Map<int, dynamic> discoveredEntries) async {
+  List<dynamic> discovered = [];
+  discoveredEntries.entries.forEach((element) => discovered.add(element.value));
+  print("in updateUserData() discovered = ${discovered.toString()}");
   String? email = FirebaseAuth.instance.currentUser?.email;
   await FirebaseFirestore.instance.collection('userData').doc(email).set({
     'email': email,
-    'discovered': discoveredEntries.toList(),
+    'discovered': discovered.toList(),
   });
 }
 
@@ -26,7 +29,7 @@ Map<String, dynamic> getUserData() {
   User? user = FirebaseAuth.instance.currentUser;
   String? email = user?.email; //Get the user's email address
   String? uid = user?.uid;
-  
+
   FirebaseFirestore.instance
       .collection('userData')
       .doc(email)

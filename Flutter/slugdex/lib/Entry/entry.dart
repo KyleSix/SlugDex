@@ -88,17 +88,17 @@ class Entry {
     return entryString.toString();
   }
 
-  //Set the date discovered of an entry to current day
-  void setDiscoveredDate() {
-    DateTime now = DateTime.now();
-    DateFormat format = DateFormat('MM/dd/yyyy');
-
-    dateDiscovered = format.format(now);
-  }
-
   String getFileName() {
     StringBuffer fileName = StringBuffer();
     fileName.write("$iD - $name.jpg");
     return fileName.toString();
   }
 }
+
+  //Set the date discovered of an entry to current day
+  String setDiscoveredDate() {
+    DateTime now = DateTime.now();
+    DateFormat format = DateFormat('MM/dd/yyyy');
+
+    return format.format(now).toString();
+  }

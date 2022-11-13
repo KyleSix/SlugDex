@@ -15,8 +15,9 @@ import 'firebase_options.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart'
     as fss; //Naming conflict arose, so use prefix fss
 
-List<dynamic> entryList = []; //Global ist of all entries
+List<Entry> entryList = []; //Global ist of all entries
 var db = FirebaseFirestore.instance;
+final Map<int, dynamic> discoveredEntries = {};
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,9 +25,9 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   entryList = await loadEntry();
-
-  //Print statement for debugging
-  await Future.forEach(entryList, (element) => print('${element.toString()}'));
+  
+  //Print statement for debugging - delete
+  //await Future.forEach(entryList, (element) => print('${element.toString()}'));
 
   // Initialize the settings plugin
   await fss.Settings.init();

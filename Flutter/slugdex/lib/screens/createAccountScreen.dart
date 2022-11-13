@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
-
-List<dynamic> discoveredEntries = populateDiscovered();
+import 'package:slugdex/screens/LiveMapScreen.dart';
+import 'package:slugdex/main.dart';
 
 class createAccountScreen extends StatefulWidget {
   final VoidCallback showLoginScreen;
@@ -30,7 +30,14 @@ class _createAccountScreenState extends State<createAccountScreen> {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _emailController.text.trim(),
             password: _passwordController.text.trim());
+
+        initializeDiscovered(discoveredEntries);//Initialize discovered entries map using default values
+        populateDiscovered(discoveredEntries);  //Update the discovered entries in entryList
+        print("discoveredEntries = ${discoveredEntries.toString()}");
         updateUserData(discoveredEntries);
+        userData = await getUserData();
+        print("userData in signIn()= ${userData.toString()}");
+        //print("userData[discovered] in signIn() = ${userData['discovered']}");
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {
           setState(() {
