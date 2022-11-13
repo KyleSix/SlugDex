@@ -86,8 +86,6 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-      - assets/json/EntryInput.json
-      - assets/json/UserDataDefault.json
       - assets/images/
 
       
