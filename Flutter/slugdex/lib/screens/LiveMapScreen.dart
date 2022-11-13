@@ -7,15 +7,12 @@ import 'package:slugdex/provider/LocationProvider.dart';
 import 'package:slugdex/main.dart';
 import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/Entry/entryReadWrite.dart';
-import 'package:slugdex/db/ManageUserData.dart';
 import 'DexEntryPage.dart';
 import 'package:slugdex/screens/settingsPage.dart';
 
-//Map<String, dynamic> userData = {};
-
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-double _radius = 4500.0; // Distance in meters
+double _radius = 60.0; // Distance in meters
 
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen(

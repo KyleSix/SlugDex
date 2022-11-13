@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:slugdex/main.dart';
-import 'package:slugdex/screens/LiveMapScreen.dart';
 
 Future updateUserData() async {
   List<dynamic> discovered = [];
@@ -13,7 +11,7 @@ Future updateUserData() async {
       discovered.add(entryList[i].toUserJson());
     }
   }//end for
-  
+
   String? email = FirebaseAuth.instance.currentUser?.email;
   await FirebaseFirestore.instance.collection('userData').doc(email).set({
     'email': email,
@@ -21,22 +19,9 @@ Future updateUserData() async {
   });
 }
 
-Future<List<String>> getDocIds() async {
-  List<String> docIDs = [];
-  await FirebaseFirestore.instance
-      .collection('userData')
-      .get()
-      .then((snapshot) => snapshot.docs.forEach((document) {
-            print("element = ${document.reference}");
-            docIDs.add(document.reference.id);
-          }));
-  return docIDs;
-}
-
+//Populate entryList to store all user discovered data
 void loadUserDiscovered() {
-  User? user = FirebaseAuth.instance.currentUser;
-  String? email = user?.email; //Get the user's email address
-  String? uid = user?.uid;
+  String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
   Map<String, dynamic> userData = {};
 
   FirebaseFirestore.instance
@@ -48,8 +33,6 @@ void loadUserDiscovered() {
       userData = snapshot.data() as Map<String, dynamic>;
 
       for (Map<String, dynamic> element in userData['discovered']) {
-        print("element = ${element['ID'].toString()}");
-        print("element = ${element['dateDiscovered'].toString()}");
         int id = element['ID'];
         String dateDiscovered = element['dateDiscovered'].toString();
         entryList[id - 1].discovered = 1;

@@ -1,13 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:slugdex/screens/LiveMapScreen.dart';
-
 import 'entry.dart';
-import 'dart:convert';
 import 'dart:core';
-import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:path_provider/path_provider.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 

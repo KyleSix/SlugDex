@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/screens/createAccountScreen.dart';
 import 'package:slugdex/screens/loginScreen.dart';
-import 'package:slugdex/main.dart';
-import 'package:slugdex/Entry/entryReadWrite.dart';
 
 class authPage extends StatefulWidget {
   const authPage({Key? key}) : super(key: key);
@@ -42,10 +39,6 @@ class checkLogin extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            //Initialize entryList to show discovered entries
-            // entryList = await loadEntry();
-            // loadUserDiscovered();
-
             return LiveMapScreen();
           } else {
             return authPage();
