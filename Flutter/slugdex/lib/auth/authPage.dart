@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/screens/createAccountScreen.dart';
 import 'package:slugdex/screens/loginScreen.dart';
+import 'package:slugdex/main.dart';
+import 'package:slugdex/Entry/entryReadWrite.dart';
+import 'package:slugdex/db/ManageUserData.dart';
 
 class authPage extends StatefulWidget {
   const authPage({Key? key}) : super(key: key);

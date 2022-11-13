@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:slugdex/auth/authPage.dart';
 import 'Entry/entry.dart';
 import 'package:slugdex/provider/LocationProvider.dart';
 import 'dart:core';
+import 'package:slugdex/db/ManageUserData.dart';
+import 'package:slugdex/Entry/entryReadWrite.dart';
+
 //Firebase Imports
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -22,6 +26,12 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   
+  String? email = FirebaseAuth.instance.currentUser?.email;
+  if (email != null) {
+    entryList = await loadEntry();
+    loadUserDiscovered();
+  }//end if 
+
   // Initialize the settings plugin
   await fss.Settings.init();
 
