@@ -92,7 +92,8 @@ void updateEntryListDiscovered(index) {
 //Updates user data file with new discovered locations
 void markDiscovered(/*Map<int, dynamic> discoveredEntries,*/ int index) async {
   //Set discovery
-  discoveredEntries[index + 1] = setDiscoveredDate();
+  Entry entry = Entry.fromUserJson({'ID': index + 1, 'dateDiscovered': setDiscoveredDate()});
+  discoveredEntries[index + 1] = entry.toUserJson();
   updateEntryListDiscovered(index);
 
   //Load items into into user entry in firebase

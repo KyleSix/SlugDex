@@ -15,7 +15,7 @@ Map<String, dynamic> userData = {};
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-double _radius = 60.0; // Distance in meters
+double _radius = 4500.0; // Distance in meters
 
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen(
