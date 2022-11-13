@@ -1,19 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 import 'package:slugdex/screens/createAccountScreen.dart';
 import 'package:slugdex/screens/loginScreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:slugdex/main.dart';
+import 'package:slugdex/Entry/entryReadWrite.dart';
 
 class authPage extends StatefulWidget {
-  const authPage({Key? key}) : super(key:key);
+  const authPage({Key? key}) : super(key: key);
 
   @override
   State<authPage> createState() => _authPageState();
 }
 
 class _authPageState extends State<authPage> {
-
   bool showLogin = true;
 
   void toggleScreens() {
@@ -24,7 +25,7 @@ class _authPageState extends State<authPage> {
 
   @override
   Widget build(BuildContext context) {
-    if(showLogin) {
+    if (showLogin) {
       return loginScreen(showCreateAccountScreen: toggleScreens);
     } else {
       return createAccountScreen(showLoginScreen: toggleScreens);
@@ -33,19 +34,22 @@ class _authPageState extends State<authPage> {
 }
 
 class checkLogin extends StatelessWidget {
-  const checkLogin({Key? key}) : super(key:key);
+  const checkLogin({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return LiveMapScreen();
-        } else {
-          return authPage();
-        }
-      }
-    );
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            //Initialize entryList to show discovered entries
+            // entryList = await loadEntry();
+            // loadUserDiscovered();
+
+            return LiveMapScreen();
+          } else {
+            return authPage();
+          }
+        });
   }
 }

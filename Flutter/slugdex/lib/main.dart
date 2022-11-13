@@ -24,7 +24,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  entryList = await loadEntry();
   
   //Print statement for debugging - delete
   //await Future.forEach(entryList, (element) => print('${element.toString()}'));

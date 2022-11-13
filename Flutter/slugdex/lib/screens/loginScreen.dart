@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
+import 'package:slugdex/main.dart';
+import 'package:slugdex/Entry/entryReadWrite.dart';
 
 class loginScreen extends StatefulWidget {
   final VoidCallback showCreateAccountScreen;
@@ -25,9 +27,8 @@ class _loginScreenState extends State<loginScreen> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim());
-      userData = await getUserData();
-      print("userData in signIn()= ${userData.toString()}");
-      print("userData[discovered] in signIn() = ${userData['discovered']}");
+      entryList = await loadEntry();
+      loadUserDiscovered();
     } catch (_) {
       setState(() {
         loginFailed = true;

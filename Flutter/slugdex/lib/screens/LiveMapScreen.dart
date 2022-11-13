@@ -11,7 +11,7 @@ import 'package:slugdex/db/ManageUserData.dart';
 import 'DexEntryPage.dart';
 import 'package:slugdex/screens/settingsPage.dart';
 
-Map<String, dynamic> userData = {};
+//Map<String, dynamic> userData = {};
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
@@ -35,7 +35,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     id = widget.entryID; // set id member to class parameter
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
-    //userData = getUserData();
   }
 
   @override

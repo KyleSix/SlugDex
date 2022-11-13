@@ -31,12 +31,15 @@ class _createAccountScreenState extends State<createAccountScreen> {
             email: _emailController.text.trim(),
             password: _passwordController.text.trim());
 
-        initializeDiscovered(discoveredEntries);//Initialize discovered entries map using default values
-        populateDiscovered(discoveredEntries);  //Update the discovered entries in entryList
-        print("discoveredEntries = ${discoveredEntries.toString()}");
-        updateUserData(discoveredEntries);
-        userData = await getUserData();
-        print("userData in signIn()= ${userData.toString()}");
+        entryList = await loadEntry();
+        initializeDiscovered();
+        updateUserData();
+        // initializeDiscovered(discoveredEntries);//Initialize discovered entries map using default values
+        // populateDiscovered(discoveredEntries);  //Update the discovered entries in entryList
+        // print("discoveredEntries = ${discoveredEntries.toString()}");
+        // updateUserData(discoveredEntries);
+        // userData = await getUserData();
+        // print("userData in signIn()= ${userData.toString()}");
         //print("userData[discovered] in signIn() = ${userData['discovered']}");
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {

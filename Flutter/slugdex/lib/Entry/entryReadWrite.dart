@@ -13,32 +13,6 @@ import 'package:slugdex/db/ManageUserData.dart';
 
 List<int> defaultIds = [1, 5, 10, 15]; //Default Entry IDs given to user
 
-//Load Entry List as a string from Json
-Future<String> _loadEntryAsset() async {
-  return await rootBundle.loadString('assets/json/EntryInput.json');
-}
-
-//Load User Data if it exist, if not create a save file with default entries
-// Future<String> _loadUserAsset() async {
-//   File file = File(await getUserDataFilePath());
-//   String fileContents;
-
-//   //Create user data file if it does not exist
-//   //If an exception is thrown, catch and create user data file
-//   try {
-//     fileContents = await file.readAsString();
-//   } catch (_) {
-//     File(await getUserDataFilePath()).create();
-//     file = File(await getUserDataFilePath());
-//     file.writeAsString(
-//         await rootBundle.loadString('assets/json/UserDataDefault.json'));
-//     fileContents = await file.readAsString();
-//   }
-//   return fileContents;
-// }
-
-//Create default list of
-
 //Pull entries from Firebase and create List<Entry> entryList
 Future<List<Entry>> loadEntry() async {
   List<Entry> entryList = [];
@@ -61,10 +35,10 @@ Future<List<Entry>> loadEntry() async {
 }
 
 //Create default discovered locations (used for newly created accounts)
-void initializeDiscovered(Map<int, dynamic> discoveredEntries) {
+void initializeDiscovered() {
   for (int i = 0; i < defaultIds.length; i++) {
-    Entry e = Entry.fromUserJson({'ID': defaultIds[i], 'dateDiscovered': setDiscoveredDate()});
-    discoveredEntries[defaultIds[i]] = e.toUserJson();
+    entryList[defaultIds[i] - 1].discovered = 1;
+    entryList[defaultIds[i] - 1].dateDiscovered = setDiscoveredDate();
   }
 }
 
@@ -92,18 +66,8 @@ void updateEntryListDiscovered(index) {
 //Updates user data file with new discovered locations
 void markDiscovered(/*Map<int, dynamic> discoveredEntries,*/ int index) async {
   //Set discovery
-  Entry entry = Entry.fromUserJson({'ID': index + 1, 'dateDiscovered': setDiscoveredDate()});
-  discoveredEntries[index + 1] = entry.toUserJson();
   updateEntryListDiscovered(index);
 
   //Load items into into user entry in firebase
-  updateUserData(discoveredEntries);
-}
-
-Future<String> getUserDataFilePath() async {
-  Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
-  String appDocumentsPath = appDocumentsDirectory.path.substring(1);
-  String filePath = '$appDocumentsPath/UserData.json';
-
-  return filePath;
+  updateUserData();
 }
