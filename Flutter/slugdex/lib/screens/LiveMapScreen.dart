@@ -42,12 +42,16 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text("SlugDex",
-            style: TextStyle(inherit: true, shadows: [
-              Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
-              Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
-              Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
-              Shadow(offset: Offset(-1.5, -1.5), color: Colors.black),
-            ])),
+            style: TextStyle( inherit: true,
+                color: Colors.white,
+                shadows: [
+                  Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
+                  Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
+                  Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
+                  Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
+                ]
+            )
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
