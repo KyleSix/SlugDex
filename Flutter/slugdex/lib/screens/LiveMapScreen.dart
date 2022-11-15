@@ -11,10 +11,12 @@ import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'DexEntryPage.dart';
 import 'package:slugdex/screens/settingsPage.dart';
 import 'package:slugdex/db/ManageUserData.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
 double _radius = 25.0; // Distance in meters
+String _mapStyle = "";
 
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen(
@@ -33,6 +35,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   void initState() {
     id = widget.entryID; // set id member to class parameter
     super.initState();
+    rootBundle.loadString('assets/map_style.txt').then((string) {_mapStyle = string;});
     Provider.of<LocationProvider>(context, listen: false).initialization();
   }
 
@@ -79,7 +82,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               children: [
                 Expanded(
                   child: GoogleMap(
-                    mapType: MapType.hybrid,
+                    //mapType: MapType.hybrid,
                     initialCameraPosition: CameraPosition(
                         target: model.locationPosition!, zoom: 18),
                     myLocationEnabled: true,
@@ -92,10 +95,9 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     minMaxZoomPreference: const MinMaxZoomPreference(16, 19),
                     markers: populateClientMarkers(context),
                     circles: populateHintCircles(context),
-                    onMapCreated: (controller) {
-                      setState(() {
-                        mapController = controller;
-                      });
+                    onMapCreated: (GoogleMapController controller) {
+                      mapController = controller;
+                      mapController.setMapStyle(_mapStyle);
                       if (id != -1) {
                         navigateHint(id!);
                       } // if we came from an entry hint, let's nav to it

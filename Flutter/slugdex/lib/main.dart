@@ -18,7 +18,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart'
 
 
 List<Entry> entryList = []; //Global List of all entries
-bool Debug = true;
+bool Debug = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

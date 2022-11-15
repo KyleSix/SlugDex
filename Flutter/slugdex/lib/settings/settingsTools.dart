@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
-
 
 // This class wraps an Icon in a container of a specific shape and color
 // Usage: IconWidget(icon: Icons.menu, color: Colors.black)

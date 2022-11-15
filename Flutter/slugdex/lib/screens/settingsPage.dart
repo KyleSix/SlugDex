@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
+import 'package:slugdex/main.dart';
 
 const double spacing = 16.0;
 const double icon_size = 24.0;
@@ -208,6 +209,7 @@ class _SettingsPageState extends State<SettingsPage> {
         leading: IconWidget(
             icon: Icons.developer_mode, color: Colors.grey, size: icon_size),
         onChange: (value) {
+          Debug = !Debug;
           debugPrint(keyDevMode + ": $value");
         },
       );
