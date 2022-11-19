@@ -41,18 +41,30 @@ class Entry {
   //Will pull all entry data from Json and create entries
   factory Entry.fromJson(Map<String, dynamic> parsedJson) {
     return Entry(
-        iD: parsedJson['ID'],
+        iD: parsedJson['ID'].toInt(),
         name: parsedJson['name'],
-        latitude: parsedJson['latitude'],
-        longitude: parsedJson['longitude'],
+        latitude: parsedJson['latitude'].toDouble(),
+        longitude: parsedJson['longitude'].toDouble(),
         description: parsedJson['description'],
         rarity: Rarity.values[parsedJson['rarity']]);
+  }
+
+  //Convert entry to json
+  Map<String, dynamic> toJson() {
+    return {
+      "ID": iD,
+      "name": name,
+      "latitude": latitude,
+      "longitude": longitude,
+      "description": description,
+      "rarity": rarity?.index.toInt()
+    };
   }
 
   //Will pull user data from User data Json
   factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
     return Entry(
-        iD: parsedJson['ID'], dateDiscovered: parsedJson['dateDiscovered']);
+        iD: parsedJson['ID'].toInt(), dateDiscovered: parsedJson['dateDiscovered']);
   }
 
   //Convert Entry data to Json for User Data
@@ -76,17 +88,17 @@ class Entry {
     return entryString.toString();
   }
 
-  //Set the date discovered of an entry to current day
-  void setDiscoveredDate() {
-    DateTime now = DateTime.now();
-    DateFormat format = DateFormat('MM/dd/yyyy');
-
-    dateDiscovered = format.format(now);
-  }
-
   String getFileName() {
     StringBuffer fileName = StringBuffer();
     fileName.write("$iD - $name.jpg");
     return fileName.toString();
   }
 }
+
+  //Set the date discovered of an entry to current day
+  String setDiscoveredDate() {
+    DateTime now = DateTime.now();
+    DateFormat format = DateFormat('MM/dd/yyyy');
+
+    return format.format(now).toString();
+  }
