@@ -101,7 +101,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                       } // if we came from an entry hint, let's nav to it
                     },
                   ),
-                ),
+                )
               ],
             ),
           ),
