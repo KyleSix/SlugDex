@@ -74,7 +74,7 @@ class dexEntryView extends StatelessWidget {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                          padding: const EdgeInsets.fromLTRB(10, 5, 0, 10),
                         child: Text(name, style: const TextStyle(fontSize: 50, fontWeight: FontWeight.w500, color: Colors.white),),
                         ),
                         Container(
@@ -103,7 +103,7 @@ class dexEntryView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 35, 0, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 40, 0, 10),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Rarity: " + rarity, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
