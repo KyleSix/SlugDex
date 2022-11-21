@@ -32,8 +32,7 @@ class _createAccountScreenState extends State<createAccountScreen> {
 
         //Initialize entryList and create userData, then upload it
         entryList = await loadEntry();
-        initializeDiscovered();
-        updateUserData();
+        createUserData();
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {
           setState(() {
