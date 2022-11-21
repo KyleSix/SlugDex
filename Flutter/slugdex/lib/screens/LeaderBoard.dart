@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final TAB_COUNT = 4; //Number of tabs in Leaderboard
+final int TAB_COUNT = 4; //Number of tabs in Leaderboard
 
 class LeaderBoard extends StatefulWidget {
   const LeaderBoard({Key? key}) : super(key: key);
@@ -16,17 +16,25 @@ class _LeaderBoardState extends State<LeaderBoard> {
         length: TAB_COUNT,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Leader Board'),
+            title: Text('Leaderboards'),
             centerTitle: true,
           ),
           body: Column(
             children: [
               TabBar(tabs: [
-                EntriesDiscoveredBoard(),
-                AverageDiscoveryTimeBoard(),
-                DistanceTraveledBoard(),
-                RarityBoard()
+                EntriesDiscoveredTab(),
+                AverageDiscoveryTimeTab(),
+                DistanceTraveledTab(),
+                RarityTab()
               ]),
+              Expanded(
+                child: TabBarView(children: [
+                  EntriesDiscoveredBoard(),
+                  AverageDiscoveryTimeBoard(),
+                  DistanceTraveledBoard(),
+                  RarityBoard()
+                ]),
+              )
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -39,38 +47,292 @@ class _LeaderBoardState extends State<LeaderBoard> {
   }
 }
 
-Tab EntriesDiscoveredBoard() {
+//*****************************************
+//Used to display the tabs of each Leader board
+//*****************************************/
+Tab EntriesDiscoveredTab() {
   return Tab(
-          icon: Icon(
-            Icons.location_city_rounded,
-            color: Colors.deepPurple,
-          ),
-        );
+    icon: Icon(
+      Icons.location_city_rounded,
+      color: Colors.deepPurple,
+    ),
+  );
 }
 
-Tab AverageDiscoveryTimeBoard() {
+Tab AverageDiscoveryTimeTab() {
   return Tab(
-          icon: Icon(
-            Icons.timer_sharp,
-            color: Colors.deepPurple,
-          ),
-        );
+    icon: Icon(
+      Icons.timer_sharp,
+      color: Colors.deepPurple,
+    ),
+  );
 }
 
-Tab DistanceTraveledBoard() {
+Tab DistanceTraveledTab() {
   return Tab(
-          icon: Icon(
-            Icons.nordic_walking,
-            color: Colors.deepPurple,
-          ),
-        );
+    icon: Icon(
+      Icons.nordic_walking,
+      color: Colors.deepPurple,
+    ),
+  );
 }
 
-Tab RarityBoard() {
+Tab RarityTab() {
   return Tab(
     icon: Icon(
       Icons.diamond,
       color: Colors.deepPurple,
+    ),
+  );
+}
+
+//**********************************
+//This is where the displays in the tabs are created
+//**********************************/
+Scaffold EntriesDiscoveredBoard() {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(
+        "Most Entries Discovered",
+        style: TextStyle(fontSize: 20),
+      ),
+      centerTitle: true,
+      elevation: 0.0,
+    ),
+    body: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10)),
+            margin: EdgeInsets.all(20),
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                              backgroundImage: AssetImage('assets/logo.png')),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text("Jawn Jawnsawn")
+                        ],
+                      ),
+                      leading: Text(
+                        "#${index + 1}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    );
+                  },
+                  separatorBuilder: (context, index) => Divider(
+                        thickness: 1,
+                        color: Colors.purple,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                  itemCount: 20),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Scaffold AverageDiscoveryTimeBoard() {
+    return Scaffold(
+    appBar: AppBar(
+      title: Text(
+        "Average Time/Discovery",
+        style: TextStyle(fontSize: 20),
+      ),
+      centerTitle: true,
+      elevation: 0.0,
+    ),
+    body: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10)),
+            margin: EdgeInsets.all(20),
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                              backgroundImage: AssetImage('assets/logo.png')),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text("Jawn Jawnsawn")
+                        ],
+                      ),
+                      leading: Text(
+                        "#${index + 1}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    );
+                  },
+                  separatorBuilder: (context, index) => Divider(
+                        thickness: 1,
+                        color: Colors.purple,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                  itemCount: 20),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Scaffold DistanceTraveledBoard() {
+    return Scaffold(
+    appBar: AppBar(
+      title: Text(
+        "Most Distance Traveled",
+        style: TextStyle(fontSize: 20),
+      ),
+      centerTitle: true,
+      elevation: 0.0,
+    ),
+    body: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10)),
+            margin: EdgeInsets.all(20),
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                              backgroundImage: AssetImage('assets/logo.png')),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text("Jawn Jawnsawn")
+                        ],
+                      ),
+                      leading: Text(
+                        "#${index + 1}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    );
+                  },
+                  separatorBuilder: (context, index) => Divider(
+                        thickness: 1,
+                        color: Colors.purple,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                  itemCount: 20),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Scaffold RarityBoard() {
+    return Scaffold(
+    appBar: AppBar(
+      title: Text(
+        "Most Rarities Collected",
+        style: TextStyle(fontSize: 20),
+      ),
+      centerTitle: true,
+      elevation: 0.0,
+    ),
+    body: SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10)),
+            margin: EdgeInsets.all(20),
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                              backgroundImage: AssetImage('assets/logo.png')),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text("Jawn Jawnsawn")
+                        ],
+                      ),
+                      leading: Text(
+                        "#${index + 1}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    );
+                  },
+                  separatorBuilder: (context, index) => Divider(
+                        thickness: 1,
+                        color: Colors.purple,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                  itemCount: 20),
+            ),
+          )
+        ],
+      ),
     ),
   );
 }
