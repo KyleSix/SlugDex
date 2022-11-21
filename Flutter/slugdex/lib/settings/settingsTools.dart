@@ -3,7 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
+Text logo = Text("SlugDex",
+    style: TextStyle(
+      fontFamily: "PocketMonk",
+      fontSize: 40.0,
+      //color: Colors.black,
+      foreground: Paint()
+        ..strokeWidth = 1
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke,
 
+      shadows: [
+        Shadow(offset: Offset(-1, 1), color: Colors.black),
+        Shadow(offset: Offset(1, -1), color: Colors.black),
+        Shadow(offset: Offset(1, 1), color: Colors.black),
+        Shadow(offset: Offset(-1, -1), color: Colors.black),
+      ],
+    ));
 
 // This class wraps an Icon in a container of a specific shape and color
 // Usage: IconWidget(icon: Icons.menu, color: Colors.black)

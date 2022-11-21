@@ -10,7 +10,11 @@ import 'package:slugdex/screens/Animations.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'DexEntryPage.dart';
 import 'package:slugdex/screens/settingsPage.dart';
+import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/db/ManageUserData.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
@@ -41,23 +45,32 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("SlugDex",
-            style: TextStyle( inherit: true,
-                color: Colors.white,
-                shadows: [
-                  Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
-                ]
-            )
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
+          title: logo,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+            bottom: Radius.elliptical(MediaQuery.of(context).size.width, 64.0),
+          ))),
+      body: SlidingUpPanel(
+        backdropColor: Colors.black,
+        minHeight: MediaQuery.of(context).size.height *
+            .1, // in pixels, 10% of total height
+        maxHeight:
+            MediaQuery.of(context).size.height * .8, // 80% of the total height
+        body: googleMapUI(context),
+        panel: dexEntryPage(),
+        parallaxEnabled: true,
+        parallaxOffset: 0.5,
+        //header: Center(child: buildSliderHeading()),
+        //padding: EdgeInsets.fromLTRB(0, 64.0, 0, 24.0),
+        defaultPanelState: PanelState.CLOSED,
+        borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(18.0),
+                topRight: Radius.circular(18.0)),
       ),
-      body: googleMapUI(context),
       floatingActionButton: FloatingActionButton(
           heroTag: "SettingsBtn",
           backgroundColor: Colors.white,
@@ -66,7 +79,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                 .push(MaterialPageRoute(builder: (context) => SettingsPage()));
           },
           child: const Icon(Icons.person, color: Colors.black)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   } // End widget
 
@@ -105,17 +118,17 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-              heroTag: "DexViewBtn",
-              backgroundColor: Colors.white,
-              onPressed: () {
-                Navigator.of(context).push(openDexPage());
-              },
-              label: Row(
-                children: [Icon(Icons.menu, color: Colors.black)],
-              )),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          // floatingActionButton: FloatingActionButton.extended(
+          //     heroTag: "DexViewBtn",
+          //     backgroundColor: Colors.white,
+          //     onPressed: () {
+          //       Navigator.of(context).push(openDexPage());
+          //     },
+          //     label: Row(
+          //       children: [Icon(Icons.catching_pokemon, color: Colors.black)],
+          //     )),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerFloat,
         );
       }
       return Center(
@@ -260,19 +273,13 @@ Set<Circle> populateHintCircles(context) {
                 thisEntry.latitude!.toDouble(),
                 thisEntry.longitude!.toDouble());
 
-            if (Debug == true) {
-              // TODO When debugging we want to test without leaving our current location
-              _radius =
-                  10000.0; // So Set Large Radius Value For Testing to reach the Locations
-            }
-
-            if (distance <= _radius) {
-              // if user is inside 25 meter radius
-              if (Debug == false) {
-                // TODO We don't want to Mark Entry Locations in debug mode : For Testing
-                markDiscovered(thisEntry.iD!.toInt() -
-                    1); // Mark Entry List[index] to discovered
-              }
+            bool? Debug =
+                Settings.getValue<bool>("key-dev-mode", defaultValue: false);
+            if (distance <= _radius || Debug == true) {
+              /////// Note debug check here
+              // if user is inside 25 meter radius or debug mode
+              markDiscovered(thisEntry.iD!.toInt() -
+                  1); // Mark Entry List[index] to discovered
 
               showDialog(
                 context: context,
@@ -283,9 +290,50 @@ Set<Circle> populateHintCircles(context) {
                 context: context,
                 builder: (BuildContext context) => DiscoveryAnimation(),
               );
+            } else {
+              // User is not in range, so let's tell them
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text("Try getting closer..."),
+                    duration: const Duration(milliseconds: 2000)),
+              );
             }
           })); // End add(Circle)
     } // End if(Not Discovered)
   } // End For(Each Entry)
   return _circles;
+}
+
+Widget buildSlidingPanel() {
+  return Stack(
+    children: [
+      new Positioned(top: 0.0, left: 0.0, right: 0.0,child: Row(
+        children: <Widget>[
+          Container(
+            width: 30,
+            height: 5,
+            decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.all(Radius.circular(12.0))),
+          ),
+        ],
+      )),
+      dexEntryPage(),
+      // SizedBox(
+      //   height: 18.0,
+      // ),
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: <Widget>[
+      //     Text(
+      //       "My Collection",
+      //       style: TextStyle(
+      //         fontWeight: FontWeight.normal,
+      //         fontSize: 24.0,
+      //       ),
+      //     ),
+      //   ],
+      // ),
+    ]
+  );
 }

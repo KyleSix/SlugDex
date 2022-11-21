@@ -16,9 +16,7 @@ import 'firebase_options.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart'
     as fss; //Naming conflict arose, so use prefix fss
 
-
 List<Entry> entryList = []; //Global List of all entries
-bool Debug = true;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -20,10 +20,9 @@ class _SettingsPageState extends State<SettingsPage> {
   bool logoutEnabled = (FirebaseAuth.instance.currentUser != null)
       ? true
       : false; // Check to see if we're logged in
-
   // Store settings
   static const keyDevMode = "key-dev-mode";
-
+    
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -207,7 +206,8 @@ class _SettingsPageState extends State<SettingsPage> {
         settingKey: keyDevMode,
         leading: IconWidget(
             icon: Icons.developer_mode, color: Colors.grey, size: icon_size),
-        onChange: (value) {
+        onChange: (value) async {
+          await Settings.setValue<bool>(keyDevMode, value);
           debugPrint(keyDevMode + ": $value");
         },
       );
