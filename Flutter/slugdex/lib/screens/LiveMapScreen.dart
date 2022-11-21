@@ -33,15 +33,24 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   late GoogleMapController mapController;
   int? id;
 
+  final double _initFabHeight = 80.0;
+  double _fabHeight = 0;
+  double _panelHeightOpen = 0; // calculated later
+  double _panelHeightClosed = 72.0;
+
   @override
   void initState() {
     id = widget.entryID; // set id member to class parameter
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
+    _fabHeight = _initFabHeight;
   }
 
   @override
   Widget build(BuildContext context) {
+    _panelHeightOpen =
+        MediaQuery.of(context).size.height * .8; // 80% of the total height
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -54,32 +63,51 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(MediaQuery.of(context).size.width, 64.0),
           ))),
-      body: SlidingUpPanel(
-        backdropColor: Colors.black,
-        minHeight: MediaQuery.of(context).size.height *
-            .1, // in pixels, 10% of total height
-        maxHeight:
-            MediaQuery.of(context).size.height * .8, // 80% of the total height
-        body: googleMapUI(context),
-        panel: dexEntryPage(),
-        parallaxEnabled: true,
-        parallaxOffset: 0.5,
-        //header: Center(child: buildSliderHeading()),
-        //padding: EdgeInsets.fromLTRB(0, 64.0, 0, 24.0),
-        defaultPanelState: PanelState.CLOSED,
-        borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18.0),
-                topRight: Radius.circular(18.0)),
-      ),
-      floatingActionButton: FloatingActionButton(
-          heroTag: "SettingsBtn",
-          backgroundColor: Colors.white,
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => SettingsPage()));
-          },
-          child: const Icon(Icons.person, color: Colors.black)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      body: Stack(alignment: Alignment.topCenter, children: <Widget>[
+        SlidingUpPanel(
+          backdropColor: Colors.black,
+          minHeight: _panelHeightClosed, // in pixels, 10% of total height
+          maxHeight: _panelHeightOpen,
+          body: googleMapUI(context),
+          panel: dexEntryPage(),
+          parallaxEnabled: true,
+          parallaxOffset: 0.5,
+          defaultPanelState: PanelState.CLOSED,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0)),
+          onPanelSlide: (double pos) => setState(() {
+            _fabHeight =
+                pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
+          }),
+        ),
+        Positioned(
+          left: 20.0,
+          bottom: _fabHeight,
+          child: FloatingActionButton(
+            mini: true,
+            heroTag: "GPSBtn",
+            child: Icon(
+              Icons.gps_fixed,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () async {
+              var _currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+              mapController.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: LatLng(_currentLocation.latitude, _currentLocation.longitude),
+                      zoom: await mapController.getZoomLevel()
+                      )));
+            },
+            backgroundColor: Colors.white,
+          ),
+        ),
+        Positioned(
+          right: 20.0,
+          bottom: _fabHeight,
+          child: _buildProfileFAB(context),
+        ),
+      ]),
     );
   } // End widget
 
@@ -304,36 +332,20 @@ Set<Circle> populateHintCircles(context) {
   return _circles;
 }
 
-Widget buildSlidingPanel() {
-  return Stack(
-    children: [
-      new Positioned(top: 0.0, left: 0.0, right: 0.0,child: Row(
-        children: <Widget>[
-          Container(
-            width: 30,
-            height: 5,
-            decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.all(Radius.circular(12.0))),
-          ),
-        ],
-      )),
-      dexEntryPage(),
-      // SizedBox(
-      //   height: 18.0,
-      // ),
-      // Row(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: <Widget>[
-      //     Text(
-      //       "My Collection",
-      //       style: TextStyle(
-      //         fontWeight: FontWeight.normal,
-      //         fontSize: 24.0,
-      //       ),
-      //     ),
-      //   ],
-      // ),
-    ]
-  );
-}
+Widget _buildProfileFAB(context) => Container(
+  height: 80.0,
+  width: 80.0,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.white, width: 2),
+    borderRadius: BorderRadius.circular(120)
+  ),
+  child: FloatingActionButton(
+      heroTag: "SettingsBtn",
+      backgroundColor: Color.fromRGBO(255, 255, 255, .0),
+      onPressed: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SettingsPage()));
+      },
+      child: profilePic
+  )
+);

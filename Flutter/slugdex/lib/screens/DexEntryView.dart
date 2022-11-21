@@ -143,25 +143,25 @@ class dexEntryView extends StatelessWidget {
 }
 
 Widget _getHintButton(Entry entry, Color backColor, BuildContext context) {
-  if (entry.discovered == 1) {
-    return Container();
-  } else {
-    return FloatingActionButton(
-        backgroundColor: backColor,
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(
-              // Goes to the LiveMapScreen and removes all previous navigations
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LiveMapScreen(
-                        // Pass in the entry ID to move to
-                        entryID: entry.iD!,
-                      )),
-              (Route<dynamic> route) => false);
-        },
-              child: const Icon(Icons.question_mark, color: Colors.white)
-      );
-  }
+  return FloatingActionButton.extended(
+      backgroundColor: backColor,
+      onPressed: () {
+        Navigator.pushAndRemoveUntil(
+            // Goes to the LiveMapScreen and removes all previous navigations
+            context,
+            MaterialPageRoute(
+                builder: (context) => LiveMapScreen(
+                      // Pass in the entry ID to move to
+                      entryID: entry.iD!,
+                    )),
+            ModalRoute.withName("/map"));
+      },
+      label: Row(children: [
+        Text("Locate"),
+        SizedBox(width: 6.0,),
+        Icon(Icons.location_searching, color: Colors.white)
+        ],)
+    );
 }
 
 Border getBorderForImageView(Entry entry) {

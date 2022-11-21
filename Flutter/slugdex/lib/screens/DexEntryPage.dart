@@ -14,8 +14,9 @@ class dexEntryPage extends StatelessWidget {
     }
     int totalEntries = entryList.length;
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.fromHeight(-24.0), child: AppBar(
-        title: const Text('\nMy Collection', style: TextStyle(fontSize: 24.0),),
+      backgroundColor: Colors.transparent,
+      appBar: PreferredSize(preferredSize: Size.fromHeight(-16.0), child: AppBar(
+        title: const Text('\nMy Discoveries', style: TextStyle(fontSize: 24.0),),
         centerTitle: false,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
