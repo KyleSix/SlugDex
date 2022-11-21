@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'SlugDex',
-            home: checkLogin()));
+            home: checkLogin(),
+            theme: ThemeData(primarySwatch: Colors.deepPurple)));
   }
 }

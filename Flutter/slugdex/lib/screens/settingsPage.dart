@@ -4,6 +4,9 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
 
+//Testing
+import 'LeaderBoard.dart';
+
 const double spacing = 16.0;
 const double icon_size = 24.0;
 
@@ -101,6 +104,14 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          heroTag: 'LeaderBoardButton',
+          backgroundColor: Colors.blue,
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: ((context) => LeaderBoard())));
+          },
         ),
       );
 
