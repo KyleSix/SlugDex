@@ -29,6 +29,7 @@ class _loginScreenState extends State<loginScreen> {
       //Initialize entryList and load user's discovered entries into entryList
       entryList = await loadEntry();
       loadUserDiscovered();
+      displayName = await getDisplayName();
     } catch (_) {
       setState(() {
         loginFailed = true;

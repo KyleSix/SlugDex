@@ -11,7 +11,6 @@ import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'DexEntryPage.dart';
 import 'package:slugdex/screens/settingsPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
-import 'package:slugdex/db/ManageUserData.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';

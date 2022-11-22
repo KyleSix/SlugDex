@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/settings/settingsTools.dart';
+import 'package:slugdex/main.dart';
+import 'package:slugdex/screens/changeUsernamePage.dart';
 
 const double icon_size = 24.0;
 
@@ -31,7 +34,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   right: 0, //set right 0 to end without margin at right
                   child: WrapperWidget(children: [
                     const SizedBox(height: 40.0),
-                    Text("Sammy Slug",
+                    Text(displayName,
                         textScaleFactor: 2.0,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 10.0),
@@ -71,15 +74,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
           )));
 
   Widget buildUsername() => SimpleSettingsTile(
-        title: "Change Username",
+        title: "Change Display Name",
         leading:
             IconWidget(icon: Icons.edit, color: Colors.grey, size: icon_size),
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text("Feature in progress..."),
-                duration: const Duration(milliseconds: 2000)),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (context) => changeUsernamePage()));
         },
       );
 

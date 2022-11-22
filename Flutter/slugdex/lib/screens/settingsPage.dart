@@ -4,6 +4,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/auth/authPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
+import 'package:slugdex/main.dart';
 
 const double spacing = 16.0;
 const double icon_size = 24.0;
@@ -54,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: profilePic,
                         )),
                     const SizedBox(width: 24.0),
-                    Text("Sammy Slug",
+                    Text(displayName,
                         textScaleFactor: 2.0,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
@@ -108,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
   /// Edit Profile Settings ///
   Widget buildEditProfile() => SimpleSettingsTile(
         title: "Edit Profile",
-        subtitle: "Appearance, Username",
+        subtitle: "Appearance, Display Name",
         leading: IconWidget(
             icon: Icons.edit_note, color: Colors.greenAccent, size: icon_size),
         enabled: logoutEnabled,

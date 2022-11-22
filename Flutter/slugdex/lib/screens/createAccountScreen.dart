@@ -16,6 +16,7 @@ class createAccountScreen extends StatefulWidget {
 }
 
 class _createAccountScreenState extends State<createAccountScreen> {
+  final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -30,10 +31,15 @@ class _createAccountScreenState extends State<createAccountScreen> {
             email: _emailController.text.trim(),
             password: _passwordController.text.trim());
 
+        String name = _displayNameController.text.trim();
+
         //Initialize entryList and create userData, then upload it
         entryList = await loadEntry();
         initializeDiscovered();
+        createDatabaseForUser();
         updateUserData();
+        setDisplayName(name);
+        displayName = await getDisplayName();
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {
           setState(() {
@@ -118,6 +124,24 @@ class _createAccountScreenState extends State<createAccountScreen> {
                                 offset: Offset(-1.5, -1.5),
                                 color: Colors.black),
                           ])),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                        child: TextField(
+                          controller: _displayNameController,
+                          decoration: InputDecoration(
+                              border: InputBorder.none, hintText: "Display Name"),
+                        )),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
