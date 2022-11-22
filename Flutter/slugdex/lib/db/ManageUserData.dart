@@ -34,7 +34,11 @@ Future createUserData() async {
   });
 }
 
-//Updates user's discovered locations, number of entries discovered,
+//Update user data:
+// - entries values
+// - number of entries discovered (0)
+// - time they have started playing
+// - average time discovering entries
 Future updateUserData() async {
   List<dynamic> discovered = [];
   int entriesDiscovered = 0;
@@ -46,15 +50,14 @@ Future updateUserData() async {
     }
   } //end for
 
-  //Get amount discovered
-  entriesDiscovered = discovered.length;
+  entriesDiscovered =
+      discovered.length; //Get number of entries discovered by user
+  String? email =
+      FirebaseAuth.instance.currentUser?.email; //Get user's email address
 
-  String? email = FirebaseAuth.instance.currentUser?.email;
-  await FirebaseFirestore.instance.collection('userData').doc(email).set({
-    'email': email,
-    'discovered': discovered.toList(),
-    'entriesDiscovered': entriesDiscovered.toInt()
-  });
+  //Update user data in firebase
+  queryUpdateUserData(email, discovered, entriesDiscovered);
+  queryUpdateMostDiscovered(email, entriesDiscovered);
 }
 
 //Populate entryList to store all user discovered data
@@ -81,3 +84,44 @@ void loadUserDiscovered() {
   });
 }
 
+//Queries data into 'userData' collection
+Future queryUpdateUserData(
+    String? email, List<dynamic> discovered, int entriesDiscovered) async {
+  await FirebaseFirestore.instance.collection('userData').doc(email).set({
+    'email': email,
+    'discovered': discovered.toList(),
+  });
+}
+
+//Queries data into 'mostDiscovered' collection
+Future queryUpdateMostDiscovered(String? email, int entriesDiscovered) async {
+  StringBuffer string = StringBuffer();
+  string.write('$entriesDiscovered-$email');
+
+  await FirebaseFirestore.instance
+      .collection('mostDiscovered')
+      .doc(string.toString())
+      .set({'entriesDiscovered': entriesDiscovered});
+}
+
+/*******************************************************************************
+ * GETTERS
+ ******************************************************************************/
+Future<int> queryGetUserPlayTimeInMillis(String? email) async {
+  int playTime = 0;
+
+  await FirebaseFirestore.instance
+      .collection('userData')
+      .doc(email)
+      .get()
+      .then((snapshot) {
+    if (snapshot.exists) {
+      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+      playTime = userData['millisecondsPlayed'];
+      int currentTime = DateTime.now().millisecondsSinceEpoch;
+      return currentTime - playTime;
+    }
+  });
+
+  return playTime;
+}

@@ -32,6 +32,9 @@ Future<void> main() async {
     loadUserDiscovered();
   }//end if 
 
+      print(
+          "milliseconds = ${await queryGetUserPlayTimeInMillis(FirebaseAuth.instance.currentUser?.email)}");
+
   // Initialize the settings plugin
   await fss.Settings.init();
 
