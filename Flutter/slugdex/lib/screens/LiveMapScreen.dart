@@ -10,7 +10,11 @@ import 'package:slugdex/screens/Animations.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'DexEntryPage.dart';
 import 'package:slugdex/screens/settingsPage.dart';
+import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/db/ManageUserData.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
@@ -29,44 +33,81 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   late GoogleMapController mapController;
   int? id;
 
+  final double _initFabHeight = 80.0;
+  double _fabHeight = 0;
+  double _panelHeightOpen = 0; // calculated later
+  double _panelHeightClosed = 72.0;
+
   @override
   void initState() {
     id = widget.entryID; // set id member to class parameter
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).initialization();
+    _fabHeight = _initFabHeight;
   }
 
   @override
   Widget build(BuildContext context) {
+    _panelHeightOpen =
+        MediaQuery.of(context).size.height * .8; // 80% of the total height
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("SlugDex",
-            style: TextStyle( inherit: true,
-                color: Colors.white,
-                shadows: [
-                  Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
-                ]
-            )
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
-      body: googleMapUI(context),
-      floatingActionButton: FloatingActionButton(
-          heroTag: "SettingsBtn",
+          title: logo,
+          centerTitle: true,
           backgroundColor: Colors.white,
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => SettingsPage()));
-          },
-          child: const Icon(Icons.person, color: Colors.black)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+            bottom: Radius.elliptical(MediaQuery.of(context).size.width, 64.0),
+          ))),
+      body: Stack(alignment: Alignment.topCenter, children: <Widget>[
+        SlidingUpPanel(
+          backdropColor: Colors.black,
+          minHeight: _panelHeightClosed, // in pixels, 10% of total height
+          maxHeight: _panelHeightOpen,
+          body: googleMapUI(context),
+          panel: dexEntryPage(),
+          parallaxEnabled: true,
+          parallaxOffset: 0.5,
+          defaultPanelState: PanelState.CLOSED,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0)),
+          onPanelSlide: (double pos) => setState(() {
+            _fabHeight =
+                pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
+          }),
+        ),
+        Positioned(
+          left: 20.0,
+          bottom: _fabHeight,
+          child: FloatingActionButton(
+            mini: true,
+            heroTag: "GPSBtn",
+            child: Icon(
+              Icons.gps_fixed,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () async {
+              var _currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+              mapController.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: LatLng(_currentLocation.latitude, _currentLocation.longitude),
+                      zoom: await mapController.getZoomLevel()
+                      )));
+            },
+            backgroundColor: Colors.white,
+          ),
+        ),
+        Positioned(
+          right: 20.0,
+          bottom: _fabHeight,
+          child: _buildProfileFAB(context),
+        ),
+      ]),
     );
   } // End widget
 
@@ -105,17 +146,17 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton.extended(
-              heroTag: "DexViewBtn",
-              backgroundColor: Colors.white,
-              onPressed: () {
-                Navigator.of(context).push(openDexPage());
-              },
-              label: Row(
-                children: [Icon(Icons.menu, color: Colors.black)],
-              )),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          // floatingActionButton: FloatingActionButton.extended(
+          //     heroTag: "DexViewBtn",
+          //     backgroundColor: Colors.white,
+          //     onPressed: () {
+          //       Navigator.of(context).push(openDexPage());
+          //     },
+          //     label: Row(
+          //       children: [Icon(Icons.catching_pokemon, color: Colors.black)],
+          //     )),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerFloat,
         );
       }
       return Center(
@@ -260,19 +301,13 @@ Set<Circle> populateHintCircles(context) {
                 thisEntry.latitude!.toDouble(),
                 thisEntry.longitude!.toDouble());
 
-            if (Debug == true) {
-              // TODO When debugging we want to test without leaving our current location
-              _radius =
-                  10000.0; // So Set Large Radius Value For Testing to reach the Locations
-            }
-
-            if (distance <= _radius) {
-              // if user is inside 25 meter radius
-              if (Debug == false) {
-                // TODO We don't want to Mark Entry Locations in debug mode : For Testing
-                markDiscovered(thisEntry.iD!.toInt() -
-                    1); // Mark Entry List[index] to discovered
-              }
+            bool? Debug =
+                Settings.getValue<bool>("key-dev-mode", defaultValue: false);
+            if (distance <= _radius || Debug == true) {
+              /////// Note debug check here
+              // if user is inside 25 meter radius or debug mode
+              markDiscovered(thisEntry.iD!.toInt() -
+                  1); // Mark Entry List[index] to discovered
 
               showDialog(
                 context: context,
@@ -283,9 +318,34 @@ Set<Circle> populateHintCircles(context) {
                 context: context,
                 builder: (BuildContext context) => DiscoveryAnimation(),
               );
+            } else {
+              // User is not in range, so let's tell them
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text("Try getting closer..."),
+                    duration: const Duration(milliseconds: 2000)),
+              );
             }
           })); // End add(Circle)
     } // End if(Not Discovered)
   } // End For(Each Entry)
   return _circles;
 }
+
+Widget _buildProfileFAB(context) => Container(
+  height: 80.0,
+  width: 80.0,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.white, width: 2),
+    borderRadius: BorderRadius.circular(120)
+  ),
+  child: FloatingActionButton(
+      heroTag: "SettingsBtn",
+      backgroundColor: Color.fromRGBO(255, 255, 255, .0),
+      onPressed: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SettingsPage()));
+      },
+      child: profilePic
+  )
+);

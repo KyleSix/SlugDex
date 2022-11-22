@@ -2,8 +2,37 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
+// App Accent Color
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
+// Logo Formatting
+Text logo = Text("SlugDex",
+    style: TextStyle(
+      fontFamily: "PocketMonk",
+      fontSize: 40.0,
+      //color: Colors.black,
+      foreground: Paint()
+        ..strokeWidth = 1
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke,
 
+      shadows: [
+        Shadow(offset: Offset(-1, 1), color: Colors.black),
+        Shadow(offset: Offset(1, -1), color: Colors.black),
+        Shadow(offset: Offset(1, 1), color: Colors.black),
+        Shadow(offset: Offset(-1, -1), color: Colors.black),
+      ],
+    ));
+
+// Profile pic code
+Widget profilePic = ClipRRect(
+    borderRadius: BorderRadius.circular(120.0),
+    clipBehavior: Clip.antiAlias,
+    child: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+      image: AssetImage("assets/YoungSlugPortrait1.png"),
+      fit: BoxFit.contain,
+    ))));
 
 // This class wraps an Icon in a container of a specific shape and color
 // Usage: IconWidget(icon: Icons.menu, color: Colors.black)

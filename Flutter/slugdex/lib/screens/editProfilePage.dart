@@ -41,12 +41,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ])),
               Hero(
                   tag: 'SettingsBtn',
-                  child: IconWidget(
-                    icon: Icons.person,
-                    color: slugdex_yellow,
-                    size: 128.0,
-                    radius: 128.0,
-                    icon_color: Colors.black,
+                  child: Container(
+                    height: 128.0,
+                    width: 128.0,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 2),
+                      borderRadius: BorderRadius.circular(120)
+                    ),
+                    child: profilePic
                   )),
               Align(
                 alignment: Alignment.bottomCenter,

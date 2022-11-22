@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/jair/FlutterDev/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/jair/Desktop/SlugDex/Flutter/slugdex"
+export "FLUTTER_ROOT=C:\flutter_windows_3.3.3-stable\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\Kyle S. Lim\Documents\GitHub\SlugDex\Flutter\slugdex"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"

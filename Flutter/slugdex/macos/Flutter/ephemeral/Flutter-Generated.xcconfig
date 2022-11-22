@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Users/jair/FlutterDev/flutter
-FLUTTER_APPLICATION_PATH=/Users/jair/Desktop/SlugDex/Flutter/slugdex
+FLUTTER_ROOT=C:\flutter_windows_3.3.3-stable\flutter
+FLUTTER_APPLICATION_PATH=C:\Users\Kyle S. Lim\Documents\GitHub\SlugDex\Flutter\slugdex
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
