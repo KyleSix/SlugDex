@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/auth/authPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
 
@@ -20,7 +21,6 @@ class _SettingsPageState extends State<SettingsPage> {
   bool logoutEnabled = (FirebaseAuth.instance.currentUser != null)
       ? true
       : false; // Check to see if we're logged in
-
   // Store settings
   static const keyDevMode = "key-dev-mode";
 
@@ -45,12 +45,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: [
                     Hero(
                         tag: 'SettingsBtn',
-                        child: IconWidget(
-                          icon: Icons.person,
-                          color: Colors.white,
-                          size: 64.0,
-                          radius: 64.0,
-                          icon_color: Colors.black,
+                        child: Container(
+                          height: 80.0,
+                          width: 80.0,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 2),
+                              borderRadius: BorderRadius.circular(120)),
+                          child: profilePic,
                         )),
                     const SizedBox(width: 24.0),
                     Text("Sammy Slug",
@@ -130,7 +131,9 @@ class _SettingsPageState extends State<SettingsPage> {
         );
         logoutEnabled = false; // Set our logout flag to disable setting
         await FirebaseAuth.instance.signOut(); // do sign out
-        Navigator.pop(context); // Go back to sign-in screen
+        Navigator.popUntil(
+            context, (route) => false); // Go back to sign-in screen
+        Navigator.push(context, MaterialPageRoute(builder: (context) => checkLogin()));
       });
 
   /// Delete Account Setting ///
@@ -165,9 +168,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                     logoutEnabled = false;
                     await user?.delete(); // do account deletion
-                    Navigator.pop(
-                        context); // Go back to sign-in screen, 2 pops needed
-                    Navigator.pop(context);
+                    Navigator.popUntil(
+                        context, (route) => false); // Go back to sign-in screen
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => checkLogin()));
                   },
                   child: const Text('OK'),
                 ),
@@ -207,7 +210,8 @@ class _SettingsPageState extends State<SettingsPage> {
         settingKey: keyDevMode,
         leading: IconWidget(
             icon: Icons.developer_mode, color: Colors.grey, size: icon_size),
-        onChange: (value) {
+        onChange: (value) async {
+          await Settings.setValue<bool>(keyDevMode, value);
           debugPrint(keyDevMode + ": $value");
         },
       );

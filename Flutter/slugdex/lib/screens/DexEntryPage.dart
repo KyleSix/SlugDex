@@ -14,23 +14,28 @@ class dexEntryPage extends StatelessWidget {
     }
     int totalEntries = entryList.length;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('SlugDex',
-          style: TextStyle( inherit: true,
-                color: Colors.white,
-                shadows: [
-                  Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
-                ]
-            )
-        ),
-        centerTitle: true,
+      backgroundColor: Colors.transparent,
+      appBar: PreferredSize(preferredSize: Size.fromHeight(-16.0), child: AppBar(
+        title: const Text('\nMy Discoveries', style: TextStyle(fontSize: 24.0),),
+        centerTitle: false,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
+        primary: false,
         elevation: 0,
+        flexibleSpace: Column(
+              children: <Widget>[
+                SizedBox(height: 12.0,),
+                Container(
+                  width: MediaQuery.of(context).size.width * .25,
+                  height: 5,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                ),
+              ],
+            ),
         ),
+      ),
       body: Stack(
         children: [
           Container(
@@ -111,23 +116,23 @@ class dexEntryPage extends StatelessWidget {
             ),
           ),
           Container(
-              padding: const EdgeInsets.all(15.0),
-              alignment: Alignment.bottomCenter,
-              child: Text("Discovered: $totalDiscovered/$totalEntries", 
-                style: const TextStyle(
-                  inherit: true,
-                  fontSize: 20, 
-                  fontWeight: FontWeight.w500, 
-                  color: Colors.white,
-                  shadows: [
-                    Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
-                    Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
-                    Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
-                    Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
-                  ]
-                ),
+            padding: const EdgeInsets.all(15.0),
+            alignment: Alignment.bottomCenter,
+            child: Text("Discovered: $totalDiscovered/$totalEntries", 
+              style: const TextStyle(
+                inherit: true,
+                fontSize: 20, 
+                fontWeight: FontWeight.w500, 
+                color: Colors.white,
+                shadows: [
+                  Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
+                  Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
+                  Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
+                  Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
+                ]
               ),
-            )
+            ),
+          ),
         ]
       ),
     );
