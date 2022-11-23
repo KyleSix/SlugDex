@@ -9,6 +9,26 @@ class changeUsernamePage extends StatefulWidget {
 class _changeUsernamePageState extends State<changeUsernamePage> {
   final _displayNameController = TextEditingController();
 
+  int errorNum = 0;
+
+  Widget getErrorMessage() {
+    if (errorNum == 1) {
+      return Text(
+        "Display Name Must Be At Least 3 Characters",
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+      );
+    } else if (errorNum == 2) {
+      return Text(
+        "Display Name Can Be At Most 15 Characters",
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +63,11 @@ class _changeUsernamePageState extends State<changeUsernamePage> {
                     )),
               ),
             ),
+            Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 0.0),
+                  child: getErrorMessage(),
+            ),
             InkWell(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -68,13 +93,22 @@ class _changeUsernamePageState extends State<changeUsernamePage> {
                     )),
                   ),
                 ),
-                onTap: () {
+                onTap: () async {
                   String name = _displayNameController.text.trim();
-                  setDisplayName(name);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }),
+                  if(name.length >= 3 && name.length <= 15){
+                    await setDisplayName(name);
+                    Navigator.pop(context);
+                  } else if (name.length > 15) {
+                    setState(() {
+                      errorNum = 2;
+                    });
+                  } else {
+                    setState(() {
+                      errorNum = 1;
+                    });
+                  }
+                }
+            ),
           ],
         ),
       ),

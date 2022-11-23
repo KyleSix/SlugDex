@@ -47,7 +47,7 @@ void loadUserDiscovered() {
   });
 }
 
-void setDisplayName(newName) async {
+setDisplayName(newName) async {
   String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
   await FirebaseFirestore.instance.collection('userData').doc(email).update({
     'displayName': newName

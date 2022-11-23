@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
-import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/screens/changeUsernamePage.dart';
@@ -13,6 +12,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  String displayNameState = displayName;
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -34,7 +34,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   right: 0, //set right 0 to end without margin at right
                   child: WrapperWidget(children: [
                     const SizedBox(height: 40.0),
-                    Text(displayName,
+                    Text(displayNameState,
                         textScaleFactor: 2.0,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 10.0),
@@ -77,8 +77,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         title: "Change Display Name",
         leading:
             IconWidget(icon: Icons.edit, color: Colors.grey, size: icon_size),
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => changeUsernamePage()));
+        onTap: () async {
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => changeUsernamePage()));
+          setState(() {
+            displayNameState = displayName;
+          });
         },
       );
 

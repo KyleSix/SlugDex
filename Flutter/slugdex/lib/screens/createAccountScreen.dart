@@ -25,7 +25,9 @@ class _createAccountScreenState extends State<createAccountScreen> {
 
   Future signUp() async {
     if (_passwordController.text.trim() ==
-        _confirmPasswordController.text.trim()) {
+        _confirmPasswordController.text.trim() && 
+        _displayNameController.text.trim().length >= 3 &&
+        _displayNameController.text.trim().length <= 15) {
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _emailController.text.trim(),
@@ -55,6 +57,14 @@ class _createAccountScreenState extends State<createAccountScreen> {
           });
         }
       }
+    } else if (_displayNameController.text.trim().length < 3) {
+      setState(() {
+        errorNum = 4;
+      });
+    } else if (_displayNameController.text.trim().length > 15) {
+      setState(() {
+        errorNum = 5;
+      });
     } else {
       setState(() {
         errorNum = 1;
@@ -78,6 +88,18 @@ class _createAccountScreenState extends State<createAccountScreen> {
     } else if (errorNum == 3) {
       return Text(
         "Password Must Be At Least 6 Characters",
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+      );
+    } else if (errorNum == 4) {
+      return Text(
+        "Username Must Be At Least 3 Characters",
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+      );
+    } else if (errorNum == 5) {
+      return Text(
+        "Display Name Can Be At Most 15 Characters",
         style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
       );
