@@ -19,6 +19,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final User? user = FirebaseAuth.instance.currentUser;
 
   String displayNameState = displayName;
+  Widget profilePicState = profilePic();
 
   // Configure settings
   bool logoutEnabled = (FirebaseAuth.instance.currentUser != null)
@@ -54,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.white, width: 2),
                               borderRadius: BorderRadius.circular(120)),
-                          child: profilePic,
+                          child: profilePicState,
                         )),
                     const SizedBox(width: 24.0),
                     Text(displayNameState,
@@ -119,6 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
           await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
           setState(() {
             displayNameState = displayName;
+            profilePicState = new profilePic();
           });
         },
       );

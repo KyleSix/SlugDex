@@ -42,6 +42,7 @@ class _createAccountScreenState extends State<createAccountScreen> {
         updateUserData();
         setDisplayName(name);
         displayName = await getDisplayName();
+        profileImageURL = await getProfileImageURL();
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {
           setState(() {

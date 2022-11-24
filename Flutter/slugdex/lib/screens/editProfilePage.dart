@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/screens/changeProfileImagePage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/screens/changeUsernamePage.dart';
@@ -13,6 +14,7 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   String displayNameState = displayName;
+  Widget profilePicState = profilePic();
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -51,7 +53,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       border: Border.all(color: Colors.white, width: 2),
                       borderRadius: BorderRadius.circular(120)
                     ),
-                    child: profilePic
+                    child: profilePicState
                   )),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -89,12 +91,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         title: "Change Appearance",
         leading: IconWidget(
             icon: Icons.image_search, color: Colors.grey, size: icon_size),
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text("Feature in progress..."),
-                duration: const Duration(milliseconds: 2000)),
-          );
+        onTap: () async {
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => changeProfileImagePage()));
+          setState(() {
+            profilePicState = new profilePic();
+          });
         },
       );
 }

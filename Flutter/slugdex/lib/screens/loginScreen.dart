@@ -30,6 +30,7 @@ class _loginScreenState extends State<loginScreen> {
       entryList = await loadEntry();
       loadUserDiscovered();
       displayName = await getDisplayName();
+      profileImageURL = await getProfileImageURL();
     } catch (_) {
       setState(() {
         loginFailed = true;

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:slugdex/main.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 void createDatabaseForUser() async {
   String? email = FirebaseAuth.instance.currentUser?.email;
@@ -73,4 +75,37 @@ Future<String> getDisplayName() async {
     }
   });
   return name;
+}
+
+Future<String> updateProfileImage(File image) async {
+  String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
+
+  final ref = FirebaseStorage.instance
+    .ref()
+    .child('profileImages')
+    .child(email.toString() + '.jpg');
+  
+  await ref.putFile(image);
+  String url = await ref.getDownloadURL();
+
+  return url;
+}
+
+Future<String> getProfileImageURL() async {
+  String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
+  String url = "";
+  try {
+    url = await FirebaseStorage.instance
+      .ref()
+      .child('profileImages')
+      .child(email.toString() + '.jpg')
+      .getDownloadURL();
+    return url;
+  } catch (_) {
+    url = await FirebaseStorage.instance
+      .ref()
+      .child('profileImages')
+      .child('default.jpg').getDownloadURL();
+    return url;
+  }
 }

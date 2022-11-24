@@ -18,6 +18,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart'
 
 List<Entry> entryList = []; //Global List of all entries
 String displayName = "";
+String profileImageURL = "";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ Future<void> main() async {
     entryList = await loadEntry();
     loadUserDiscovered();
     displayName = await getDisplayName();
+    profileImageURL = await getProfileImageURL();
   }//end if 
 
   // Initialize the settings plugin
