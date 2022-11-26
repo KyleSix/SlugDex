@@ -95,7 +95,7 @@ Tab RarityTab() {
 Scaffold EntriesDiscoveredBoard() {
   Query collectionReference = FirebaseFirestore.instance
       .collection("userData")
-      .orderBy('entriesDiscovered')
+      .orderBy('entriesDiscovered', descending: true)
       .limit(MAX_PER_LEADERBOARD);
 
   return Scaffold(
@@ -122,12 +122,10 @@ Scaffold EntriesDiscoveredBoard() {
                 constraints:
                     BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('userData')
-                      .orderBy('entriesDiscovered')
-                      .snapshots(),
+                  stream: collectionReference.snapshots(),
                   builder: (context, snapshot) {
-                    return ListView.separated(
+                    return (snapshot.connectionState == ConnectionState.waiting) ? Center(child: CircularProgressIndicator(),) : 
+                    ListView.separated(
                       itemCount: snapshot.data!.docs.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {

@@ -14,7 +14,7 @@ import 'package:slugdex/db/ManageUserData.dart';
 
 final Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
-double _radius = 25.0; // Distance in meters
+double _radius = 640000.0; // Distance in meters
 
 class LiveMapScreen extends StatefulWidget {
   const LiveMapScreen(
