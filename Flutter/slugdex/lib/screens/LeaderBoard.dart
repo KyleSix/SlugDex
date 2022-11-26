@@ -124,15 +124,18 @@ Scaffold EntriesDiscoveredBoard() {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: collectionReference.snapshots(),
                   builder: (context, snapshot) {
-                    return (snapshot.connectionState == ConnectionState.waiting) ? Center(child: CircularProgressIndicator(),) : 
+                    //Check if the snapshot has been received
+                    //If the connection is waiting then load, 
+                    //Else return a list view 
+                    return (snapshot.connectionState == ConnectionState.waiting) ? 
+                    Center(child: CircularProgressIndicator(),) : 
                     ListView.separated(
-                      itemCount: snapshot.data!.docs.length,
+                      itemCount: snapshot.data!.docs.length,//Length of Items grabbed from DB
                       shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        var data = snapshot.data!.docs[index].data()
-                            as Map<String, dynamic>;
+                      itemBuilder: (context, index) { 
+                        //Grab data as a Map
+                        var data = snapshot.data!.docs[index].data() as Map<String, dynamic>;
 
-                        print('data is ${data.toString()}');
                         return ListTile(
                           title: Row(
                             children: [
@@ -145,10 +148,12 @@ Scaffold EntriesDiscoveredBoard() {
                               Text(data['email'])
                             ],
                           ),
+                          //Print leaderboard placement 
                           leading: Text(
                             "#${index + 1}",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
+                          //Print number of entries discovered
                           trailing: Text(
                               "${data['entriesDiscovered'].toString()}",
                               style: TextStyle(fontWeight: FontWeight.bold)),
@@ -171,10 +176,15 @@ Scaffold EntriesDiscoveredBoard() {
 }
 
 Scaffold AverageDiscoveryTimeBoard() {
+  Query collectionReference = FirebaseFirestore.instance
+      .collection("userData")
+      .orderBy('entriesDiscovered', descending: true)
+      .limit(MAX_PER_LEADERBOARD);
+
   return Scaffold(
     appBar: AppBar(
       title: Text(
-        "Average Time/Discovery",
+        "Most Entries Discovered",
         style: TextStyle(fontSize: 20),
       ),
       centerTitle: true,
@@ -192,39 +202,55 @@ Scaffold AverageDiscoveryTimeBoard() {
                 borderRadius: BorderRadius.circular(10)),
             margin: EdgeInsets.all(20),
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          CircleAvatar(
-                              backgroundImage: AssetImage('assets/logo.png')),
-                          SizedBox(
-                            width: 3,
+                constraints:
+                    BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: collectionReference.snapshots(),
+                  builder: (context, snapshot) {
+                    //Check if the snapshot has been received
+                    //If the connection is waiting then load, 
+                    //Else return a list view 
+                    return (snapshot.connectionState == ConnectionState.waiting) ? 
+                    Center(child: CircularProgressIndicator(),) : 
+                    ListView.separated(
+                      itemCount: snapshot.data!.docs.length,//Length of Items grabbed from DB
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) { 
+                        //Grab data as a Map
+                        var data = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+
+                        return ListTile(
+                          title: Row(
+                            children: [
+                              CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/logo.png')),
+                              SizedBox(
+                                width: 3,
+                              ),
+                              Text(data['email'])
+                            ],
                           ),
-                          Text("Jawn Jawnsawn")
-                        ],
-                      ),
-                      leading: Text(
-                        "#${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      trailing: Text(
-                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    );
-                  },
-                  separatorBuilder: (context, index) => Divider(
+                          //Print leaderboard placement 
+                          leading: Text(
+                            "#${index + 1}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          //Print number of entries discovered
+                          trailing: Text(
+                              "${data['entriesDiscovered'].toString()}",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(
                         thickness: 1,
                         color: Colors.purple,
                         indent: 10,
                         endIndent: 10,
                       ),
-                  itemCount: 20),
-            ),
+                    );
+                  },
+                )),
           )
         ],
       ),
