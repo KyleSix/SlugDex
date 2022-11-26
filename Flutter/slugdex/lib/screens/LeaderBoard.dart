@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:slugdex/Entry/entryReadWrite.dart';
 
 final int TAB_COUNT = 4; //Number of tabs in Leaderboard
 final int MAX_PER_LEADERBOARD =
@@ -93,8 +94,12 @@ Tab RarityTab() {
 //This is where the displays in the tabs are created
 //**********************************/
 Scaffold EntriesDiscoveredBoard() {
+  //Query for userData > entriesDiscovered.
+  //Data is only grabbed if entriesDiscovered > # Default locations given.
+  //Max number of items grabbed defined at top of file.
   Query collectionReference = FirebaseFirestore.instance
       .collection("userData")
+      .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
       .orderBy('entriesDiscovered', descending: true)
       .limit(MAX_PER_LEADERBOARD);
 

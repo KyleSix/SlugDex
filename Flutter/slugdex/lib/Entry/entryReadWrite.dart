@@ -5,6 +5,7 @@ import 'package:slugdex/main.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 
 List<int> defaultIds = [1, 5, 10, 15]; //Default Entry IDs given to user
+final int DEFAULT_COUNT = defaultIds.length; //Get Length of default IDs
 
 //Pull entries from Firebase and create List<Entry> entryList
 Future<List<Entry>> loadEntry() async {

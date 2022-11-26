@@ -101,7 +101,7 @@ Future queryUpdateDiscovered(String? email, int entriesDiscovered) async {
   await FirebaseFirestore.instance
       .collection('userData')
       .doc(email)
-      .set({'entriesDiscovered': entriesDiscovered});
+      .update({'entriesDiscovered': entriesDiscovered});
 }
 
 /*******************************************************************************
