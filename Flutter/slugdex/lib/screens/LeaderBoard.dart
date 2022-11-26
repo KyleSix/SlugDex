@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 final int TAB_COUNT = 4; //Number of tabs in Leaderboard
+final int MAX_PER_LEADERBOARD =
+    20; //Max number of players allowed to display on leaderboard
 
 class LeaderBoard extends StatefulWidget {
   const LeaderBoard({Key? key}) : super(key: key);
@@ -90,6 +93,11 @@ Tab RarityTab() {
 //This is where the displays in the tabs are created
 //**********************************/
 Scaffold EntriesDiscoveredBoard() {
+  Query collectionReference = FirebaseFirestore.instance
+      .collection("userData")
+      .orderBy('entriesDiscovered')
+      .limit(MAX_PER_LEADERBOARD);
+
   return Scaffold(
     appBar: AppBar(
       title: Text(
@@ -111,39 +119,52 @@ Scaffold EntriesDiscoveredBoard() {
                 borderRadius: BorderRadius.circular(10)),
             margin: EdgeInsets.all(20),
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          CircleAvatar(
-                              backgroundImage: AssetImage('assets/logo.png')),
-                          SizedBox(
-                            width: 3,
+                constraints:
+                    BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('userData')
+                      .orderBy('entriesDiscovered')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    return ListView.separated(
+                      itemCount: snapshot.data!.docs.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        var data = snapshot.data!.docs[index].data()
+                            as Map<String, dynamic>;
+
+                        print('data is ${data.toString()}');
+                        return ListTile(
+                          title: Row(
+                            children: [
+                              CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/logo.png')),
+                              SizedBox(
+                                width: 3,
+                              ),
+                              Text(data['email'])
+                            ],
                           ),
-                          Text("Jawn Jawnsawn")
-                        ],
-                      ),
-                      leading: Text(
-                        "#${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      trailing: Text(
-                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    );
-                  },
-                  separatorBuilder: (context, index) => Divider(
+                          leading: Text(
+                            "#${index + 1}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          trailing: Text(
+                              "${data['entriesDiscovered'].toString()}",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(
                         thickness: 1,
                         color: Colors.purple,
                         indent: 10,
                         endIndent: 10,
                       ),
-                  itemCount: 20),
-            ),
+                    );
+                  },
+                )),
           )
         ],
       ),
@@ -152,7 +173,7 @@ Scaffold EntriesDiscoveredBoard() {
 }
 
 Scaffold AverageDiscoveryTimeBoard() {
-    return Scaffold(
+  return Scaffold(
     appBar: AppBar(
       title: Text(
         "Average Time/Discovery",
@@ -214,7 +235,7 @@ Scaffold AverageDiscoveryTimeBoard() {
 }
 
 Scaffold DistanceTraveledBoard() {
-    return Scaffold(
+  return Scaffold(
     appBar: AppBar(
       title: Text(
         "Most Distance Traveled",
@@ -276,7 +297,7 @@ Scaffold DistanceTraveledBoard() {
 }
 
 Scaffold RarityBoard() {
-    return Scaffold(
+  return Scaffold(
     appBar: AppBar(
       title: Text(
         "Most Rarities Collected",

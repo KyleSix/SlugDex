@@ -108,6 +108,7 @@ Future queryUpdateMostDiscovered(String? email, int entriesDiscovered) async {
  * GETTERS
  ******************************************************************************/
 Future<int> queryGetUserPlayTimeInMillis(String? email) async {
+  int currentTime = DateTime.now().millisecondsSinceEpoch;
   int playTime = 0;
 
   await FirebaseFirestore.instance
@@ -118,10 +119,8 @@ Future<int> queryGetUserPlayTimeInMillis(String? email) async {
     if (snapshot.exists) {
       Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
       playTime = userData['millisecondsPlayed'];
-      int currentTime = DateTime.now().millisecondsSinceEpoch;
-      return currentTime - playTime;
     }
   });
 
-  return playTime;
+  return await currentTime - playTime;
 }
