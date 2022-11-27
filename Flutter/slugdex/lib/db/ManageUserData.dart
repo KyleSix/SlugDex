@@ -50,16 +50,11 @@ Future updateUserData() async {
     }
   } //end for
 
-  entriesDiscovered =
-      discovered.length; //Get number of entries discovered by user
-
-  print('entriesDiscovered = ${entriesDiscovered}');
-
   String? email =
       FirebaseAuth.instance.currentUser?.email; //Get user's email address
 
   //Update user data in firebase
-  queryUpdateUserData(email, discovered, entriesDiscovered);
+  queryUpdateUserData(email, discovered);
 }
 
 //Populate entryList to store all user discovered data
@@ -87,12 +82,15 @@ void loadUserDiscovered() {
 }
 
 //Queries data into 'userData' collection
-Future queryUpdateUserData(
-    String? email, List<dynamic> discovered, int entriesDiscovered) async {
+Future queryUpdateUserData(String? email, List<dynamic> discovered) async {
+  int entriesDiscovered = discovered.length;
+  String time = await getAverageDiscoveryTime(email, entriesDiscovered);
+
   await FirebaseFirestore.instance.collection('userData').doc(email).update({
     'email': email,
     'discovered': discovered.toList(),
-    'entriesDiscovered': entriesDiscovered
+    'entriesDiscovered': entriesDiscovered,
+    'averageDiscoveryTime': time
   });
 }
 
@@ -126,4 +124,17 @@ Future<int> queryGetUserPlayTimeInMillis(String? email) async {
   });
 
   return await currentTime - playTime;
+}
+
+//Update the average play time as a string formatted as h:mm:ss
+Future<String> getAverageDiscoveryTime(String? email, int entriesDiscovered) async {
+  int start = 0;
+  int end = 7;
+  int currentPlayTime = await queryGetUserPlayTimeInMillis(email);
+
+  String time = Duration(milliseconds: (currentPlayTime ~/ entriesDiscovered))
+      .toString()
+      .substring(start, end);
+
+  return time;
 }

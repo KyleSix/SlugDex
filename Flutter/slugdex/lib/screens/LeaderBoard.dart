@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
+import 'package:slugdex/db/ManageUserData.dart';
 
 final int TAB_COUNT = 4; //Number of tabs in Leaderboard
 final int MAX_PER_LEADERBOARD =
@@ -130,47 +131,52 @@ Scaffold EntriesDiscoveredBoard() {
                   stream: collectionReference.snapshots(),
                   builder: (context, snapshot) {
                     //Check if the snapshot has been received
-                    //If the connection is waiting then load, 
-                    //Else return a list view 
-                    return (snapshot.connectionState == ConnectionState.waiting) ? 
-                    Center(child: CircularProgressIndicator(),) : 
-                    ListView.separated(
-                      itemCount: snapshot.data!.docs.length,//Length of Items grabbed from DB
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) { 
-                        //Grab data as a Map
-                        var data = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                    //If the connection is waiting then load,
+                    //Else return a list view
+                    return (snapshot.connectionState == ConnectionState.waiting)
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.separated(
+                            itemCount: snapshot.data!.docs
+                                .length, //Length of Items grabbed from DB
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              //Grab data as a Map
+                              var data = snapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
 
-                        return ListTile(
-                          title: Row(
-                            children: [
-                              CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/logo.png')),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Text(data['email'])
-                            ],
-                          ),
-                          //Print leaderboard placement 
-                          leading: Text(
-                            "#${index + 1}",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          //Print number of entries discovered
-                          trailing: Text(
-                              "${data['entriesDiscovered'].toString()}",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        );
-                      },
-                      separatorBuilder: (context, index) => Divider(
-                        thickness: 1,
-                        color: Colors.purple,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                    );
+                              return ListTile(
+                                title: Row(
+                                  children: [
+                                    CircleAvatar(
+                                        backgroundImage:
+                                            AssetImage('assets/logo.png')),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    Text(data['email'])
+                                  ],
+                                ),
+                                //Print leaderboard placement
+                                leading: Text(
+                                  "#${index + 1}",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                //Print number of entries discovered
+                                trailing: Text(
+                                    "${data['entriesDiscovered'].toString()}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(
+                              thickness: 1,
+                              color: Colors.purple,
+                              indent: 10,
+                              endIndent: 10,
+                            ),
+                          );
                   },
                 )),
           )
@@ -189,7 +195,7 @@ Scaffold AverageDiscoveryTimeBoard() {
   return Scaffold(
     appBar: AppBar(
       title: Text(
-        "Most Entries Discovered",
+        "Average Discovery Time",
         style: TextStyle(fontSize: 20),
       ),
       centerTitle: true,
@@ -213,47 +219,52 @@ Scaffold AverageDiscoveryTimeBoard() {
                   stream: collectionReference.snapshots(),
                   builder: (context, snapshot) {
                     //Check if the snapshot has been received
-                    //If the connection is waiting then load, 
-                    //Else return a list view 
-                    return (snapshot.connectionState == ConnectionState.waiting) ? 
-                    Center(child: CircularProgressIndicator(),) : 
-                    ListView.separated(
-                      itemCount: snapshot.data!.docs.length,//Length of Items grabbed from DB
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) { 
-                        //Grab data as a Map
-                        var data = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                    //If the connection is waiting then load,
+                    //Else return a list view
+                    return (snapshot.connectionState == ConnectionState.waiting)
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.separated(
+                            itemCount: snapshot.data!.docs
+                                .length, //Length of Items grabbed from DB
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              //Grab data as a Map
+                              var data = snapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
 
-                        return ListTile(
-                          title: Row(
-                            children: [
-                              CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/logo.png')),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Text(data['email'])
-                            ],
-                          ),
-                          //Print leaderboard placement 
-                          leading: Text(
-                            "#${index + 1}",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          //Print number of entries discovered
-                          trailing: Text(
-                              "${data['entriesDiscovered'].toString()}",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        );
-                      },
-                      separatorBuilder: (context, index) => Divider(
-                        thickness: 1,
-                        color: Colors.purple,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                    );
+                              return ListTile(
+                                title: Row(
+                                  children: [
+                                    CircleAvatar(
+                                        backgroundImage:
+                                            AssetImage('assets/logo.png')),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    Text(data['email'])
+                                  ],
+                                ),
+                                //Print leaderboard placement
+                                leading: Text(
+                                  "#${index + 1}",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                //Print number of entries discovered
+                                trailing: Text(
+                                    "${data['entriesDiscovered'].toString()}\t${data['averageDiscoveryTime'].toString()}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(
+                              thickness: 1,
+                              color: Colors.purple,
+                              indent: 10,
+                              endIndent: 10,
+                            ),
+                          );
                   },
                 )),
           )
