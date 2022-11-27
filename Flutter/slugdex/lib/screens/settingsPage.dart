@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/auth/authPage.dart';
+import 'package:slugdex/screens/testImageMap.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
 
@@ -44,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Hero(
-                        tag: 'SettingsBtn',
+                        tag: 'ProfileBtn',
                         child: Container(
                           height: 80.0,
                           width: 80.0,
@@ -179,15 +180,16 @@ class _SettingsPageState extends State<SettingsPage> {
           ));
 
   Widget buildBugReport() => SimpleSettingsTile(
-        title: "Report A Bug",
+        title: "Custom Map",
         leading: IconWidget(
-            icon: Icons.bug_report, color: Colors.grey, size: icon_size),
+            icon: Icons.map_outlined, color: Colors.grey, size: icon_size),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content: Text("Feature in progress..."),
                 duration: const Duration(milliseconds: 2000)),
           );
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ImageMap(title:"Custom Map")));
         },
       );
 

@@ -41,8 +41,6 @@ class dexEntryView extends StatelessWidget {
     return Scaffold(
       backgroundColor: backColor,
       appBar: AppBar(
-        title: const Text('SlugDex'),
-        centerTitle: true,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0,

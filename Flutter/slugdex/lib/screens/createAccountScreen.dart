@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/main.dart';
+import 'package:slugdex/settings/settingsTools.dart';
 
 class createAccountScreen extends StatefulWidget {
   final VoidCallback showLoginScreen;
@@ -89,154 +90,153 @@ class _createAccountScreenState extends State<createAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
-          elevation: 0,
-        ),
+        backgroundColor: slugdex_yellow,
         body: SafeArea(
             child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                  child: const Text('SlugDex',
-                      style: TextStyle(
-                          inherit: true,
-                          color: Colors.white,
-                          fontSize: 75,
-                          shadows: [
-                            Shadow(
-                                offset: Offset(-1.5, 1.5), color: Colors.black),
-                            Shadow(
-                                offset: Offset(1.5, -1.5), color: Colors.black),
-                            Shadow(
-                                offset: Offset(1.5, 1.5), color: Colors.black),
-                            Shadow(
-                                offset: Offset(-1.5, -1.5),
-                                color: Colors.black),
-                          ])),
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              fit: StackFit.passthrough,
+              children: [ 
+                Positioned(
+                  top:-150,
+                  left:10.0,
+                  child: IconWidget(
+                    icon: Icons.catching_pokemon, 
+                    color: Colors.transparent,
+                    icon_color: Colors.white,
+                    radius: 0,
+                    size: 700,
+                  )
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
+                Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+                      child: title
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                        child: TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                              border: InputBorder.none, hintText: "Email"),
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                        child: TextField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              border: InputBorder.none, hintText: "Password"),
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                        child: TextField(
-                          controller: _confirmPasswordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Confirm Password"),
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 0.0),
-                  child: getErrorMessage(),
-                ),
-                InkWell(
-                    child: Padding(
+                    Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 25.0, vertical: 15.0),
+                          horizontal: 25.0, vertical: 10.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border.all(color: Colors.black),
+                          color: Colors.grey.shade200,
+                          border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Center(
-                            child: Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              "Create Account",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        )),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                            child: TextField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none, hintText: "Email"),
+                            )),
                       ),
                     ),
-                    onTap: () {
-                      signUp();
-                    }),
-                InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25.0, vertical: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Already have an account?",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        Text(
-                          " Log in",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.blue),
-                        ),
-                      ],
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                            child: TextField(
+                              controller: _passwordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none, hintText: "Password"),
+                            )),
+                      ),
                     ),
-                  ),
-                  onTap: widget.showLoginScreen,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                            child: TextField(
+                              controller: _confirmPasswordController,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Confirm Password"),
+                            )),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 0.0),
+                      child: getErrorMessage(),
+                    ),
+                    InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25.0, vertical: 15.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                                child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Text(
+                                  "Create Account",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            )),
+                          ),
+                        ),
+                        onTap: () {
+                          signUp();
+                        }),
+                    InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Already have an account?",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              " Log in",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onTap: widget.showLoginScreen,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ]
+            )
           ),
         )));
   }

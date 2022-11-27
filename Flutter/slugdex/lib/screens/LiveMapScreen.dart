@@ -13,6 +13,7 @@ import 'package:slugdex/screens/settingsPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/screens/profilePage.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -66,7 +67,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       body: Stack(alignment: Alignment.topCenter, children: <Widget>[
         SlidingUpPanel(
           backdropColor: Colors.black,
-          minHeight: _panelHeightClosed, // in pixels, 10% of total height
+          minHeight: _panelHeightClosed, 
           maxHeight: _panelHeightOpen,
           body: googleMapUI(context),
           panel: dexEntryPage(),
@@ -91,13 +92,13 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               color: Theme.of(context).primaryColor,
             ),
             onPressed: () async {
-              var _currentLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-              mapController.animateCamera(
-                  CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                      target: LatLng(_currentLocation.latitude, _currentLocation.longitude),
-                      zoom: await mapController.getZoomLevel()
-                      )));
+              var _currentLocation = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high);
+              mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                      target: LatLng(_currentLocation.latitude,
+                          _currentLocation.longitude),
+                      zoom: await mapController.getZoomLevel())));
             },
             backgroundColor: Colors.white,
           ),
@@ -146,17 +147,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               ],
             ),
           ),
-          // floatingActionButton: FloatingActionButton.extended(
-          //     heroTag: "DexViewBtn",
-          //     backgroundColor: Colors.white,
-          //     onPressed: () {
-          //       Navigator.of(context).push(openDexPage());
-          //     },
-          //     label: Row(
-          //       children: [Icon(Icons.catching_pokemon, color: Colors.black)],
-          //     )),
-          // floatingActionButtonLocation:
-          //     FloatingActionButtonLocation.centerFloat,
         );
       }
       return Center(
@@ -230,31 +220,6 @@ getUserLocation() async {
   //Use Geo locator to find the current location(latitude & longitude)
   _currentPosition = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);
-}
-
-Widget _buildPopupDialog(BuildContext context, _title, _message, thisEntry) {
-  return new AlertDialog(
-    title: Text(_title),
-    content: new Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(_message),
-      ],
-    ),
-    actions: <Widget>[
-      new TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => dexEntryView(entry: thisEntry)));
-        },
-        child: const Text("Ok"),
-      ),
-    ],
-  );
 }
 
 Set<Circle> populateHintCircles(context) {
@@ -333,19 +298,16 @@ Set<Circle> populateHintCircles(context) {
 }
 
 Widget _buildProfileFAB(context) => Container(
-  height: 80.0,
-  width: 80.0,
-  decoration: BoxDecoration(
-    border: Border.all(color: Colors.white, width: 2),
-    borderRadius: BorderRadius.circular(120)
-  ),
-  child: FloatingActionButton(
-      heroTag: "SettingsBtn",
-      backgroundColor: Color.fromRGBO(255, 255, 255, .0),
-      onPressed: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SettingsPage()));
-      },
-      child: profilePic
-  )
-);
+    height: 80.0,
+    width: 80.0,
+    decoration: BoxDecoration(
+        border: Border.all(color: Colors.white, width: 2),
+        borderRadius: BorderRadius.circular(120)),
+    child: FloatingActionButton(
+        heroTag: "ProfileBtn",
+        backgroundColor: Color.fromRGBO(255, 255, 255, .0),
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ProfilePage()));
+        },
+        child: profilePic));
