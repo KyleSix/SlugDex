@@ -46,7 +46,6 @@ class DiscoveryAnimation extends StatelessWidget {
         stopPauseOnTap: false,
         onFinished: () { // Goes to the LiveMapScreen and removes all previous navigation
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LiveMapScreen()));
         },
       );
 
@@ -54,7 +53,7 @@ class DiscoveryAnimation extends StatelessWidget {
     return FadeAnimatedText(
         DiscoveryMessage[index],
         textAlign: TextAlign.center,
-        textStyle: const TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, fontFamily: '', color: Colors.yellow,)
+        textStyle: const TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold, fontFamily: 'PocketMonk', color: Colors.yellow,)
     );
   }
 }
