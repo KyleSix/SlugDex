@@ -528,7 +528,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
 void addMarker(index, context) async {
   final bitmapIcon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration.empty,
-      'assets/images/markers/' + (index + 1).toString() + '.png');
+      'assets/markers/' + (index + 1).toString() + '.png');
   _markers.add(Marker(
       markerId: MarkerId(entryList[index].iD.toString()),
       position: LatLng(entryList[index].latitude!, entryList[index].longitude!),
