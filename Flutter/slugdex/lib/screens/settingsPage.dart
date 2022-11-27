@@ -4,6 +4,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/auth/authPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
+import 'package:slugdex/screens/LiveMapScreen.dart';
 
 const double spacing = 16.0;
 const double icon_size = 24.0;
@@ -95,6 +96,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   buildBugReport(), // Bug Report Button
                   const SizedBox(height: spacing),
                   buildFeedback(), // Feedback Button
+                  const SizedBox(height: spacing),
+                  buildToggleMap(), // Feedback Button
                   const SizedBox(height: spacing),
                   buildDevMode(), // Dev Mode Button
                   const SizedBox(height: 2),
@@ -203,6 +206,20 @@ class _SettingsPageState extends State<SettingsPage> {
           );
         },
       );
+
+  Widget buildToggleMap() => SimpleSettingsTile(
+    title: "Toggle Map Type",
+    leading: IconWidget(
+        icon: Icons.map, color: Colors.grey, size: icon_size),
+    onTap: () {
+      toggleMapType();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("The Map appearance has been changed"),
+            duration: const Duration(milliseconds: 2000)),
+      );
+    },
+  );
 
   Widget buildDevMode() => SwitchSettingsTile(
         title: "Developer Mode",

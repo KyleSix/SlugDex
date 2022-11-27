@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 // App Accent Color
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
