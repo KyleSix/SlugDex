@@ -32,6 +32,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   late GoogleMapController mapController;
   int? id;
 
+  bool isLoading = true;
+
   final double _initFabHeight = 80.0;
   double _fabHeight = 0;
   double _panelHeightOpen = 0; // calculated later
@@ -68,7 +70,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           minHeight: _panelHeightClosed, // in pixels, 10% of total height
           maxHeight: _panelHeightOpen,
           body: googleMapUI(context),
-          panel: dexEntryPage(),
+          panel: getPanel(),
           parallaxEnabled: true,
           parallaxOffset: 0.5,
           defaultPanelState: PanelState.CLOSED,
@@ -104,7 +106,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         Positioned(
           right: 20.0,
           bottom: _fabHeight,
-          child: _buildProfileFAB(context),
+          child: getSettingsButton(context),
         ),
       ]),
     );
@@ -134,6 +136,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     circles: populateHintCircles(context),
                     onMapCreated: (controller) {
                       setState(() {
+                        isLoading = false;
                         mapController = controller;
                       });
                       if (id != -1) {
@@ -162,6 +165,22 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         child: LoadingScreen(),
       );
     });
+  }
+
+  Widget getSettingsButton(context) {
+    if(isLoading) {
+      return Container();
+    } else {
+      return _buildProfileFAB(context);
+    }
+  }
+
+  Widget getPanel() {
+    if(isLoading) {
+      return Container();
+    } else {
+      return dexEntryPage();
+    }
   }
 
   void navigateHint(int id) async {
