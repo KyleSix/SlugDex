@@ -187,8 +187,12 @@ Scaffold EntriesDiscoveredBoard() {
 }
 
 Scaffold AverageDiscoveryTimeBoard() {
+  //Query for userData > entriesDiscovered.
+  //Data is only grabbed if entriesDiscovered > # Default locations given.
+  //Max number of items grabbed defined at top of file.
   Query collectionReference = FirebaseFirestore.instance
       .collection("userData")
+      .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
       .orderBy('entriesDiscovered', descending: true)
       .limit(MAX_PER_LEADERBOARD);
 
