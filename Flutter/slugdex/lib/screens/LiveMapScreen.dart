@@ -35,6 +35,8 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   late GoogleMapController mapController;
   int? id;
 
+  bool isLoading = true;
+
   final double _initFabHeight = 80.0;
   double _fabHeight = 0;
   double _panelHeightOpen = 0; // calculated later
@@ -70,7 +72,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           minHeight: _panelHeightClosed, // in pixels, 10% of total height
           maxHeight: _panelHeightOpen,
           body: googleMapUI(context),
-          panel: dexEntryPage(),
+          panel: getPanel(),
           parallaxEnabled: true,
           parallaxOffset: 0.5,
           defaultPanelState: PanelState.CLOSED,
@@ -106,7 +108,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         Positioned(
           right: 20.0,
           bottom: _fabHeight,
-          child: _buildProfileFAB(context),
+          child: getSettingsButton(context),
         ),
       ]),
     );
@@ -137,6 +139,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     circles: populateHintCircles(context),
                     onMapCreated: (controller) {
                       setState(() {
+                        isLoading = false;
                         controller.setMapStyle('''
                       [
                         {
@@ -515,6 +518,22 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     });
   }
 
+  Widget getSettingsButton(context) {
+    if(isLoading) {
+      return Container();
+    } else {
+      return _buildProfileFAB(context);
+    }
+  }
+
+  Widget getPanel() {
+    if(isLoading) {
+      return Container();
+    } else {
+      return dexEntryPage();
+    }
+  }
+
   void navigateHint(int id) async {
     // Animate camera to desired position and zoom
     CameraPosition newPosition = CameraPosition(
@@ -638,16 +657,19 @@ Set<Circle> populateHintCircles(context) {
 }
 
 Widget _buildProfileFAB(context) => Container(
-    height: 80.0,
-    width: 80.0,
-    decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2),
-        borderRadius: BorderRadius.circular(120)),
-    child: FloatingActionButton(
-        heroTag: "SettingsBtn",
-        backgroundColor: Color.fromRGBO(255, 255, 255, .0),
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => SettingsPage()));
-        },
-        child: profilePic));
+  height: 80.0,
+  width: 80.0,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.white, width: 2),
+    borderRadius: BorderRadius.circular(120)
+  ),
+  child: FloatingActionButton(
+      heroTag: "SettingsBtn",
+      backgroundColor: Color.fromRGBO(255, 255, 255, .0),
+      onPressed: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => SettingsPage()));
+      },
+      child: profilePic()
+  )
+);

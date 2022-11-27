@@ -4,6 +4,7 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/auth/authPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
+import 'package:slugdex/main.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 
 const double spacing = 16.0;
@@ -17,6 +18,9 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   // Get User info
   final User? user = FirebaseAuth.instance.currentUser;
+
+  String displayNameState = displayName;
+  Widget profilePicState = profilePic();
 
   // Configure settings
   bool logoutEnabled = (FirebaseAuth.instance.currentUser != null)
@@ -52,10 +56,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.white, width: 2),
                               borderRadius: BorderRadius.circular(120)),
-                          child: profilePic,
+                          child: profilePicState,
                         )),
                     const SizedBox(width: 24.0),
-                    Text("Sammy Slug",
+                    Text(displayNameState,
                         textScaleFactor: 2.0,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
@@ -111,11 +115,17 @@ class _SettingsPageState extends State<SettingsPage> {
   /// Edit Profile Settings ///
   Widget buildEditProfile() => SimpleSettingsTile(
         title: "Edit Profile",
-        subtitle: "Appearance, Username",
+        subtitle: "Appearance, Display Name",
         leading: IconWidget(
             icon: Icons.edit_note, color: Colors.greenAccent, size: icon_size),
         enabled: logoutEnabled,
-        child: EditProfilePage(),
+        onTap: () async{
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+          setState(() {
+            displayNameState = displayName;
+            profilePicState = new profilePic();
+          });
+        },
       );
 
   /// Logout Setting ///
