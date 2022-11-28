@@ -25,6 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
   double pokeballScale = 800;
   double max_pokeballOffset = -60, min_pokeballOffset = 0;
   double pokeballOffset = -60;
+  double max_pokeFontSize = 18, min_pokeFontSize = 1;
+  double pokeFontSize = 18.0;
   @override
   Widget build(BuildContext context) {
     totalDiscovered = 0;
@@ -48,8 +50,8 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: slugdex_yellow,
       ////////// Sliding Panel //////////
       body: SlidingUpPanel(
-        body: buildBody(),
-        panel: buildPanel(),
+        body: buildBody(), // the widget behind the sliding panel
+        panel: buildPanel(), // the widget that the sliding panel holds
         backdropColor: Colors.black,
         minHeight: panelHeightClosed,
         maxHeight: panelHeightOpen,
@@ -65,7 +67,9 @@ class _ProfilePageState extends State<ProfilePage> {
           double pokeOffsetRange = min_pokeballOffset - max_pokeballOffset;
           pokeballOffset =
               (pos * pokeOffsetRange) / heightRange + max_pokeballOffset;
-          ;
+          double pokeFontRange = min_pokeFontSize - max_pokeFontSize;
+          pokeFontSize =
+              (pos * pokeFontRange) / heightRange + max_pokeFontSize;
         }),
       ),
       floatingActionButton: FloatingActionButton(
@@ -100,10 +104,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.white,
                     size: pokeballScale,
                   ),
-                  Text("$totalDiscovered/$totalEntries",
+                  Text("$totalDiscovered / $totalEntries",
                       textScaleFactor: 2.0,
                       style: TextStyle(
-                          fontWeight: FontWeight.normal, color: textColor)),
+                        fontWeight: FontWeight.bold,
+                        fontSize: pokeFontSize,
+                      )),
                 ],
               )),
           Positioned(
@@ -133,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text("sammy@ucsc.edu",
                         textScaleFactor: 1.0,
                         style: TextStyle(
-                            fontWeight: FontWeight.normal, color: textColor)),
+                            fontWeight: FontWeight.bold, color: textColor)),
                   ])),
           Align(
             alignment: Alignment.bottomCenter,
