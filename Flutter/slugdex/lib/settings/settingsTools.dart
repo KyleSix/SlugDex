@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/main.dart';
 
 // App Accent Color
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
@@ -42,15 +42,36 @@ Text title = Text("SlugDex",
     ));
 
 // Profile pic code
-Widget profilePic = ClipRRect(
+//Widget profilePic = ClipRRect(
+//    borderRadius: BorderRadius.circular(120.0),
+//    clipBehavior: Clip.antiAlias,
+//    child: Container(
+//        decoration: BoxDecoration(
+//            image: DecorationImage(
+//      image: NetworkImage(profileImageURL),
+//      fit: BoxFit.contain,
+//    ))));
+
+class profilePic extends StatefulWidget {
+  @override
+  State<profilePic> createState() => profilePicState();
+}
+
+class profilePicState extends State<profilePic> {
+  String imageUrlState = profileImageURL;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
     borderRadius: BorderRadius.circular(120.0),
     clipBehavior: Clip.antiAlias,
     child: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-      image: AssetImage("assets/YoungSlugPortrait1.png"),
-      fit: BoxFit.contain,
+      image: NetworkImage(imageUrlState),
+      fit: BoxFit.cover,
     ))));
+  }
+}
 
 // This class wraps an Icon in a container of a specific shape and color
 // Usage: IconWidget(icon: Icons.menu, color: Colors.black)

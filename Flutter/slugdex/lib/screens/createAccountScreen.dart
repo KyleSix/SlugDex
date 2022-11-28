@@ -17,6 +17,7 @@ class createAccountScreen extends StatefulWidget {
 }
 
 class _createAccountScreenState extends State<createAccountScreen> {
+  final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -25,16 +26,24 @@ class _createAccountScreenState extends State<createAccountScreen> {
 
   Future signUp() async {
     if (_passwordController.text.trim() ==
-        _confirmPasswordController.text.trim()) {
+        _confirmPasswordController.text.trim() && 
+        _displayNameController.text.trim().length >= 3 &&
+        _displayNameController.text.trim().length <= 15) {
       try {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _emailController.text.trim(),
             password: _passwordController.text.trim());
 
+        String name = _displayNameController.text.trim();
+
         //Initialize entryList and create userData, then upload it
         entryList = await loadEntry();
         initializeDiscovered();
+        createDatabaseForUser();
         updateUserData();
+        setDisplayName(name);
+        displayName = await getDisplayName();
+        profileImageURL = await getProfileImageURL();
       } on FirebaseAuthException catch (error) {
         if (error.code == 'email-already-in-use') {
           setState(() {
@@ -50,6 +59,14 @@ class _createAccountScreenState extends State<createAccountScreen> {
           });
         }
       }
+    } else if (_displayNameController.text.trim().length < 3) {
+      setState(() {
+        errorNum = 4;
+      });
+    } else if (_displayNameController.text.trim().length > 15) {
+      setState(() {
+        errorNum = 5;
+      });
     } else {
       setState(() {
         errorNum = 1;
@@ -73,6 +90,18 @@ class _createAccountScreenState extends State<createAccountScreen> {
     } else if (errorNum == 3) {
       return Text(
         "Password Must Be At Least 6 Characters",
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+      );
+    } else if (errorNum == 4) {
+      return Text(
+        "Username Must Be At Least 3 Characters",
+        style: TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
+      );
+    } else if (errorNum == 5) {
+      return Text(
+        "Display Name Can Be At Most 15 Characters",
         style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w500, color: Colors.red),
       );
@@ -127,13 +156,40 @@ class _createAccountScreenState extends State<createAccountScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                            child: TextField(
-                              controller: _emailController,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none, hintText: "Email"),
-                            )),
-                      ),
+                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                        child: TextField(
+                          controller: _displayNameController,
+                          decoration: InputDecoration(
+                              border: InputBorder.none, hintText: "Display Name"),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                        child: TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                              border: InputBorder.none, hintText: "Email"),
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(

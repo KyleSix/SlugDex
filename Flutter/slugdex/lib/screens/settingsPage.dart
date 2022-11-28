@@ -5,6 +5,8 @@ import 'package:slugdex/auth/authPage.dart';
 import 'package:slugdex/screens/testImageMap.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
+import 'package:slugdex/main.dart';
+import 'package:slugdex/screens/LiveMapScreen.dart';
 
 const double spacing = 16.0;
 const double icon_size = 24.0;
@@ -17,6 +19,9 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   // Get User info
   final User? user = FirebaseAuth.instance.currentUser;
+
+  String displayNameState = displayName;
+  Widget profilePicState = profilePic();
 
   // Configure settings
   bool logoutEnabled = (FirebaseAuth.instance.currentUser != null)
@@ -52,10 +57,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.white, width: 2),
                               borderRadius: BorderRadius.circular(120)),
-                          child: profilePic,
+                          child: profilePicState,
                         )),
                     const SizedBox(width: 24.0),
-                    Text("Sammy Slug",
+                    Text(displayNameState,
                         textScaleFactor: 2.0,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
@@ -97,6 +102,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   const SizedBox(height: spacing),
                   buildFeedback(), // Feedback Button
                   const SizedBox(height: spacing),
+                  buildToggleMap(), // Feedback Button
+                  const SizedBox(height: spacing),
                   buildDevMode(), // Dev Mode Button
                   const SizedBox(height: 2),
                 ]),
@@ -109,11 +116,17 @@ class _SettingsPageState extends State<SettingsPage> {
   /// Edit Profile Settings ///
   Widget buildEditProfile() => SimpleSettingsTile(
         title: "Edit Profile",
-        subtitle: "Appearance, Username",
+        subtitle: "Appearance, Display Name",
         leading: IconWidget(
             icon: Icons.edit_note, color: Colors.greenAccent, size: icon_size),
         enabled: logoutEnabled,
-        child: EditProfilePage(),
+        onTap: () async{
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+          setState(() {
+            displayNameState = displayName;
+            profilePicState = new profilePic();
+          });
+        },
       );
 
   /// Logout Setting ///
@@ -205,6 +218,20 @@ class _SettingsPageState extends State<SettingsPage> {
           );
         },
       );
+
+  Widget buildToggleMap() => SimpleSettingsTile(
+    title: "Toggle Map Type",
+    leading: IconWidget(
+        icon: Icons.map, color: Colors.grey, size: icon_size),
+    onTap: () {
+      toggleMapType();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("The Map appearance has been changed"),
+            duration: const Duration(milliseconds: 2000)),
+      );
+    },
+  );
 
   Widget buildDevMode() => SwitchSettingsTile(
         title: "Developer Mode",
