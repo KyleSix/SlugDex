@@ -12,6 +12,7 @@ import 'DexEntryPage.dart';
 import 'package:slugdex/screens/settingsPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/screens/profilePage.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 MapType _currentMapType = MapType.normal;
@@ -20,7 +21,7 @@ void toggleMapType() {
       (_currentMapType == MapType.normal) ? MapType.satellite : MapType.normal;
 }
 
-final Set<Marker> _markers = new Set();
+Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
 double _radius = 25.0; // Distance in meters
 
@@ -69,7 +70,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       body: Stack(alignment: Alignment.topCenter, children: <Widget>[
         SlidingUpPanel(
           backdropColor: Colors.black,
-          minHeight: _panelHeightClosed, // in pixels, 10% of total height
+          minHeight: _panelHeightClosed,
           maxHeight: _panelHeightOpen,
           body: googleMapUI(context),
           panel: getPanel(),
@@ -563,6 +564,7 @@ void addMarker(index, context) async {
 }
 
 Set<Marker> populateClientMarkers(context) {
+  _markers.clear();
   for (int index = 0; index < entryList.length; ++index) {
     if (entryList[index].discovered != 0) // If user discovered a location
       addMarker(index, context); // Mark that location on the map with a marker
@@ -657,19 +659,18 @@ Set<Circle> populateHintCircles(context) {
 }
 
 Widget _buildProfileFAB(context) => Container(
-  height: 80.0,
-  width: 80.0,
-  decoration: BoxDecoration(
-    border: Border.all(color: Colors.white, width: 2),
-    borderRadius: BorderRadius.circular(120)
-  ),
-  child: FloatingActionButton(
-      heroTag: "SettingsBtn",
-      backgroundColor: Color.fromRGBO(255, 255, 255, .0),
-      onPressed: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => SettingsPage()));
-      },
-      child: profilePic()
-  )
+    height: 80.0,
+    width: 80.0,
+    decoration: BoxDecoration(
+        border: Border.all(color: Colors.white, width: 2),
+        borderRadius: BorderRadius.circular(120)),
+    child: FloatingActionButton(
+        heroTag: "ProfileBtn",
+        backgroundColor: Color.fromRGBO(255, 255, 255, .0),
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ProfilePage()));
+        },
+        child: profilePic()
+    )
 );

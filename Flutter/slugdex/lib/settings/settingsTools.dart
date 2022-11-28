@@ -23,6 +23,24 @@ Text logo = Text("SlugDex",
       ],
     ));
 
+Text title = Text("SlugDex",
+    style: TextStyle(
+      fontFamily: "PocketMonk",
+      fontSize: 80.0,
+      //color: Colors.black,
+      foreground: Paint()
+        ..strokeWidth = 1
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke,
+
+      shadows: [
+        Shadow(offset: Offset(-1, 1), color: Colors.black),
+        Shadow(offset: Offset(1, -1), color: Colors.black),
+        Shadow(offset: Offset(1, 1), color: Colors.black),
+        Shadow(offset: Offset(-1, -1), color: Colors.black),
+      ],
+    ));
+
 // Profile pic code
 //Widget profilePic = ClipRRect(
 //    borderRadius: BorderRadius.circular(120.0),

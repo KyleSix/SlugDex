@@ -45,7 +45,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     buildAppearance()
                   ])),
               Hero(
-                  tag: 'SettingsBtn',
+                  tag: 'ProfileBtn',
                   child: Container(
                     height: 128.0,
                     width: 128.0,

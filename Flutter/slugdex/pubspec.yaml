@@ -49,6 +49,7 @@ dependencies:
   cloud_firestore: ^4.1.0
   flutter_settings_screens: ^0.3.3-null-safety+2
   sliding_up_panel: ^2.0.0+1
+  image_overlay_map: ^0.0.3
   firebase_storage: ^11.0.6
   image_picker: ^0.8.6
 
