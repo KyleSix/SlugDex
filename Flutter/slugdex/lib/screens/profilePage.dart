@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/settingsPage.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/main.dart';
 
@@ -27,6 +28,11 @@ class _ProfilePageState extends State<ProfilePage> {
   double pokeballOffset = -60;
   double max_pokeFontSize = 18, min_pokeFontSize = 1;
   double pokeFontSize = 18.0;
+
+  String displayNameState = displayName;
+  Widget profilePicState = profilePic();
+  String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
+
   @override
   Widget build(BuildContext context) {
     totalDiscovered = 0;
@@ -79,9 +85,13 @@ class _ProfilePageState extends State<ProfilePage> {
           Icons.settings,
           color: textColor,
         ),
-        onPressed: () {
-          Navigator.of(context)
+        onPressed: () async {
+          await Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => SettingsPage()));
+          setState(() {
+            displayNameState = displayName;
+            profilePicState = new profilePic();
+          });
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
@@ -124,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.white,
                         border: Border.all(color: Colors.white, width: 1),
                         borderRadius: BorderRadius.circular(120)),
-                    child: profilePic)),
+                    child: profilePicState)),
           ),
           Positioned(
               top: 110.0,
@@ -132,11 +142,11 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Sammy Slug",
+                    Text(displayNameState,
                         textScaleFactor: 2.0,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: textColor)),
-                    Text("sammy@ucsc.edu",
+                    Text(userEmail,
                         textScaleFactor: 1.0,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: textColor)),

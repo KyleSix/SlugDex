@@ -162,34 +162,25 @@ class _createAccountScreenState extends State<createAccountScreen> {
                           decoration: InputDecoration(
                               border: InputBorder.none, hintText: "Display Name"),
                         )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                        child: TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                              border: InputBorder.none, hintText: "Email"),
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                            child: TextField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none, hintText: "Email"),
+                            )),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(

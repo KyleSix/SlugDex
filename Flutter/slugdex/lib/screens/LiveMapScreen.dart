@@ -671,5 +671,6 @@ Widget _buildProfileFAB(context) => Container(
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => ProfilePage()));
         },
-        child: profilePic));
+        child: profilePic()
+    )
 );
