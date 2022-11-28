@@ -121,7 +121,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
               children: [
                 Expanded(
                   child: GoogleMap(
-                    //mapType: MapType.hybrid,
                     mapType: _currentMapType,
                     initialCameraPosition: CameraPosition(
                         target: model.locationPosition!, zoom: 18),
@@ -534,8 +533,7 @@ void addMarker(index, context) async {
       position: LatLng(entryList[index].latitude!, entryList[index].longitude!),
       icon: bitmapIcon,
       infoWindow: InfoWindow(title: entryList[index].name),
-      onTap: () {
-        // On tap marker, opens its Dex Entry
+      onTap: () { // On tap marker, opens its Dex Entry
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -569,29 +567,16 @@ Set<Circle> populateHintCircles(context) {
   for (Entry thisEntry in entryList) {
     Color rarityColor = Colors.grey.shade400;
     switch (thisEntry.rarity) {
-      case Rarity.MYTHICAL:
-        rarityColor = Colors.amber.shade400;
-        break;
-      case Rarity.LEGENDARY:
-        rarityColor = Colors.purple;
-        break;
-      case Rarity.RARE:
-        rarityColor = Colors.blue;
-        break;
-      case Rarity.UNCOMMON:
-        rarityColor = Colors.green;
-        break;
-      case Rarity.COMMON:
-        rarityColor = Colors.grey.shade400;
-        break;
-      default:
-        break;
+      case Rarity.MYTHICAL: rarityColor = Colors.amber.shade400; break;
+      case Rarity.LEGENDARY: rarityColor = Colors.purple; break;
+      case Rarity.RARE: rarityColor = Colors.blue; break;
+      case Rarity.UNCOMMON: rarityColor = Colors.green; break;
+      case Rarity.COMMON: rarityColor = Colors.grey.shade400; break;
+      default: break;
     }
-    if (thisEntry.discovered == 0) {
-      // if not discovered
+    if (thisEntry.discovered == 0) { // if not discovered
       _circles.add(Circle(
-          circleId:
-              CircleId(thisEntry.iD.toString()), // Entry ID # is the Circle ID
+          circleId: CircleId(thisEntry.iD.toString()), // Entry ID #
           consumeTapEvents: true,
           fillColor: rarityColor.withOpacity(0.2),
           center: LatLng(thisEntry.latitude!, thisEntry.longitude!),
@@ -606,13 +591,12 @@ Set<Circle> populateHintCircles(context) {
                 _currentPosition?.latitude ?? 0,
                 _currentPosition?.longitude ?? 0,
                 thisEntry.latitude!.toDouble(),
-                thisEntry.longitude!.toDouble());
+                thisEntry.longitude!.toDouble()
+            );
 
-            bool? Debug =
-                Settings.getValue<bool>("key-dev-mode", defaultValue: false);
+            bool? Debug = Settings.getValue<bool>("key-dev-mode", defaultValue: false);
             // if user is inside 25 meter radius or debug mode
             if (distance <= _radius || Debug == true) {
-              // Debug check here
               markDiscovered(thisEntry.iD!.toInt() - 1); // Mark discovered
               showDialog(
                 context: context,
@@ -623,8 +607,8 @@ Set<Circle> populateHintCircles(context) {
                 context: context,
                 builder: (BuildContext context) => DiscoveryAnimation(),
               );
-            } else {
-              // User is not in range, so let's tell them
+            }
+            else { // User is not in range, so let's tell them
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                     content: Text("Try getting closer..."),

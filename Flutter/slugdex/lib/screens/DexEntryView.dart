@@ -42,6 +42,10 @@ class dexEntryView extends StatelessWidget {
       backgroundColor: backColor,
       appBar: AppBar(
         title: const Text('SlugDex'),
+        titleTextStyle: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold, fontFamily: 'PocketMonk', foreground: Paint()
+          ..strokeWidth = 1
+          ..color = Colors.black
+          ..style = PaintingStyle.stroke,),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
@@ -66,7 +70,7 @@ class dexEntryView extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: trayHeight-260,
+            top: trayHeight-290,
               child: Column(
                 children: [
                   Container(
@@ -81,13 +85,11 @@ class dexEntryView extends StatelessWidget {
                           width: 225.0,
                           height: 225.0,
                           decoration: BoxDecoration(
-                              border: getBorderForImageView(entry),
-                              shape: BoxShape.circle,
                               image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage(img),
-                            )
-                        ),
+                                fit: BoxFit.fitWidth,
+                                image: AssetImage(img),
+                              )
+                          ),
                         ),
                       ],
                     ),
@@ -97,10 +99,8 @@ class dexEntryView extends StatelessWidget {
           ),
           Positioned(
             top: trayHeight,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            child: SizedBox(width: MediaQuery.of(context).size.width,
+              child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 40, 0, 10),
@@ -145,23 +145,19 @@ class dexEntryView extends StatelessWidget {
 Widget _getHintButton(Entry entry, Color backColor, BuildContext context) {
   return FloatingActionButton.extended(
       backgroundColor: backColor,
-      onPressed: () {
-        Navigator.pushAndRemoveUntil(
-            // Goes to the LiveMapScreen and removes all previous navigations
-            context,
-            MaterialPageRoute(
-                builder: (context) => LiveMapScreen(
-                      // Pass in the entry ID to move to
-                      entryID: entry.iD!,
-                    )),
+      onPressed: () { // Goes to the LiveMapScreen and removes all previous navigation
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) => LiveMapScreen(entryID: entry.iD!)),
             ModalRoute.withName("/map"));
       },
-      label: Row(children: [
-        Text("Locate"),
-        SizedBox(width: 6.0,),
-        Icon(Icons.location_searching, color: Colors.white)
-        ],)
-    );
+      label: Row(
+        children: [
+          Text("Locate"),
+          SizedBox(width: 6.0,),
+          Icon(Icons.location_searching, color: Colors.white)
+        ],
+      )
+  );
 }
 
 Border getBorderForImageView(Entry entry) {

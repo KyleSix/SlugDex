@@ -7,7 +7,6 @@ Text logo = Text("SlugDex",
     style: TextStyle(
       fontFamily: "PocketMonk",
       fontSize: 40.0,
-      //color: Colors.black,
       foreground: Paint()
         ..strokeWidth = 1
         ..color = Colors.white
