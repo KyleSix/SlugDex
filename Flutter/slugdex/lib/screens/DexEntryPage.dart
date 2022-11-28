@@ -52,7 +52,7 @@ class dexEntryPage extends StatelessWidget {
                   Color boxColor = Colors.grey.shade700;
                   String img = "assets/images/undiscovered.png";
                   int entryID = entryList[index].iD!;
-                  String entryname = "Entry $entryID";
+                  String entryname = "$entryID";
                   if(entryList[index].discovered == 1){
                     if(entryList[index].rarity == Rarity.MYTHICAL) {
                       boxColor = Colors.amber.shade400;
@@ -101,7 +101,7 @@ class dexEntryPage extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 10.0),
-                                child: Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
+                                child: Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
                               ),
                             ],
                           ),
