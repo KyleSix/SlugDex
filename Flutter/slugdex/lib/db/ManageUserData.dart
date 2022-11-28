@@ -82,6 +82,9 @@ void loadUserDiscovered() {
 }
 
 //Queries data into 'userData' collection
+//NOTE: this can not be called after the user has discovered all entries since
+//If the user has discovered all entries, then their average discovery time does
+//Not need to be updated.
 Future queryUpdateUserData(String? email, List<dynamic> discovered) async {
   int entriesDiscovered = discovered.length;
   String time = await getAverageDiscoveryTime(email, entriesDiscovered);
@@ -100,6 +103,16 @@ Future queryUpdateDiscovered(String? email, int entriesDiscovered) async {
       .collection('userData')
       .doc(email)
       .update({'entriesDiscovered': entriesDiscovered});
+}
+
+//Get the discoveredCOunt of an entry and increment it (when a user discovers it)
+Future queryUpdateDiscoveredCount(int index) async {
+  int discoveredCount = await queryGetDiscoveredCount(index);
+
+  await FirebaseFirestore.instance
+      .collection('entries')
+      .doc(index.toString())
+      .update({'discoveredCount': discoveredCount + 1});
 }
 
 /*******************************************************************************
@@ -127,7 +140,8 @@ Future<int> queryGetUserPlayTimeInMillis(String? email) async {
 }
 
 //Update the average play time as a string formatted as h:mm:ss
-Future<String> getAverageDiscoveryTime(String? email, int entriesDiscovered) async {
+Future<String> getAverageDiscoveryTime(
+    String? email, int entriesDiscovered) async {
   int start = 0;
   int end = 7;
   int currentPlayTime = await queryGetUserPlayTimeInMillis(email);
@@ -137,4 +151,39 @@ Future<String> getAverageDiscoveryTime(String? email, int entriesDiscovered) asy
       .substring(start, end);
 
   return time;
+}
+
+//Get the number of people that have discovered an entry
+//Used to in displaying the rarity of an entry
+Future<int> queryGetDiscoveredCount(int index) async {
+  int discoveredCount = 0;
+
+  //Get the discoveredCount of an entry
+  //If the discoveredCount is NULL then set it to zero
+  await FirebaseFirestore.instance
+      .collection('entries')
+      .doc('entries')
+      .get()
+      .then((snapshot) {
+    if (snapshot.exists) {
+      Map<String, dynamic> entry = snapshot.data() as Map<String, dynamic>;
+      //If NULL, then set to zero
+      
+      if (entry['entryList'][index]['discoveredCount'] == null) {
+        FirebaseFirestore.instance
+            .collection('entries')
+            .doc('entries')
+            .update({'discoveredCount': 0.toString()});
+      } else {
+        //Get the discoveredCount
+        discoveredCount = int.parse(entry['entryList'][index]['discoveredCount'].toString());
+      } //end else
+    }
+  });
+
+  return discoveredCount;
+}
+
+queryUpdateEntries() {
+  
 }

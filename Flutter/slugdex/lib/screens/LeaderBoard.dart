@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 
-final int TAB_COUNT = 4; //Number of tabs in Leaderboard
+final int TAB_COUNT = 3; //Number of tabs in Leaderboard
 final int MAX_PER_LEADERBOARD =
     20; //Max number of players allowed to display on leaderboard
 
@@ -29,14 +29,12 @@ class _LeaderBoardState extends State<LeaderBoard> {
               TabBar(tabs: [
                 EntriesDiscoveredTab(),
                 AverageDiscoveryTimeTab(),
-                DistanceTraveledTab(),
                 RarityTab()
               ]),
               Expanded(
                 child: TabBarView(children: [
                   EntriesDiscoveredBoard(),
                   AverageDiscoveryTimeBoard(),
-                  DistanceTraveledBoard(),
                   RarityBoard()
                 ]),
               )
@@ -68,15 +66,6 @@ Tab AverageDiscoveryTimeTab() {
   return Tab(
     icon: Icon(
       Icons.timer_sharp,
-      color: Colors.deepPurple,
-    ),
-  );
-}
-
-Tab DistanceTraveledTab() {
-  return Tab(
-    icon: Icon(
-      Icons.nordic_walking,
       color: Colors.deepPurple,
     ),
   );
@@ -278,73 +267,21 @@ Scaffold AverageDiscoveryTimeBoard() {
   );
 }
 
-Scaffold DistanceTraveledBoard() {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text(
-        "Most Distance Traveled",
-        style: TextStyle(fontSize: 20),
-      ),
-      centerTitle: true,
-      elevation: 0.0,
-    ),
-    body: SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10)),
-            margin: EdgeInsets.all(20),
-            child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          CircleAvatar(
-                              backgroundImage: AssetImage('assets/logo.png')),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text("Jawn Jawnsawn")
-                        ],
-                      ),
-                      leading: Text(
-                        "#${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      trailing: Text(
-                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    );
-                  },
-                  separatorBuilder: (context, index) => Divider(
-                        thickness: 1,
-                        color: Colors.purple,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                  itemCount: 20),
-            ),
-          )
-        ],
-      ),
-    ),
-  );
-}
-
+//List the discovery percentages of all users
 Scaffold RarityBoard() {
+  //Query for userData > entriesDiscovered.
+  //Data is only grabbed if entriesDiscovered > # Default locations given.
+  //Max number of items grabbed defined at top of file.
+  Query collectionReference = FirebaseFirestore.instance
+      .collection("userData")
+      .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
+      .orderBy('entriesDiscovered', descending: true)
+      .limit(MAX_PER_LEADERBOARD);
+
   return Scaffold(
     appBar: AppBar(
       title: Text(
-        "Most Rarities Collected",
+        "Average Discovery Time",
         style: TextStyle(fontSize: 20),
       ),
       centerTitle: true,
@@ -362,39 +299,60 @@ Scaffold RarityBoard() {
                 borderRadius: BorderRadius.circular(10)),
             margin: EdgeInsets.all(20),
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Row(
-                        children: [
-                          CircleAvatar(
-                              backgroundImage: AssetImage('assets/logo.png')),
-                          SizedBox(
-                            width: 3,
-                          ),
-                          Text("Jawn Jawnsawn")
-                        ],
-                      ),
-                      leading: Text(
-                        "#${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      trailing: Text(
-                          "Rs.${(200000 / (index + 1)).toString().substring(0, 5)}",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    );
+                constraints:
+                    BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: collectionReference.snapshots(),
+                  builder: (context, snapshot) {
+                    //Check if the snapshot has been received
+                    //If the connection is waiting then load,
+                    //Else return a list view
+                    return (snapshot.connectionState == ConnectionState.waiting)
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.separated(
+                            itemCount: snapshot.data!.docs
+                                .length, //Length of Items grabbed from DB
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              //Grab data as a Map
+                              var data = snapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
+
+                              return ListTile(
+                                title: Row(
+                                  children: [
+                                    CircleAvatar(
+                                        backgroundImage:
+                                            AssetImage('assets/logo.png')),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    Text(data['email'])
+                                  ],
+                                ),
+                                //Print leaderboard placement
+                                leading: Text(
+                                  "#${index + 1}",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                //Print number of entries discovered
+                                trailing: Text(
+                                    "${data['entriesDiscovered'].toString()}\t${data['averageDiscoveryTime'].toString()}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(
+                              thickness: 1,
+                              color: Colors.purple,
+                              indent: 10,
+                              endIndent: 10,
+                            ),
+                          );
                   },
-                  separatorBuilder: (context, index) => Divider(
-                        thickness: 1,
-                        color: Colors.purple,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                  itemCount: 20),
-            ),
+                )),
           )
         ],
       ),

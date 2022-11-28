@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,6 @@ import 'firebase_options.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart'
     as fss; //Naming conflict arose, so use prefix fss
 
-
 List<Entry> entryList = []; //Global List of all entries
 bool Debug = false;
 
@@ -25,15 +25,15 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   String? email = FirebaseAuth.instance.currentUser?.email;
   if (email != null) {
     entryList = await loadEntry();
-    loadUserDiscovered();
-  }//end if 
 
-      print(
-          "milliseconds = ${await queryGetUserPlayTimeInMillis(FirebaseAuth.instance.currentUser?.email)}");
+    loadUserDiscovered();
+  } //end if
+
+  print("milliseconds = ${await queryGetUserPlayTimeInMillis(FirebaseAuth.instance.currentUser?.email)}");
 
   // Initialize the settings plugin
   await fss.Settings.init();
