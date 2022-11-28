@@ -17,7 +17,7 @@ import 'package:slugdex/screens/profilePage.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-final Set<Marker> _markers = new Set();
+Set<Marker> _markers = new Set();
 Set<Circle> _circles = new Set(); // For the hint radii
 double _radius = 25.0; // Distance in meters
 
@@ -67,7 +67,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       body: Stack(alignment: Alignment.topCenter, children: <Widget>[
         SlidingUpPanel(
           backdropColor: Colors.black,
-          minHeight: _panelHeightClosed, 
+          minHeight: _panelHeightClosed,
           maxHeight: _panelHeightOpen,
           body: googleMapUI(context),
           panel: dexEntryPage(),
@@ -201,6 +201,7 @@ void addMarker(index, context) {
 }
 
 Set<Marker> populateClientMarkers(context) {
+  _markers.clear();
   for (int index = 0; index < entryList.length; ++index) {
     // Iterates through Global "entryList" from main
     if (entryList[index].discovered != 0)

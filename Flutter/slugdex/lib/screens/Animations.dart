@@ -46,7 +46,6 @@ class DiscoveryAnimation extends StatelessWidget {
         stopPauseOnTap: false,
         onFinished: () { // Goes to the LiveMapScreen and removes all previous navigation
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => LiveMapScreen()));
         },
       );
 
