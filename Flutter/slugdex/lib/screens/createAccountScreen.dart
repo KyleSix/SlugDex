@@ -38,8 +38,8 @@ class _createAccountScreenState extends State<createAccountScreen> {
 
         //Initialize entryList and create userData, then upload it
         entryList = await loadEntry();
-        createUserData();
-        setDisplayName(name);
+        await createUserData();
+        await setDisplayName(name);
         displayName = await getDisplayName();
         profileImageURL = await getProfileImageURL();
       } on FirebaseAuthException catch (error) {

@@ -77,7 +77,9 @@ class _LeaderBoardState extends State<LeaderBoard> {
             heroTag: 'ReloadLeaderBoardsButton',
             backgroundColor: slugdex_yellow,
             child: const Icon(Icons.refresh),
-            onPressed: (() {}),
+            onPressed: (() {
+              queryRefreshDiscoveredCountAll();
+            }),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.miniCenterDocked,
@@ -323,6 +325,8 @@ class _LeaderBoardState extends State<LeaderBoard> {
         Map<String, dynamic> playerCountMap =
             snapshot.data() as Map<String, dynamic>;
         playerCount = int.parse(playerCountMap['playerCount'].toString());
+        print('playercount:');
+        print(playerCount);
       }
     });
 

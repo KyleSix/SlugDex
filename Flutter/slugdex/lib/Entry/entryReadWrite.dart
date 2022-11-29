@@ -29,10 +29,12 @@ Future<List<Entry>> loadEntry() async {
 }
 
 //Create default discovered locations (used for newly created accounts)
-void initializeDiscovered() {
+Future<void> initializeDiscovered() async {
+  await queryRefreshDiscoveredCountAll();
   for (int i = 0; i < defaultIds.length; i++) {
     entryList[defaultIds[i] - 1].discovered = 1;
     entryList[defaultIds[i] - 1].dateDiscovered = setDiscoveredDate();
+    await queryUpdateDiscoveredCount(defaultIds[i] - 1);
   }
 }
 

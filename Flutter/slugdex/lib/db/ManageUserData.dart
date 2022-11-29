@@ -16,8 +16,8 @@ Future createUserData() async {
   int timeStartedPlaying = DateTime.now().millisecondsSinceEpoch;
 
   //Initialize entryList to store default values and increment the number of players
-  initializeDiscovered();
-  incrementPlayerCount();
+  await initializeDiscovered();
+  await incrementPlayerCount();
 
   //Load discovered entries before storing in firebase
   for (int i = 0; i < entryList.length; i++) {
@@ -111,6 +111,7 @@ Future queryUpdateDiscovered(String? email, int entriesDiscovered) async {
 
 //Get the discoveredCOunt of an entry and increment it (when a user discovers it)
 Future queryUpdateDiscoveredCount(int index) async {
+  await queryRefreshDiscoveredCountAll();
   int discoveredCount = await queryGetDiscoveredCount(index);
   entryList[index].discoveredCount = discoveredCount + 1;
 
@@ -126,6 +127,14 @@ Future queryUpdateDiscoveredCount(int index) async {
       .collection('entries')
       .doc('entries')
       .update({'entryList': tempList.toList()});
+}
+
+//Refresh the local count of discovered entries
+Future<void> queryRefreshDiscoveredCountAll() async {
+    for (int i = 0; i < entryList.length; i++) {
+      int discoveredCount = await queryGetDiscoveredCount(i);
+      entryList[i].discoveredCount = discoveredCount;
+    }
 }
 
 /*******************************************************************************
