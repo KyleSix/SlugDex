@@ -5,6 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/main.dart';
+import 'package:slugdex/screens/LeaderBoard.dart';
 
 const double icon_size = 24.0;
 
@@ -28,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   double pokeballOffset = -60;
   double max_pokeFontSize = 18, min_pokeFontSize = 1;
   double pokeFontSize = 18.0;
-
+  
   String displayNameState = displayName;
   Widget profilePicState = profilePic();
   String userEmail = FirebaseAuth.instance.currentUser!.email.toString();
@@ -57,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ////////// Sliding Panel //////////
       body: SlidingUpPanel(
         body: buildBody(), // the widget behind the sliding panel
-        panel: buildPanel(), // the widget that the sliding panel holds
+        panel: LeaderBoard(), // the widget that the sliding panel holds
         backdropColor: Colors.black,
         minHeight: panelHeightClosed,
         maxHeight: panelHeightOpen,
@@ -74,8 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
           pokeballOffset =
               (pos * pokeOffsetRange) / heightRange + max_pokeballOffset;
           double pokeFontRange = min_pokeFontSize - max_pokeFontSize;
-          pokeFontSize =
-              (pos * pokeFontRange) / heightRange + max_pokeFontSize;
+          pokeFontSize = (pos * pokeFontRange) / heightRange + max_pokeFontSize;
         }),
       ),
       floatingActionButton: FloatingActionButton(

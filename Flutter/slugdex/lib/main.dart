@@ -15,8 +15,10 @@ import 'firebase_options.dart';
 // Settings Imports
 import 'package:flutter_settings_screens/flutter_settings_screens.dart'
     as fss; //Naming conflict arose, so use prefix fss
+import 'package:slugdex/settings/settingsTools.dart';
 
 List<Entry> entryList = []; //Global List of all entries
+
 String displayName = "";
 String profileImageURL = "";
 
@@ -29,10 +31,10 @@ Future<void> main() async {
   String? email = FirebaseAuth.instance.currentUser?.email;
   if (email != null) {
     entryList = await loadEntry();
-    loadUserDiscovered();
+    loadUserDiscovered(entryList);
     displayName = await getDisplayName();
     profileImageURL = await getProfileImageURL();
-  }//end if 
+  } //end if
 
   // Initialize the settings plugin
   await fss.Settings.init();
@@ -54,6 +56,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'SlugDex',
-            home: checkLogin()));
+            home: checkLogin(),
+            theme: ThemeData(primarySwatch: MaterialColor(slugdex_yellow.value, slugdex_yellow_map))));
   }
 }

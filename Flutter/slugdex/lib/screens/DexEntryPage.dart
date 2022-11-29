@@ -22,6 +22,7 @@ class dexEntryPage extends StatelessWidget {
         foregroundColor: Colors.black,
         primary: false,
         elevation: 0,
+        automaticallyImplyLeading: false,
         flexibleSpace: Column(
               children: <Widget>[
                 SizedBox(height: 12.0,),

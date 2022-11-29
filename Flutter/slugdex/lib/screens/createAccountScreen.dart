@@ -38,9 +38,7 @@ class _createAccountScreenState extends State<createAccountScreen> {
 
         //Initialize entryList and create userData, then upload it
         entryList = await loadEntry();
-        initializeDiscovered();
-        createDatabaseForUser();
-        updateUserData();
+        createUserData();
         setDisplayName(name);
         displayName = await getDisplayName();
         profileImageURL = await getProfileImageURL();

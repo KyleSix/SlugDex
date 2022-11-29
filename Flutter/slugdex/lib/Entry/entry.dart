@@ -21,6 +21,7 @@ class Entry {
   double? longitude;
   String? description;
   Rarity? rarity;
+  int? discoveredCount = 0;
 
   //USER DEPENDENT DATA
   int? discovered = 0;
@@ -36,7 +37,8 @@ class Entry {
       this.longitude,
       this.description,
       this.rarity,
-      this.dateDiscovered});
+      this.dateDiscovered,
+      this.discoveredCount});
 
   //Will pull all entry data from Json and create entries
   factory Entry.fromJson(Map<String, dynamic> parsedJson) {
@@ -46,7 +48,8 @@ class Entry {
         latitude: parsedJson['latitude'].toDouble(),
         longitude: parsedJson['longitude'].toDouble(),
         description: parsedJson['description'],
-        rarity: Rarity.values[parsedJson['rarity']]);
+        rarity: Rarity.values[parsedJson['rarity']],
+        discoveredCount: parsedJson['discoveredCount'].toInt());
   }
 
   //Convert entry to json
@@ -57,14 +60,16 @@ class Entry {
       "latitude": latitude,
       "longitude": longitude,
       "description": description,
-      "rarity": rarity?.index.toInt()
+      "rarity": rarity?.index.toInt(),
+      "discoveredCount": discoveredCount?.toInt(),
     };
   }
 
   //Will pull user data from User data Json
   factory Entry.fromUserJson(Map<String, dynamic> parsedJson) {
     return Entry(
-        iD: parsedJson['ID'].toInt(), dateDiscovered: parsedJson['dateDiscovered']);
+        iD: parsedJson['ID'].toInt(),
+        dateDiscovered: parsedJson['dateDiscovered']);
   }
 
   //Convert Entry data to Json for User Data
@@ -84,6 +89,7 @@ class Entry {
     entryString.write("desc: $description\n");
     entryString.write("disc: $discovered\n");
     entryString.write("rare: $rarity\n\n");
+    entryString.write("disc: $discoveredCount\n\n");
 
     return entryString.toString();
   }
@@ -95,10 +101,10 @@ class Entry {
   }
 }
 
-  //Set the date discovered of an entry to current day
-  String setDiscoveredDate() {
-    DateTime now = DateTime.now();
-    DateFormat format = DateFormat('MM/dd/yyyy');
+//Set the date discovered of an entry to current day
+String setDiscoveredDate() {
+  DateTime now = DateTime.now();
+  DateFormat format = DateFormat('MM/dd/yyyy');
 
-    return format.format(now).toString();
-  }
+  return format.format(now).toString();
+}

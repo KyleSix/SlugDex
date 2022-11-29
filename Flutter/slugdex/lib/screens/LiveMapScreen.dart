@@ -63,6 +63,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
+          automaticallyImplyLeading: false,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
             bottom: Radius.elliptical(MediaQuery.of(context).size.width, 64.0),
@@ -87,24 +88,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
         Positioned(
           left: 20.0,
           bottom: _fabHeight,
-          child: FloatingActionButton(
-            mini: true,
-            heroTag: "GPSBtn",
-            child: Icon(
-              Icons.gps_fixed,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () async {
-              var _currentLocation = await Geolocator.getCurrentPosition(
-                  desiredAccuracy: LocationAccuracy.high);
-              mapController.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                      target: LatLng(_currentLocation.latitude,
-                          _currentLocation.longitude),
-                      zoom: await mapController.getZoomLevel())));
-            },
-            backgroundColor: Colors.white,
-          ),
+          child: getGPSButton(context),
         ),
         Positioned(
           right: 20.0,
@@ -532,6 +516,31 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       return Container();
     } else {
       return dexEntryPage();
+    }
+  }
+
+  Widget getGPSButton(context) {
+    if(isLoading) {
+      return Container();
+    } else {
+      return FloatingActionButton(
+        mini: true,
+        heroTag: "GPSBtn",
+        child: Icon(
+          Icons.gps_fixed,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () async {
+          var _currentLocation = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          mapController.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(
+                  target: LatLng(_currentLocation.latitude,
+                      _currentLocation.longitude),
+                  zoom: await mapController.getZoomLevel())));
+        },
+        backgroundColor: Colors.white,
+      );
     }
   }
 

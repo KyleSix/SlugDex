@@ -5,6 +5,7 @@ import 'package:slugdex/main.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 
 List<int> defaultIds = [1, 5, 10, 15]; //Default Entry IDs given to user
+final int DEFAULT_COUNT = defaultIds.length; //Get amount of default IDs
 
 //Pull entries from Firebase and create List<Entry> entryList
 Future<List<Entry>> loadEntry() async {
@@ -57,10 +58,13 @@ void updateEntryListDiscovered(index) {
 
 //Marks entries as discovered, updating discovery date
 //Updates user data file with new discovered locations
-void markDiscovered(/*Map<int, dynamic> discoveredEntries,*/ int index) async {
+void markDiscovered(int index) async {
   //Set discovery
   updateEntryListDiscovered(index);
 
   //Load items into into user entry in firebase
   updateUserData();
+
+  //Update discovery statistics
+  queryUpdateDiscoveredCount(index);
 }
