@@ -14,23 +14,28 @@ class dexEntryPage extends StatelessWidget {
     }
     int totalEntries = entryList.length;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('SlugDex',
-          style: TextStyle( inherit: true,
-                color: Colors.white,
-                shadows: [
-                  Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
-                  Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
-                  Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
-                ]
-            )
-        ),
-        centerTitle: true,
+      backgroundColor: Colors.transparent,
+      appBar: PreferredSize(preferredSize: Size.fromHeight(-16.0), child: AppBar(
+        title: const Text('\nMy Discoveries', style: TextStyle(fontSize: 24.0),),
+        centerTitle: false,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
+        primary: false,
         elevation: 0,
+        flexibleSpace: Column(
+              children: <Widget>[
+                SizedBox(height: 12.0,),
+                Container(
+                  width: MediaQuery.of(context).size.width * .25,
+                  height: 5,
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                ),
+              ],
+            ),
         ),
+      ),
       body: Stack(
         children: [
           Container(
@@ -47,7 +52,7 @@ class dexEntryPage extends StatelessWidget {
                   Color boxColor = Colors.grey.shade700;
                   String img = "assets/images/undiscovered.png";
                   int entryID = entryList[index].iD!;
-                  String entryname = "Entry $entryID";
+                  String entryname = "$entryID";
                   if(entryList[index].discovered == 1){
                     if(entryList[index].rarity == Rarity.MYTHICAL) {
                       boxColor = Colors.amber.shade400;
@@ -96,7 +101,7 @@ class dexEntryPage extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(10.0, 2.0, 10.0, 10.0),
-                                child: Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),),
+                                child: Text(entryname, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),),
                               ),
                             ],
                           ),
@@ -111,23 +116,23 @@ class dexEntryPage extends StatelessWidget {
             ),
           ),
           Container(
-              padding: const EdgeInsets.all(15.0),
-              alignment: Alignment.bottomCenter,
-              child: Text("Discovered: $totalDiscovered/$totalEntries", 
-                style: const TextStyle(
-                  inherit: true,
-                  fontSize: 20, 
-                  fontWeight: FontWeight.w500, 
-                  color: Colors.white,
-                  shadows: [
-                    Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
-                    Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
-                    Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
-                    Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
-                  ]
-                ),
+            padding: const EdgeInsets.all(15.0),
+            alignment: Alignment.bottomCenter,
+            child: Text("Discovered: $totalDiscovered/$totalEntries", 
+              style: const TextStyle(
+                inherit: true,
+                fontSize: 20, 
+                fontWeight: FontWeight.w500, 
+                color: Colors.white,
+                shadows: [
+                  Shadow( offset: Offset(-1.5, 1.5), color: Colors.black),
+                  Shadow( offset: Offset(1.5, -1.5), color: Colors.black),
+                  Shadow( offset: Offset(1.5, 1.5), color: Colors.black),
+                  Shadow( offset: Offset(-1.5, -1.5), color: Colors.black),
+                ]
               ),
-            )
+            ),
+          ),
         ]
       ),
     );

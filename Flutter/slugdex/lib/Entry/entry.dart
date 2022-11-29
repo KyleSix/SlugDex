@@ -96,7 +96,7 @@ class Entry {
 
   String getFileName() {
     StringBuffer fileName = StringBuffer();
-    fileName.write("$iD - $name.jpg");
+    fileName.write("$iD.png");
     return fileName.toString();
   }
 }

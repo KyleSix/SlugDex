@@ -17,7 +17,9 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart'
     as fss; //Naming conflict arose, so use prefix fss
 
 List<Entry> entryList = []; //Global List of all entries
-bool Debug = false;
+
+String displayName = "";
+String profileImageURL = "";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,8 +30,9 @@ Future<void> main() async {
   String? email = FirebaseAuth.instance.currentUser?.email;
   if (email != null) {
     entryList = await loadEntry();
-
     loadUserDiscovered(entryList);
+    displayName = await getDisplayName();
+    profileImageURL = await getProfileImageURL();
   } //end if
 
   // Initialize the settings plugin
