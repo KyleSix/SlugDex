@@ -28,7 +28,7 @@ class _loginScreenState extends State<loginScreen> {
           password: _passwordController.text.trim());
       //Initialize entryList and load user's discovered entries into entryList
       entryList = await loadEntry();
-      loadUserDiscovered();
+      loadUserDiscovered(entryList);
     } catch (_) {
       setState(() {
         loginFailed = true;

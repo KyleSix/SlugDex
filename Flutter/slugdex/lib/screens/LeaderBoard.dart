@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
+import 'package:slugdex/main.dart';
 
 final int TAB_COUNT = 3; //Number of tabs in Leaderboard
 final int MAX_PER_LEADERBOARD =
@@ -269,19 +271,42 @@ Scaffold AverageDiscoveryTimeBoard() {
 
 //List the discovery percentages of all users
 Scaffold RarityBoard() {
-  //Query for userData > entriesDiscovered.
-  //Data is only grabbed if entriesDiscovered > # Default locations given.
-  //Max number of items grabbed defined at top of file.
-  Query collectionReference = FirebaseFirestore.instance
-      .collection("userData")
-      .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
-      .orderBy('entriesDiscovered', descending: true)
-      .limit(MAX_PER_LEADERBOARD);
+  //Get the list data
+  List<Entry> list = entryList.toList();
+
+  // FirebaseFirestore.instance
+  //     .collection('entries')
+  //     .doc('entries')
+  //     .get()
+  //     .then((snapshot) {
+  //   if (snapshot.exists) {
+  //     Map<String, dynamic> entryData = snapshot.data() as Map<String, dynamic>;
+  //     list = List<Entry>.from(
+  //         entryData["entryList"].map((x) => Entry.fromJson(x)));
+  //   }
+  // });
+  // loadUserDiscovered(list);
+  list.sort(((a, b) => a.discoveredCount!.compareTo(b.discoveredCount!)));
+
+  int playerCount = 1;
+
+  //Get the number of players
+  FirebaseFirestore.instance
+      .collection('entries')
+      .doc('playerCount')
+      .get()
+      .then((snapshot) {
+    if (snapshot.exists) {
+      Map<String, dynamic> playerCountMap =
+          snapshot.data() as Map<String, dynamic>;
+      playerCount = int.parse(playerCountMap['playerCount'].toString());
+    }
+  });
 
   return Scaffold(
     appBar: AppBar(
       title: Text(
-        "Average Discovery Time",
+        "Discovery Statistics",
         style: TextStyle(fontSize: 20),
       ),
       centerTitle: true,
@@ -299,60 +324,45 @@ Scaffold RarityBoard() {
                 borderRadius: BorderRadius.circular(10)),
             margin: EdgeInsets.all(20),
             child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: collectionReference.snapshots(),
-                  builder: (context, snapshot) {
-                    //Check if the snapshot has been received
-                    //If the connection is waiting then load,
-                    //Else return a list view
-                    return (snapshot.connectionState == ConnectionState.waiting)
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : ListView.separated(
-                            itemCount: snapshot.data!.docs
-                                .length, //Length of Items grabbed from DB
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              //Grab data as a Map
-                              var data = snapshot.data!.docs[index].data()
-                                  as Map<String, dynamic>;
-
-                              return ListTile(
-                                title: Row(
-                                  children: [
-                                    CircleAvatar(
-                                        backgroundImage:
-                                            AssetImage('assets/logo.png')),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text(data['email'])
-                                  ],
-                                ),
-                                //Print leaderboard placement
-                                leading: Text(
-                                  "#${index + 1}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                //Print number of entries discovered
-                                trailing: Text(
-                                    "${data['entriesDiscovered'].toString()}\t${data['averageDiscoveryTime'].toString()}",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(
-                              thickness: 1,
-                              color: Colors.purple,
-                              indent: 10,
-                              endIndent: 10,
-                            ),
-                          );
+              constraints:
+                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    String title = list[index].discovered == 1
+                        ? list[index].name.toString()
+                        : '???';
+                    num percentage = playerCount == 0
+                        ? 0.0
+                        : (list[index].discoveredCount! / playerCount * 100);
+                    return ListTile(
+                      title: Row(
+                        children: [
+                          CircleAvatar(
+                              backgroundImage: AssetImage('assets/logo.png')),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text(title)
+                        ],
+                      ),
+                      leading: Text(
+                        "#${index + 1}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      trailing: Text(
+                          "${percentage.toStringAsFixed(1)}%",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                    );
                   },
-                )),
+                  separatorBuilder: (context, index) => Divider(
+                        thickness: 1,
+                        color: Colors.purple,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                  itemCount: list.length),
+            ),
           )
         ],
       ),

@@ -29,7 +29,7 @@ Future<void> main() async {
   if (email != null) {
     entryList = await loadEntry();
 
-    loadUserDiscovered();
+    loadUserDiscovered(entryList);
   } //end if
 
   // Initialize the settings plugin

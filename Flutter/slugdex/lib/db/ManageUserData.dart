@@ -59,7 +59,7 @@ Future updateUserData() async {
 }
 
 //Populate entryList to store all user discovered data
-void loadUserDiscovered() {
+void loadUserDiscovered(entryList) {
   String? email =
       FirebaseAuth.instance.currentUser?.email; //Get the user's email address
   Map<String, dynamic> userData = {};
@@ -209,7 +209,6 @@ Future incrementPlayerCount() async {
       Map<String, dynamic> playerCountMap =
           snapshot.data() as Map<String, dynamic>;
       playerCount = int.parse(playerCountMap['playerCount'].toString());
-      print('playerCount = $playerCount');
     }
   });
 
