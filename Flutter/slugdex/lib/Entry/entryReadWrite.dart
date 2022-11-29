@@ -64,4 +64,7 @@ void markDiscovered(int index) async {
 
   //Load items into into user entry in firebase
   updateUserData();
+
+  //Update discovery statistics
+  queryUpdateDiscoveredCount(index);
 }

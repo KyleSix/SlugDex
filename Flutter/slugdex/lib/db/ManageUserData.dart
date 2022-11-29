@@ -108,11 +108,20 @@ Future queryUpdateDiscovered(String? email, int entriesDiscovered) async {
 //Get the discoveredCOunt of an entry and increment it (when a user discovers it)
 Future queryUpdateDiscoveredCount(int index) async {
   int discoveredCount = await queryGetDiscoveredCount(index);
+  entryList[index].discoveredCount = discoveredCount + 1;
+
+  print('entryList discoverdCount ${entryList[index].discoveredCount}');
+
+  //Create list to overwrite current entryList
+  var tempList = [];
+  for (int i = 0; i < entryList.length; i++) {
+    tempList.add(entryList[i].toJson());
+  } //end for
 
   await FirebaseFirestore.instance
       .collection('entries')
-      .doc(index.toString())
-      .update({'discoveredCount': discoveredCount + 1});
+      .doc('entries')
+      .update({'entryList': tempList.toList()});
 }
 
 /*******************************************************************************
@@ -168,7 +177,7 @@ Future<int> queryGetDiscoveredCount(int index) async {
     if (snapshot.exists) {
       Map<String, dynamic> entry = snapshot.data() as Map<String, dynamic>;
       //If NULL, then set to zero
-      
+
       if (entry['entryList'][index]['discoveredCount'] == null) {
         FirebaseFirestore.instance
             .collection('entries')
@@ -176,14 +185,11 @@ Future<int> queryGetDiscoveredCount(int index) async {
             .update({'discoveredCount': 0.toString()});
       } else {
         //Get the discoveredCount
-        discoveredCount = int.parse(entry['entryList'][index]['discoveredCount'].toString());
+        discoveredCount =
+            int.parse(entry['entryList'][index]['discoveredCount'].toString());
       } //end else
     }
   });
 
   return discoveredCount;
-}
-
-queryUpdateEntries() {
-  
 }

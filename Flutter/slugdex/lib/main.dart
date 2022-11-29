@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +32,8 @@ Future<void> main() async {
     loadUserDiscovered();
   } //end if
 
-  print("milliseconds = ${await queryGetUserPlayTimeInMillis(FirebaseAuth.instance.currentUser?.email)}");
+  print(
+      "milliseconds = ${await queryGetUserPlayTimeInMillis(FirebaseAuth.instance.currentUser?.email)}");
 
   // Initialize the settings plugin
   await fss.Settings.init();
