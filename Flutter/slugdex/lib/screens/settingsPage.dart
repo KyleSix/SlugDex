@@ -100,27 +100,19 @@ class _SettingsPageState extends State<SettingsPage> {
               children: <Widget>[
                 const SizedBox(height: 4),
                 WrapperWidget(children: [
-                  const SizedBox(height: 2),
-                  buildBugReport(), // Bug Report Button
-                  const SizedBox(height: spacing),
-                  buildFeedback(), // Feedback Button
-                  const SizedBox(height: spacing),
+                  const SizedBox(height: 2),   
+                  //buildFeedback(), // Feedback Button
+                  //const SizedBox(height: spacing),
                   buildToggleMap(), // Feedback Button
                   const SizedBox(height: spacing),
+                  buildBugReport(), // Bug Report Button
+                  //const SizedBox(height: spacing),
                   buildDevMode(), // Dev Mode Button
                   const SizedBox(height: 2),
                 ]),
               ],
             ),
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: 'LeaderBoardButton',
-          backgroundColor: Colors.blue,
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: ((context) => LeaderBoard())));
-          },
         ),
       );
 
@@ -204,14 +196,14 @@ class _SettingsPageState extends State<SettingsPage> {
           ));
 
   Widget buildBugReport() => SimpleSettingsTile(
-        title: "Custom Map",
+        title: "Custom Map Preview",
         leading: IconWidget(
-            icon: Icons.map_outlined, color: Colors.grey, size: icon_size),
+            icon: Icons.developer_board, color: Colors.grey, size: icon_size),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text("Feature in progress..."),
-                duration: const Duration(milliseconds: 2000)),
+                content: Text("Art by Annalivia Martin-Straw"),
+                duration: const Duration(milliseconds: 3000)),
           );
           Navigator.push(context, MaterialPageRoute(builder: (context) => ImageMap(title:"Custom Map")));
         },

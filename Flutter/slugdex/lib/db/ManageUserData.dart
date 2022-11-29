@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/main.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -278,5 +279,24 @@ Future<String> getProfileImageURL() async {
       .child('profileImages')
       .child('default.jpg').getDownloadURL();
     return url;
+  }
+}
+
+
+Future<NetworkImage> getOtherProfileImage(email) async {
+  String url = "";
+  try {
+    url = await FirebaseStorage.instance
+      .ref()
+      .child('profileImages')
+      .child(email.toString() + '.jpg')
+      .getDownloadURL();
+    return NetworkImage(url.toString());
+  } catch (_) {
+    url = await FirebaseStorage.instance
+      .ref()
+      .child('profileImages')
+      .child('default.jpg').getDownloadURL();
+    return NetworkImage(url.toString());
   }
 }

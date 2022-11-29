@@ -15,6 +15,7 @@ import 'firebase_options.dart';
 // Settings Imports
 import 'package:flutter_settings_screens/flutter_settings_screens.dart'
     as fss; //Naming conflict arose, so use prefix fss
+import 'package:slugdex/settings/settingsTools.dart';
 
 List<Entry> entryList = []; //Global List of all entries
 
@@ -56,6 +57,6 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'SlugDex',
             home: checkLogin(),
-            theme: ThemeData(primarySwatch: Colors.deepPurple)));
+            theme: ThemeData(primarySwatch: MaterialColor(slugdex_yellow.value, slugdex_yellow_map))));
   }
 }

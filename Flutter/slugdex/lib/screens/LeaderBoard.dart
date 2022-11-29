@@ -4,6 +4,8 @@ import 'package:slugdex/Entry/entry.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/main.dart';
+import 'package:slugdex/settings/settingsTools.dart';
+import 'package:slugdex/screens/profilePage.dart' as pfp;
 
 final int TAB_COUNT = 3; //Number of tabs in Leaderboard
 final int MAX_PER_LEADERBOARD =
@@ -22,102 +24,97 @@ class _LeaderBoardState extends State<LeaderBoard> {
     return DefaultTabController(
         length: TAB_COUNT,
         child: Scaffold(
-          appBar: AppBar(
-            title: Text('Leaderboards'),
-            centerTitle: true,
+          backgroundColor: Colors.transparent,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(-16.0),
+            child: AppBar(
+              title: Text('\nLeaderboard'),
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.black,
+              centerTitle: true,
+              automaticallyImplyLeading: false,
+              primary: false,
+              elevation: 0,
+              flexibleSpace: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * .25,
+                    height: 5,
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                  ),
+                ],
+              ),
+            ),
           ),
           body: Column(
             children: [
-              TabBar(tabs: [
-                EntriesDiscoveredTab(),
-                AverageDiscoveryTimeTab(),
-                RarityTab()
-              ]),
+              TabBar(
+                  indicator: BoxDecoration(
+                      color: slugdex_yellow,
+                      borderRadius: BorderRadius.circular(20)),
+                  indicatorColor: slugdex_yellow,
+                  tabs: [
+                    EntriesDiscoveredTab(),
+                    AverageDiscoveryTimeTab(),
+                    RarityTab()
+                  ]),
               Expanded(
                 child: TabBarView(children: [
                   EntriesDiscoveredBoard(),
-                  AverageDiscoveryTimeBoard(),
+                  AverageDiscoveryTimeBoard(context),
                   RarityBoard()
                 ]),
               )
             ],
           ),
           floatingActionButton: FloatingActionButton(
+            mini: true,
             heroTag: 'ReloadLeaderBoardsButton',
-            backgroundColor: Colors.orange,
+            backgroundColor: slugdex_yellow,
             child: const Icon(Icons.refresh),
             onPressed: (() {}),
           ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniCenterDocked,
         ));
   }
-}
 
-//*****************************************
-//Used to display the tabs of each Leader board
-//*****************************************/
-Tab EntriesDiscoveredTab() {
-  return Tab(
-    icon: Icon(
-      Icons.location_city_rounded,
-      color: Colors.deepPurple,
-    ),
-  );
-}
+  //**********************************
+  //This is where the displays in the tabs are created
+  //**********************************/
+  Widget EntriesDiscoveredBoard() {
+    //Query for userData > entriesDiscovered.
+    //Data is only grabbed if entriesDiscovered > # Default locations given.
+    //Max number of items grabbed defined at top of file.
+    Query collectionReference = FirebaseFirestore.instance
+        .collection("userData")
+        .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
+        .orderBy('entriesDiscovered', descending: true)
+        .limit(MAX_PER_LEADERBOARD);
 
-Tab AverageDiscoveryTimeTab() {
-  return Tab(
-    icon: Icon(
-      Icons.timer_sharp,
-      color: Colors.deepPurple,
-    ),
-  );
-}
-
-Tab RarityTab() {
-  return Tab(
-    icon: Icon(
-      Icons.diamond,
-      color: Colors.deepPurple,
-    ),
-  );
-}
-
-//**********************************
-//This is where the displays in the tabs are created
-//**********************************/
-Scaffold EntriesDiscoveredBoard() {
-  //Query for userData > entriesDiscovered.
-  //Data is only grabbed if entriesDiscovered > # Default locations given.
-  //Max number of items grabbed defined at top of file.
-  Query collectionReference = FirebaseFirestore.instance
-      .collection("userData")
-      .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
-      .orderBy('entriesDiscovered', descending: true)
-      .limit(MAX_PER_LEADERBOARD);
-
-  return Scaffold(
-    appBar: AppBar(
-      title: Text(
-        "Most Entries Discovered",
-        style: TextStyle(fontSize: 20),
-      ),
-      centerTitle: true,
-      elevation: 0.0,
-    ),
-    body: SingleChildScrollView(
+    return SingleChildScrollView(
       child: Column(
         children: [
           SizedBox(
-            height: 20,
+            height: 12,
           ),
+          Text("Most Entries Discovered",
+              textScaleFactor: 2.0,
+              style: TextStyle(fontWeight: FontWeight.bold)),
           Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10)),
+                border: Border.all(color: Colors.black, width: 1.5),
+                borderRadius: BorderRadius.circular(24)),
             margin: EdgeInsets.all(20),
             child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * .40,
+                    maxWidth: double.infinity),
                 child: StreamBuilder<QuerySnapshot>(
                   stream: collectionReference.snapshots(),
                   builder: (context, snapshot) {
@@ -136,36 +133,52 @@ Scaffold EntriesDiscoveredBoard() {
                               //Grab data as a Map
                               var data = snapshot.data!.docs[index].data()
                                   as Map<String, dynamic>;
-
-                              return ListTile(
-                                title: Row(
-                                  children: [
-                                    CircleAvatar(
-                                        backgroundImage:
-                                            AssetImage('assets/logo.png')),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text(data['email'])
-                                  ],
-                                ),
-                                //Print leaderboard placement
-                                leading: Text(
-                                  "#${index + 1}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                //Print number of entries discovered
-                                trailing: Text(
-                                    "${data['entriesDiscovered'].toString()}",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                              );
+                              late final Future myFuture =
+                                  getOtherProfileImage(data['email']);
+                              return FutureBuilder(
+                                  future: myFuture,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    return ListTile(
+                                      minLeadingWidth: 16,
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 6.0, horizontal: 24.0),
+                                      title: Row(
+                                        children: [
+                                          CircleAvatar(
+                                          foregroundImage: snapshot.data,
+                                          ),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Expanded(
+                                              child: Text(
+                                            data['displayName'].toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                          ))
+                                        ],
+                                      ),
+                                      //Print leaderboard placement
+                                      leading: Text(
+                                        "${index + 1}",
+                                        textScaleFactor: 1.5,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      //Print number of entries discovered
+                                      trailing: Text(
+                                          "${data['entriesDiscovered'].toString().padLeft(3, '0')}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                    );
+                                  });
                             },
                             separatorBuilder: (context, index) => Divider(
+                              height: 8,
                               thickness: 1,
-                              color: Colors.purple,
-                              indent: 10,
+                              color: Colors.black,
                               endIndent: 10,
+                              indent: 10,
                             ),
                           );
                   },
@@ -173,43 +186,37 @@ Scaffold EntriesDiscoveredBoard() {
           )
         ],
       ),
-    ),
-  );
-}
+    );
+  }
 
-Scaffold AverageDiscoveryTimeBoard() {
-  //Query for userData > entriesDiscovered.
-  //Data is only grabbed if entriesDiscovered > # Default locations given.
-  //Max number of items grabbed defined at top of file.
-  Query collectionReference = FirebaseFirestore.instance
-      .collection("userData")
-      .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
-      .orderBy('entriesDiscovered', descending: true)
-      .limit(MAX_PER_LEADERBOARD);
+  Widget AverageDiscoveryTimeBoard(BuildContext context) {
+    //Query for userData > entriesDiscovered.
+    //Data is only grabbed if entriesDiscovered > # Default locations given.
+    //Max number of items grabbed defined at top of file.
+    Query collectionReference = FirebaseFirestore.instance
+        .collection("userData")
+        .where('entriesDiscovered', isGreaterThan: DEFAULT_COUNT)
+        .orderBy('entriesDiscovered', descending: true)
+        .limit(MAX_PER_LEADERBOARD);
 
-  return Scaffold(
-    appBar: AppBar(
-      title: Text(
-        "Average Discovery Time",
-        style: TextStyle(fontSize: 20),
-      ),
-      centerTitle: true,
-      elevation: 0.0,
-    ),
-    body: SingleChildScrollView(
+    return SingleChildScrollView(
       child: Column(
         children: [
           SizedBox(
-            height: 20,
+            height: 12,
           ),
+          Text("Average Discovery Time",
+              textScaleFactor: 2.0,
+              style: TextStyle(fontWeight: FontWeight.bold)),
           Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10)),
+                border: Border.all(color: Colors.black, width: 1.5),
+                borderRadius: BorderRadius.circular(24)),
             margin: EdgeInsets.all(20),
             child: ConstrainedBox(
-                constraints:
-                    BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * .40,
+                    maxWidth: double.infinity),
                 child: StreamBuilder<QuerySnapshot>(
                   stream: collectionReference.snapshots(),
                   builder: (context, snapshot) {
@@ -228,36 +235,53 @@ Scaffold AverageDiscoveryTimeBoard() {
                               //Grab data as a Map
                               var data = snapshot.data!.docs[index].data()
                                   as Map<String, dynamic>;
-
-                              return ListTile(
-                                title: Row(
-                                  children: [
-                                    CircleAvatar(
-                                        backgroundImage:
-                                            AssetImage('assets/logo.png')),
-                                    SizedBox(
-                                      width: 3,
+                              late final Future myFuture =
+                                  getOtherProfileImage(data['email']);
+                              return FutureBuilder(
+                                future: myFuture,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  return ListTile(
+                                    minLeadingWidth: 16,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 6.0, horizontal: 24.0),
+                                    title: Row(
+                                      children: [
+                                        CircleAvatar(
+                                          foregroundImage: snapshot.data,
+                                        ),
+                                        SizedBox(
+                                          width: 12,
+                                        ),
+                                        Expanded(
+                                            child: Text(
+                                          data['displayName'].toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ))
+                                      ],
                                     ),
-                                    Text(data['email'])
-                                  ],
-                                ),
-                                //Print leaderboard placement
-                                leading: Text(
-                                  "#${index + 1}",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                //Print number of entries discovered
-                                trailing: Text(
-                                    "${data['entriesDiscovered'].toString()}\t${data['averageDiscoveryTime'].toString()}",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                    //Print leaderboard placement
+                                    leading: Text(
+                                      "${index + 1}",
+                                      textScaleFactor: 1.5,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    //Print number of entries discovered
+                                    trailing: Text(
+                                        "${data['entriesDiscovered'].toString()}\t${data['averageDiscoveryTime'].toString()}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  );
+                                },
                               );
                             },
                             separatorBuilder: (context, index) => Divider(
+                              height: 8,
                               thickness: 1,
-                              color: Colors.purple,
-                              indent: 10,
+                              color: Colors.black,
                               endIndent: 10,
+                              indent: 10,
                             ),
                           );
                   },
@@ -265,67 +289,61 @@ Scaffold AverageDiscoveryTimeBoard() {
           )
         ],
       ),
-    ),
-  );
-}
+    );
+  }
 
-//List the discovery percentages of all users
-Scaffold RarityBoard() {
-  //Get the list data
-  List<Entry> list = entryList.toList();
+  //List the discovery percentages of all users
+  Widget RarityBoard() {
+    //Get the list data
+    List<Entry> list = entryList.toList();
 
-  // FirebaseFirestore.instance
-  //     .collection('entries')
-  //     .doc('entries')
-  //     .get()
-  //     .then((snapshot) {
-  //   if (snapshot.exists) {
-  //     Map<String, dynamic> entryData = snapshot.data() as Map<String, dynamic>;
-  //     list = List<Entry>.from(
-  //         entryData["entryList"].map((x) => Entry.fromJson(x)));
-  //   }
-  // });
-  // loadUserDiscovered(list);
-  list.sort(((a, b) => a.discoveredCount!.compareTo(b.discoveredCount!)));
+    // FirebaseFirestore.instance
+    //     .collection('entries')
+    //     .doc('entries')
+    //     .get()
+    //     .then((snapshot) {
+    //   if (snapshot.exists) {
+    //     Map<String, dynamic> entryData = snapshot.data() as Map<String, dynamic>;
+    //     list = List<Entry>.from(
+    //         entryData["entryList"].map((x) => Entry.fromJson(x)));
+    //   }
+    // });
+    // loadUserDiscovered(list);
+    list.sort(((a, b) => a.discoveredCount!.compareTo(b.discoveredCount!)));
 
-  int playerCount = 1;
+    int playerCount = 1;
 
-  //Get the number of players
-  FirebaseFirestore.instance
-      .collection('entries')
-      .doc('playerCount')
-      .get()
-      .then((snapshot) {
-    if (snapshot.exists) {
-      Map<String, dynamic> playerCountMap =
-          snapshot.data() as Map<String, dynamic>;
-      playerCount = int.parse(playerCountMap['playerCount'].toString());
-    }
-  });
+    //Get the number of players
+    FirebaseFirestore.instance
+        .collection('entries')
+        .doc('playerCount')
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        Map<String, dynamic> playerCountMap =
+            snapshot.data() as Map<String, dynamic>;
+        playerCount = int.parse(playerCountMap['playerCount'].toString());
+      }
+    });
 
-  return Scaffold(
-    appBar: AppBar(
-      title: Text(
-        "Discovery Statistics",
-        style: TextStyle(fontSize: 20),
-      ),
-      centerTitle: true,
-      elevation: 0.0,
-    ),
-    body: SingleChildScrollView(
+    return SingleChildScrollView(
       child: Column(
         children: [
           SizedBox(
-            height: 20,
+            height: 12,
           ),
+          Text("Entry Rarity",
+              textScaleFactor: 2.0,
+              style: TextStyle(fontWeight: FontWeight.bold)),
           Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10)),
+                border: Border.all(color: Colors.black, width: 1.5),
+                borderRadius: BorderRadius.circular(24)),
             margin: EdgeInsets.all(20),
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxHeight: 550, maxWidth: double.infinity),
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * .40,
+                  maxWidth: double.infinity),
               child: ListView.separated(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
@@ -336,36 +354,71 @@ Scaffold RarityBoard() {
                         ? 0.0
                         : (list[index].discoveredCount! / playerCount * 100);
                     return ListTile(
+                      minLeadingWidth: 16,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 6.0, horizontal: 24.0),
                       title: Row(
                         children: [
                           CircleAvatar(
-                              backgroundImage: AssetImage('assets/logo.png')),
+                              backgroundImage: AssetImage(
+                                  'assets/images/${list[index].iD}.png')),
                           SizedBox(
-                            width: 3,
+                            width: 12,
                           ),
                           Text(title)
                         ],
                       ),
                       leading: Text(
-                        "#${index + 1}",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        "${index + 1}",
+                        textScaleFactor: 1.5,
+                        style: TextStyle(fontWeight: FontWeight.normal),
                       ),
-                      trailing: Text(
-                          "${percentage.toStringAsFixed(1)}%",
+                      trailing: Text("${percentage.toStringAsFixed(1)}%",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     );
                   },
                   separatorBuilder: (context, index) => Divider(
+                        height: 8,
                         thickness: 1,
-                        color: Colors.purple,
-                        indent: 10,
+                        color: Colors.black,
                         endIndent: 10,
+                        indent: 10,
                       ),
                   itemCount: list.length),
             ),
           )
         ],
       ),
+    );
+  }
+}
+
+//*****************************************
+//Used to display the tabs of each Leader board
+//*****************************************/
+Tab EntriesDiscoveredTab() {
+  return Tab(
+    icon: Icon(
+      Icons.location_city_rounded,
+      color: Colors.black,
+    ),
+  );
+}
+
+Tab AverageDiscoveryTimeTab() {
+  return Tab(
+    icon: Icon(
+      Icons.timer_sharp,
+      color: Colors.black,
+    ),
+  );
+}
+
+Tab RarityTab() {
+  return Tab(
+    icon: Icon(
+      Icons.diamond,
+      color: Colors.black,
     ),
   );
 }

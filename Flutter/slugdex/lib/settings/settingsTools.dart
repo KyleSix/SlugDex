@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/main.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // App Accent Color
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
+Map<int, Color> slugdex_yellow_map = {
+  50: slugdex_yellow.withOpacity(.1),
+  100: slugdex_yellow.withOpacity(.2),
+  200: slugdex_yellow.withOpacity(.3),
+  300: slugdex_yellow.withOpacity(.4),
+  400: slugdex_yellow.withOpacity(.5),
+  500: slugdex_yellow.withOpacity(.6),
+  600: slugdex_yellow.withOpacity(.7),
+  700: slugdex_yellow.withOpacity(.8),
+  800: slugdex_yellow.withOpacity(.9),
+  900: slugdex_yellow.withOpacity(1),
+};
+
 // Logo Formatting
 Text logo = Text("SlugDex",
     style: TextStyle(
@@ -62,14 +76,14 @@ class profilePicState extends State<profilePic> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-    borderRadius: BorderRadius.circular(120.0),
-    clipBehavior: Clip.antiAlias,
-    child: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-      image: NetworkImage(imageUrlState),
-      fit: BoxFit.cover,
-    ))));
+        borderRadius: BorderRadius.circular(120.0),
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+          image: NetworkImage(imageUrlState),
+          fit: BoxFit.cover,
+        ))));
   }
 }
 
@@ -126,7 +140,7 @@ class WrapperWidget extends StatelessWidget {
           border: Border.all(
             color: background_color,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          borderRadius: BorderRadius.all(Radius.circular(24.0)),
           color: background_color,
         ),
         child: Column(
