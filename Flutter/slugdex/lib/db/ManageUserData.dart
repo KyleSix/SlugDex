@@ -12,8 +12,9 @@ Future createUserData() async {
   int entriesDiscovered = 0;
   int timeStartedPlaying = DateTime.now().millisecondsSinceEpoch;
 
-  //Initialize entryList to store default values
+  //Initialize entryList to store default values and increment the number of players
   initializeDiscovered();
+  incrementPlayerCount();
 
   //Load discovered entries before storing in firebase
   for (int i = 0; i < entryList.length; i++) {
@@ -192,4 +193,28 @@ Future<int> queryGetDiscoveredCount(int index) async {
   });
 
   return discoveredCount;
+}
+
+//Increment the number of players
+Future incrementPlayerCount() async {
+  int playerCount = 0;
+
+  //Get the number of players
+  await FirebaseFirestore.instance
+      .collection('entries')
+      .doc('playerCount')
+      .get()
+      .then((snapshot) {
+    if (snapshot.exists) {
+      Map<String, dynamic> playerCountMap =
+          snapshot.data() as Map<String, dynamic>;
+      playerCount = int.parse(playerCountMap['playerCount'].toString());
+      print('playerCount = $playerCount');
+    }
+  });
+
+  await FirebaseFirestore.instance
+      .collection('entries')
+      .doc('playerCount')
+      .update({'playerCount': playerCount + 1});
 }
