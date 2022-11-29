@@ -8,9 +8,6 @@ import 'package:slugdex/screens/editProfilePage.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/screens/LiveMapScreen.dart';
 
-//Testing
-import 'LeaderBoard.dart';
-
 const double spacing = 16.0;
 const double icon_size = 24.0;
 

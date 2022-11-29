@@ -9,7 +9,6 @@ import "package:slugdex/screens/DexEntryView.dart";
 import 'package:slugdex/screens/Animations.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'DexEntryPage.dart';
-import 'package:slugdex/screens/settingsPage.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/screens/profilePage.dart';

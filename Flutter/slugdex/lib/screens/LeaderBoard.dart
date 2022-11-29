@@ -5,7 +5,6 @@ import 'package:slugdex/Entry/entryReadWrite.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/settings/settingsTools.dart';
-import 'package:slugdex/screens/profilePage.dart' as pfp;
 
 final int TAB_COUNT = 3; //Number of tabs in Leaderboard
 final int MAX_PER_LEADERBOARD =
@@ -299,18 +298,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
     //Get the list data
     List<Entry> list = entryList.toList();
 
-    // FirebaseFirestore.instance
-    //     .collection('entries')
-    //     .doc('entries')
-    //     .get()
-    //     .then((snapshot) {
-    //   if (snapshot.exists) {
-    //     Map<String, dynamic> entryData = snapshot.data() as Map<String, dynamic>;
-    //     list = List<Entry>.from(
-    //         entryData["entryList"].map((x) => Entry.fromJson(x)));
-    //   }
-    // });
-    // loadUserDiscovered(list);
     list.sort(((a, b) => a.discoveredCount!.compareTo(b.discoveredCount!)));
 
     int playerCount = 1;
@@ -325,8 +312,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
         Map<String, dynamic> playerCountMap =
             snapshot.data() as Map<String, dynamic>;
         playerCount = int.parse(playerCountMap['playerCount'].toString());
-        print('playercount:');
-        print(playerCount);
       }
     });
 

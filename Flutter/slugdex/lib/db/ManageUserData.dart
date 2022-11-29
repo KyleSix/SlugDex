@@ -45,7 +45,6 @@ Future createUserData() async {
 // - average time discovering entries
 Future updateUserData() async {
   List<dynamic> discovered = [];
-  int entriesDiscovered = 0;
 
   //Load discovered entries before storing in firebase
   for (int i = 0; i < entryList.length; i++) {
@@ -114,8 +113,6 @@ Future queryUpdateDiscoveredCount(int index) async {
   await queryRefreshDiscoveredCountAll();
   int discoveredCount = await queryGetDiscoveredCount(index);
   entryList[index].discoveredCount = discoveredCount + 1;
-
-  print('entryList discoverdCount ${entryList[index].discoveredCount}');
 
   //Create list to overwrite current entryList
   var tempList = [];
