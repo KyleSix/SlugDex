@@ -651,7 +651,7 @@ Set<Circle> populateHintCircles(context) {
               );
               showDialog(
                 context: context,
-                builder: (BuildContext context) => DiscoveryAnimation(),
+                builder: (BuildContext context) => DiscoveryAnimation(thisEntry.iD!),
               );
             } else {
               // User is not in range, so let's tell them

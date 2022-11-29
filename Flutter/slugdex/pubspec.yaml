@@ -52,6 +52,7 @@ dependencies:
   image_overlay_map: ^0.0.3
   firebase_storage: ^11.0.6
   image_picker: ^0.8.6
+  zwidget: ^0.0.2
 
 dev_dependencies:
   flutter_test:
