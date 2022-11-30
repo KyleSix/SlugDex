@@ -343,7 +343,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
                         ? 0.0
                         : (list[index].discoveredCount! / playerCount * 100);
 
-                    
+                    //If the player count is default, then show loading circle
                     return 
                     (playerCount == 1) 
                     ? Center(child: CircularProgressIndicator(),)
