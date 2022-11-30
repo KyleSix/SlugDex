@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:slugdex/main.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 // App Accent Color
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
@@ -54,17 +52,6 @@ Text title = Text("SlugDex",
         Shadow(offset: Offset(-1, -1), color: Colors.black),
       ],
     ));
-
-// Profile pic code
-//Widget profilePic = ClipRRect(
-//    borderRadius: BorderRadius.circular(120.0),
-//    clipBehavior: Clip.antiAlias,
-//    child: Container(
-//        decoration: BoxDecoration(
-//            image: DecorationImage(
-//      image: NetworkImage(profileImageURL),
-//      fit: BoxFit.contain,
-//    ))));
 
 class profilePic extends StatefulWidget {
   @override
