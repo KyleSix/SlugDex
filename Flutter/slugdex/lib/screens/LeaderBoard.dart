@@ -342,7 +342,12 @@ class _LeaderBoardState extends State<LeaderBoard> {
                     num percentage = playerCount == 0
                         ? 0.0
                         : (list[index].discoveredCount! / playerCount * 100);
-                    return ListTile(
+
+                    
+                    return 
+                    (playerCount == 1) 
+                    ? Center(child: CircularProgressIndicator(),)
+                    : ListTile(
                       minLeadingWidth: 16,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 6.0, horizontal: 24.0),
