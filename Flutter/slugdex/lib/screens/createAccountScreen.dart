@@ -23,52 +23,58 @@ class _createAccountScreenState extends State<createAccountScreen> {
   final _confirmPasswordController = TextEditingController();
 
   int errorNum = 0;
+  bool creatingAccount = false;
 
   Future signUp() async {
-    if (_passwordController.text.trim() ==
-        _confirmPasswordController.text.trim() && 
-        _displayNameController.text.trim().length >= 3 &&
-        _displayNameController.text.trim().length <= 15) {
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim());
+    if (!creatingAccount) {
+      if (_passwordController.text.trim() ==
+              _confirmPasswordController.text.trim() &&
+          _displayNameController.text.trim().length >= 3 &&
+          _displayNameController.text.trim().length <= 15) {
+        try {
+          creatingAccount = true;
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim());
 
-        String name = _displayNameController.text.trim();
+          String name = _displayNameController.text.trim();
 
-        //Initialize entryList and create userData, then upload it
-        entryList = await loadEntry();
-        await createUserData();
-        await setDisplayName(name);
-        displayName = await getDisplayName();
-        profileImageURL = await getProfileImageURL();
-      } on FirebaseAuthException catch (error) {
-        if (error.code == 'email-already-in-use') {
-          setState(() {
-            errorNum = 2;
-          });
-        } else if (error.code == 'weak-password') {
-          setState(() {
-            errorNum = 3;
-          });
-        } else {
-          setState(() {
-            errorNum = -1;
-          });
+          //Initialize entryList and create userData, then upload it
+          entryList = await loadEntry();
+          await createUserData();
+          await setDisplayName(name);
+          displayName = await getDisplayName();
+          profileImageURL = await getProfileImageURL();
+          creatingAccount = false;
+        } on FirebaseAuthException catch (error) {
+          if (error.code == 'email-already-in-use') {
+            setState(() {
+              errorNum = 2;
+            });
+          } else if (error.code == 'weak-password') {
+            setState(() {
+              errorNum = 3;
+            });
+          } else {
+            setState(() {
+              errorNum = -1;
+            });
+          }
+          creatingAccount = false;
         }
+      } else if (_displayNameController.text.trim().length < 3) {
+        setState(() {
+          errorNum = 4;
+        });
+      } else if (_displayNameController.text.trim().length > 15) {
+        setState(() {
+          errorNum = 5;
+        });
+      } else {
+        setState(() {
+          errorNum = 1;
+        });
       }
-    } else if (_displayNameController.text.trim().length < 3) {
-      setState(() {
-        errorNum = 4;
-      });
-    } else if (_displayNameController.text.trim().length > 15) {
-      setState(() {
-        errorNum = 5;
-      });
-    } else {
-      setState(() {
-        errorNum = 1;
-      });
     }
   }
 
@@ -121,29 +127,27 @@ class _createAccountScreenState extends State<createAccountScreen> {
         body: SafeArea(
             child: Center(
           child: SingleChildScrollView(
-            child: Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              fit: StackFit.passthrough,
-              children: [ 
+              child: Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  fit: StackFit.passthrough,
+                  children: [
                 Positioned(
-                  top:-150,
-                  left:10.0,
-                  child: IconWidget(
-                    icon: Icons.catching_pokemon, 
-                    color: Colors.transparent,
-                    icon_color: Colors.white,
-                    radius: 0,
-                    size: 700,
-                  )
-                ),
+                    top: -150,
+                    left: 10.0,
+                    child: IconWidget(
+                      icon: Icons.catching_pokemon,
+                      color: Colors.transparent,
+                      icon_color: Colors.white,
+                      radius: 0,
+                      size: 700,
+                    )),
                 Column(
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                      child: title
-                    ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 10.0),
+                        child: title),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 25.0, vertical: 10.0),
@@ -154,12 +158,13 @@ class _createAccountScreenState extends State<createAccountScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                        child: TextField(
-                          controller: _displayNameController,
-                          decoration: InputDecoration(
-                              border: InputBorder.none, hintText: "Display Name"),
-                        )),
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                            child: TextField(
+                              controller: _displayNameController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Display Name"),
+                            )),
                       ),
                     ),
                     Padding(
@@ -195,7 +200,8 @@ class _createAccountScreenState extends State<createAccountScreen> {
                               controller: _passwordController,
                               obscureText: true,
                               decoration: InputDecoration(
-                                  border: InputBorder.none, hintText: "Password"),
+                                  border: InputBorder.none,
+                                  hintText: "Password"),
                             )),
                       ),
                     ),
@@ -280,9 +286,7 @@ class _createAccountScreenState extends State<createAccountScreen> {
                     ),
                   ],
                 ),
-              ]
-            )
-          ),
+              ])),
         )));
   }
 }

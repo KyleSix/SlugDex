@@ -60,9 +60,15 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: profilePicState,
                         )),
                     const SizedBox(width: 24.0),
-                    Text(displayNameState,
-                        textScaleFactor: 2.0,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Container(
+                      width: MediaQuery.of(context).size.width - 140, // width for Username text to overflow
+                      child:
+                        Text(displayNameState,
+                            overflow: TextOverflow.ellipsis,
+                            textScaleFactor: 2.0,
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    
                   ],
                 ),
               ],

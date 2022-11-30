@@ -53,7 +53,7 @@ class dexEntryPage extends StatelessWidget {
                   Color boxColor = Colors.grey.shade700;
                   String img = "assets/images/undiscovered.png";
                   int entryID = entryList[index].iD!;
-                  String entryname = "$entryID";
+                  String entryname = "Entry $entryID";
                   if(entryList[index].discovered == 1){
                     if(entryList[index].rarity == Rarity.MYTHICAL) {
                       boxColor = Colors.amber.shade400;

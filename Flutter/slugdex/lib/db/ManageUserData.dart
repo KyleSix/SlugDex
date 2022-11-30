@@ -128,10 +128,10 @@ Future queryUpdateDiscoveredCount(int index) async {
 
 //Refresh the local count of discovered entries
 Future<void> queryRefreshDiscoveredCountAll() async {
-    for (int i = 0; i < entryList.length; i++) {
-      int discoveredCount = await queryGetDiscoveredCount(i);
-      entryList[i].discoveredCount = discoveredCount;
-    }
+  for (int i = 0; i < entryList.length; i++) {
+    int discoveredCount = await queryGetDiscoveredCount(i);
+    entryList[i].discoveredCount = discoveredCount;
+  }
 }
 
 /*******************************************************************************
@@ -165,9 +165,13 @@ Future<String> getAverageDiscoveryTime(
   int end = 7;
   int currentPlayTime = await queryGetUserPlayTimeInMillis(email);
 
-  String time = Duration(milliseconds: (currentPlayTime ~/ entriesDiscovered))
-      .toString()
-      .substring(start, end);
+  String time = entriesDiscovered == DEFAULT_COUNT
+      ? '0:00'
+      : Duration(
+              milliseconds:
+                  (currentPlayTime ~/ (entriesDiscovered - DEFAULT_COUNT)))
+          .toString()
+          .substring(start, end);
 
   return time;
 }
@@ -228,15 +232,18 @@ Future incrementPlayerCount() async {
 }
 
 setDisplayName(newName) async {
-  String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
-  await FirebaseFirestore.instance.collection('userData').doc(email).update({
-    'displayName': newName
-  });
+  String? email =
+      FirebaseAuth.instance.currentUser?.email; //Get the user's email address
+  await FirebaseFirestore.instance
+      .collection('userData')
+      .doc(email)
+      .update({'displayName': newName});
   displayName = newName;
 }
 
 Future<String> getDisplayName() async {
-  String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
+  String? email =
+      FirebaseAuth.instance.currentUser?.email; //Get the user's email address
   Map<String, dynamic> userData = {};
   String name = 'No Display Name';
 
@@ -247,7 +254,7 @@ Future<String> getDisplayName() async {
       .then((snapshot) {
     if (snapshot.exists) {
       userData = snapshot.data() as Map<String, dynamic>;
-      if(userData['displayName'] != null) {
+      if (userData['displayName'] != null) {
         name = userData['displayName'];
       }
     }
@@ -256,13 +263,14 @@ Future<String> getDisplayName() async {
 }
 
 Future<String> updateProfileImage(File image) async {
-  String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
+  String? email =
+      FirebaseAuth.instance.currentUser?.email; //Get the user's email address
 
   final ref = FirebaseStorage.instance
-    .ref()
-    .child('profileImages')
-    .child(email.toString() + '.jpg');
-  
+      .ref()
+      .child('profileImages')
+      .child(email.toString() + '.jpg');
+
   await ref.putFile(image);
   String url = await ref.getDownloadURL();
 
@@ -270,39 +278,41 @@ Future<String> updateProfileImage(File image) async {
 }
 
 Future<String> getProfileImageURL() async {
-  String? email = FirebaseAuth.instance.currentUser?.email; //Get the user's email address
+  String? email =
+      FirebaseAuth.instance.currentUser?.email; //Get the user's email address
   String url = "";
   try {
     url = await FirebaseStorage.instance
-      .ref()
-      .child('profileImages')
-      .child(email.toString() + '.jpg')
-      .getDownloadURL();
+        .ref()
+        .child('profileImages')
+        .child(email.toString() + '.jpg')
+        .getDownloadURL();
     return url;
   } catch (_) {
     url = await FirebaseStorage.instance
-      .ref()
-      .child('profileImages')
-      .child('default.jpg').getDownloadURL();
+        .ref()
+        .child('profileImages')
+        .child('default.jpg')
+        .getDownloadURL();
     return url;
   }
 }
-
 
 Future<NetworkImage> getOtherProfileImage(email) async {
   String url = "";
   try {
     url = await FirebaseStorage.instance
-      .ref()
-      .child('profileImages')
-      .child(email.toString() + '.jpg')
-      .getDownloadURL();
+        .ref()
+        .child('profileImages')
+        .child(email.toString() + '.jpg')
+        .getDownloadURL();
     return NetworkImage(url.toString());
   } catch (_) {
     url = await FirebaseStorage.instance
-      .ref()
-      .child('profileImages')
-      .child('default.jpg').getDownloadURL();
+        .ref()
+        .child('profileImages')
+        .child('default.jpg')
+        .getDownloadURL();
     return NetworkImage(url.toString());
   }
 }

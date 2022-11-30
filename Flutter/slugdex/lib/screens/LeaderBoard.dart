@@ -270,7 +270,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
                                     ),
                                     //Print number of entries discovered
                                     trailing: Text(
-                                        "${data['entriesDiscovered'].toString()}\t${data['averageDiscoveryTime'].toString()}",
+                                        "${data['entriesDiscovered'].toString()} | ${data['averageDiscoveryTime'].toString()}",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                   );
@@ -359,7 +359,11 @@ class _LeaderBoardState extends State<LeaderBoard> {
                           SizedBox(
                             width: 12,
                           ),
-                          Text(title)
+                          Expanded(
+                              child: Text(
+                            title.toString(),
+                            overflow: TextOverflow.ellipsis,
+                          )),
                         ],
                       ),
                       leading: Text(

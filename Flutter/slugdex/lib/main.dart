@@ -7,6 +7,7 @@ import 'package:slugdex/provider/LocationProvider.dart';
 import 'dart:core';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
+import 'package:flutter/services.dart';
 
 //Firebase Imports
 import 'package:firebase_core/firebase_core.dart';
@@ -39,6 +40,12 @@ Future<void> main() async {
   // Initialize the settings plugin
   await fss.Settings.init();
 
+  // Lock app to portrait mode orientations
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   runApp(MyApp());
 }
 

@@ -70,7 +70,7 @@ class DiscoveryAnimationState extends State<StatefulWidget>
         alignment: Alignment.topCenter,
         children: [
           Positioned(
-            top: 115,
+            top:  (MediaQuery.of(context).size.height / 2.90) - 130,
             child: Container(
               width: 225.0,
               height: 225.0,
@@ -84,7 +84,7 @@ class DiscoveryAnimationState extends State<StatefulWidget>
           ),
           //// Rotating Zwidget!
           Positioned(
-            top: 115,
+            top:  (MediaQuery.of(context).size.height / 2.90) - 130,
             child: ZWidget.bothDirections(
               depth: 50,
               rotationX: 0.0,

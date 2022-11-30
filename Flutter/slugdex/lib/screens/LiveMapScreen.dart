@@ -110,7 +110,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     //mapType: MapType.hybrid,
                     mapType: _currentMapType,
                     initialCameraPosition: CameraPosition(
-                        target: model.locationPosition!, zoom: 18),
+                        target: model.locationPosition!, zoom: 16.0),
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
                     rotateGesturesEnabled: false,
@@ -547,7 +547,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     // Animate camera to desired position and zoom
     CameraPosition newPosition = CameraPosition(
       target: LatLng(entryList[id - 1].latitude!, entryList[id - 1].longitude!),
-      zoom: 18.0, // change to desired zoom level
+      zoom: 17.5, // change to desired zoom level
     );
     mapController.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }

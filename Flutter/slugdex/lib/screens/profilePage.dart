@@ -66,7 +66,6 @@ class _ProfilePageState extends State<ProfilePage> {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(32.0), topRight: Radius.circular(32.0)),
         onPanelSlide: (double pos) => setState(() {
-          //pokeballScale = pos * (panelHeightOpen - panelHeightClosed) + init_pokeballScale;
           double heightRange = 1 - 0;
           double pokeScaleRange = min_pokeballScale - max_pokeballScale;
           pokeballScale =
@@ -143,11 +142,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(displayNameState,
-                        textScaleFactor: 2.0,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: textColor)),
+                          textScaleFactor: 2.0,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: textColor)),
                     Text(userEmail,
                         textScaleFactor: 1.0,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: textColor)),
                   ])),
