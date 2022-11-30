@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/main.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
+import 'package:slugdex/settings/settingsTools.dart';
 
 class loginScreen extends StatefulWidget {
   final VoidCallback showCreateAccountScreen;
@@ -20,19 +21,27 @@ class _loginScreenState extends State<loginScreen> {
   final _passwordController = TextEditingController();
 
   bool loginFailed = false;
+  bool loggingIn = false;
 
   Future signIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
-      //Initialize entryList and load user's discovered entries into entryList
-      entryList = await loadEntry();
-      loadUserDiscovered();
-    } catch (_) {
-      setState(() {
-        loginFailed = true;
-      });
+    if (!loggingIn) {
+      try {
+        loggingIn = true;
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim());
+        //Initialize entryList and load user's discovered entries into entryList
+        entryList = await loadEntry();
+        loadUserDiscovered(entryList);
+        displayName = await getDisplayName();
+        profileImageURL = await getProfileImageURL();
+        loggingIn = false;
+      } catch (_) {
+        loggingIn = false;
+        setState(() {
+          loginFailed = true;
+        });
+      }
     }
   }
 
@@ -51,124 +60,131 @@ class _loginScreenState extends State<loginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: slugdex_yellow,
         body: SafeArea(
             child: Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-              child: const Text('SlugDex',
-                  style: TextStyle(
-                      inherit: true,
-                      color: Colors.white,
-                      fontSize: 75,
-                      shadows: [
-                        Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
-                        Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
-                        Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
-                        Shadow(offset: Offset(-1.5, -1.5), color: Colors.black),
-                      ])),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: "Email"),
+          child: SingleChildScrollView(
+              child: Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  fit: StackFit.passthrough,
+                  children: [
+                Positioned(
+                    top: -150,
+                    left: 10.0,
+                    child: IconWidget(
+                      icon: Icons.catching_pokemon,
+                      color: Colors.transparent,
+                      icon_color: Colors.white,
+                      radius: 0,
+                      size: 700,
                     )),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-                    child: TextField(
-                      obscureText: true,
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: "Password"),
-                    )),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 0.0),
-              child: getErrorMessage(),
-            ),
-            InkWell(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 15.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(12),
+                Column(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 10.0),
+                        child: title),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                            child: TextField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none, hintText: "Email"),
+                            )),
+                      ),
                     ),
-                    child: Center(
-                        child: Container(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+                            child: TextField(
+                              obscureText: true,
+                              controller: _passwordController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Password"),
+                            )),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25.0, vertical: 0.0),
+                      child: getErrorMessage(),
+                    ),
+                    InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25.0, vertical: 15.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                                child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            )),
+                          ),
+                        ),
+                        onTap: () {
+                          signIn();
+                        }),
+                    InkWell(
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account?",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              " Create one",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.blue),
+                            ),
+                          ],
                         ),
                       ),
-                    )),
-                  ),
-                ),
-                onTap: () {
-                  signIn();
-                }),
-            InkWell(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 25.0, vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have and account?",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black),
-                    ),
-                    Text(
-                      " Create one",
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.blue),
+                      onTap: widget.showCreateAccountScreen,
                     ),
                   ],
                 ),
-              ),
-              onTap: widget.showCreateAccountScreen,
-            ),
-          ],
-        ),
-      ),
-    )));
+              ])),
+        )));
   }
 }

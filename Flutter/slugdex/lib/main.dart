@@ -7,6 +7,7 @@ import 'package:slugdex/provider/LocationProvider.dart';
 import 'dart:core';
 import 'package:slugdex/db/ManageUserData.dart';
 import 'package:slugdex/Entry/entryReadWrite.dart';
+import 'package:flutter/services.dart';
 
 //Firebase Imports
 import 'package:firebase_core/firebase_core.dart';
@@ -15,26 +16,36 @@ import 'firebase_options.dart';
 // Settings Imports
 import 'package:flutter_settings_screens/flutter_settings_screens.dart'
     as fss; //Naming conflict arose, so use prefix fss
-
+import 'package:slugdex/settings/settingsTools.dart';
 
 List<Entry> entryList = []; //Global List of all entries
-bool Debug = true;
+
+String displayName = "";
+String profileImageURL = "";
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   String? email = FirebaseAuth.instance.currentUser?.email;
   if (email != null) {
     entryList = await loadEntry();
-    loadUserDiscovered();
-  }//end if 
+    loadUserDiscovered(entryList);
+    displayName = await getDisplayName();
+    profileImageURL = await getProfileImageURL();
+  } //end if
 
   // Initialize the settings plugin
   await fss.Settings.init();
 
+  // Lock app to portrait mode orientations
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   runApp(MyApp());
 }
 
@@ -52,6 +63,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'SlugDex',
-            home: checkLogin()));
+            home: checkLogin(),
+            theme: ThemeData(primarySwatch: MaterialColor(slugdex_yellow.value, slugdex_yellow_map))));
   }
 }

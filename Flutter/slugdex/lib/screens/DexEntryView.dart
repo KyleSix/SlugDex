@@ -41,8 +41,6 @@ class dexEntryView extends StatelessWidget {
     return Scaffold(
       backgroundColor: backColor,
       appBar: AppBar(
-        title: const Text('SlugDex'),
-        centerTitle: true,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -74,7 +72,7 @@ class dexEntryView extends StatelessWidget {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 10),
+                          padding: const EdgeInsets.fromLTRB(10, 5, 0, 10),
                         child: Text(name, style: const TextStyle(fontSize: 50, fontWeight: FontWeight.w500, color: Colors.white),),
                         ),
                         Container(
@@ -103,7 +101,7 @@ class dexEntryView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 35, 0, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 40, 0, 10),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Rarity: " + rarity, style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.black),),
@@ -143,25 +141,25 @@ class dexEntryView extends StatelessWidget {
 }
 
 Widget _getHintButton(Entry entry, Color backColor, BuildContext context) {
-  if (entry.discovered == 1) {
-    return Container();
-  } else {
-    return FloatingActionButton(
-        backgroundColor: backColor,
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(
-              // Goes to the LiveMapScreen and removes all previous navigations
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LiveMapScreen(
-                        // Pass in the entry ID to move to
-                        entryID: entry.iD!,
-                      )),
-              (Route<dynamic> route) => false);
-        },
-              child: const Icon(Icons.question_mark, color: Colors.white)
-      );
-  }
+  return FloatingActionButton.extended(
+      backgroundColor: backColor,
+      onPressed: () {
+        Navigator.pushAndRemoveUntil(
+            // Goes to the LiveMapScreen and removes all previous navigations
+            context,
+            MaterialPageRoute(
+                builder: (context) => LiveMapScreen(
+                      // Pass in the entry ID to move to
+                      entryID: entry.iD!,
+                    )),
+            ModalRoute.withName("/map"));
+      },
+      label: Row(children: [
+        Text("Locate"),
+        SizedBox(width: 6.0,),
+        Icon(Icons.location_searching, color: Colors.white)
+        ],)
+    );
 }
 
 Border getBorderForImageView(Entry entry) {

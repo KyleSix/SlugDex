@@ -1,9 +1,78 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/main.dart';
 
+// App Accent Color
 const Color slugdex_yellow = Color.fromARGB(255, 255, 230, 0);
+Map<int, Color> slugdex_yellow_map = {
+  50: slugdex_yellow.withOpacity(.1),
+  100: slugdex_yellow.withOpacity(.2),
+  200: slugdex_yellow.withOpacity(.3),
+  300: slugdex_yellow.withOpacity(.4),
+  400: slugdex_yellow.withOpacity(.5),
+  500: slugdex_yellow.withOpacity(.6),
+  600: slugdex_yellow.withOpacity(.7),
+  700: slugdex_yellow.withOpacity(.8),
+  800: slugdex_yellow.withOpacity(.9),
+  900: slugdex_yellow.withOpacity(1),
+};
 
+// Logo Formatting
+Text logo = Text("SlugDex",
+    style: TextStyle(
+      fontFamily: "PocketMonk",
+      fontSize: 40.0,
+      //color: Colors.black,
+      foreground: Paint()
+        ..strokeWidth = 1
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke,
+
+      shadows: [
+        Shadow(offset: Offset(-1, 1), color: Colors.black),
+        Shadow(offset: Offset(1, -1), color: Colors.black),
+        Shadow(offset: Offset(1, 1), color: Colors.black),
+        Shadow(offset: Offset(-1, -1), color: Colors.black),
+      ],
+    ));
+
+Text title = Text("SlugDex",
+    style: TextStyle(
+      fontFamily: "PocketMonk",
+      fontSize: 80.0,
+      //color: Colors.black,
+      foreground: Paint()
+        ..strokeWidth = 1
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke,
+
+      shadows: [
+        Shadow(offset: Offset(-1, 1), color: Colors.black),
+        Shadow(offset: Offset(1, -1), color: Colors.black),
+        Shadow(offset: Offset(1, 1), color: Colors.black),
+        Shadow(offset: Offset(-1, -1), color: Colors.black),
+      ],
+    ));
+
+class profilePic extends StatefulWidget {
+  @override
+  State<profilePic> createState() => profilePicState();
+}
+
+class profilePicState extends State<profilePic> {
+  String imageUrlState = profileImageURL;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(120.0),
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+          image: NetworkImage(imageUrlState),
+          fit: BoxFit.cover,
+        ))));
+  }
+}
 
 // This class wraps an Icon in a container of a specific shape and color
 // Usage: IconWidget(icon: Icons.menu, color: Colors.black)
@@ -58,7 +127,7 @@ class WrapperWidget extends StatelessWidget {
           border: Border.all(
             color: background_color,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          borderRadius: BorderRadius.all(Radius.circular(24.0)),
           color: background_color,
         ),
         child: Column(

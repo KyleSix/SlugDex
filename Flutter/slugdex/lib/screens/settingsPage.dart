@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:slugdex/auth/authPage.dart';
+import 'package:slugdex/screens/testImageMap.dart';
 import 'package:slugdex/settings/settingsTools.dart';
 import 'package:slugdex/screens/editProfilePage.dart';
+import 'package:slugdex/main.dart';
+import 'package:slugdex/screens/LiveMapScreen.dart';
 
 const double spacing = 16.0;
 const double icon_size = 24.0;
@@ -16,11 +20,13 @@ class _SettingsPageState extends State<SettingsPage> {
   // Get User info
   final User? user = FirebaseAuth.instance.currentUser;
 
+  String displayNameState = displayName;
+  Widget profilePicState = profilePic();
+
   // Configure settings
   bool logoutEnabled = (FirebaseAuth.instance.currentUser != null)
       ? true
       : false; // Check to see if we're logged in
-
   // Store settings
   static const keyDevMode = "key-dev-mode";
 
@@ -44,18 +50,25 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Hero(
-                        tag: 'SettingsBtn',
-                        child: IconWidget(
-                          icon: Icons.person,
-                          color: Colors.white,
-                          size: 64.0,
-                          radius: 64.0,
-                          icon_color: Colors.black,
+                        tag: 'ProfileBtn',
+                        child: Container(
+                          height: 80.0,
+                          width: 80.0,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 2),
+                              borderRadius: BorderRadius.circular(120)),
+                          child: profilePicState,
                         )),
                     const SizedBox(width: 24.0),
-                    Text("Sammy Slug",
-                        textScaleFactor: 2.0,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Container(
+                      width: MediaQuery.of(context).size.width - 140, // width for Username text to overflow
+                      child:
+                        Text(displayNameState,
+                            overflow: TextOverflow.ellipsis,
+                            textScaleFactor: 2.0,
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    
                   ],
                 ),
               ],
@@ -90,11 +103,13 @@ class _SettingsPageState extends State<SettingsPage> {
               children: <Widget>[
                 const SizedBox(height: 4),
                 WrapperWidget(children: [
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 2),   
+                  //buildFeedback(), // Feedback Button
+                  //const SizedBox(height: spacing),
+                  buildToggleMap(), // Feedback Button
+                  const SizedBox(height: spacing),
                   buildBugReport(), // Bug Report Button
-                  const SizedBox(height: spacing),
-                  buildFeedback(), // Feedback Button
-                  const SizedBox(height: spacing),
+                  //const SizedBox(height: spacing),
                   buildDevMode(), // Dev Mode Button
                   const SizedBox(height: 2),
                 ]),
@@ -107,11 +122,17 @@ class _SettingsPageState extends State<SettingsPage> {
   /// Edit Profile Settings ///
   Widget buildEditProfile() => SimpleSettingsTile(
         title: "Edit Profile",
-        subtitle: "Appearance, Username",
+        subtitle: "Appearance, Display Name",
         leading: IconWidget(
             icon: Icons.edit_note, color: Colors.greenAccent, size: icon_size),
         enabled: logoutEnabled,
-        child: EditProfilePage(),
+        onTap: () async{
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage()));
+          setState(() {
+            displayNameState = displayName;
+            profilePicState = new profilePic();
+          });
+        },
       );
 
   /// Logout Setting ///
@@ -130,7 +151,9 @@ class _SettingsPageState extends State<SettingsPage> {
         );
         logoutEnabled = false; // Set our logout flag to disable setting
         await FirebaseAuth.instance.signOut(); // do sign out
-        Navigator.pop(context); // Go back to sign-in screen
+        Navigator.popUntil(
+            context, (route) => false); // Go back to sign-in screen
+        Navigator.push(context, MaterialPageRoute(builder: (context) => checkLogin()));
       });
 
   /// Delete Account Setting ///
@@ -165,9 +188,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     );
                     logoutEnabled = false;
                     await user?.delete(); // do account deletion
-                    Navigator.pop(
-                        context); // Go back to sign-in screen, 2 pops needed
-                    Navigator.pop(context);
+                    Navigator.popUntil(
+                        context, (route) => false); // Go back to sign-in screen
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => checkLogin()));
                   },
                   child: const Text('OK'),
                 ),
@@ -176,15 +199,16 @@ class _SettingsPageState extends State<SettingsPage> {
           ));
 
   Widget buildBugReport() => SimpleSettingsTile(
-        title: "Report A Bug",
+        title: "Custom Map Preview",
         leading: IconWidget(
-            icon: Icons.bug_report, color: Colors.grey, size: icon_size),
+            icon: Icons.developer_board, color: Colors.grey, size: icon_size),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text("Feature in progress..."),
-                duration: const Duration(milliseconds: 2000)),
+                content: Text("Art by Annalivia Martin-Straw"),
+                duration: const Duration(milliseconds: 3000)),
           );
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ImageMap(title:"Custom Map")));
         },
       );
 
@@ -201,13 +225,28 @@ class _SettingsPageState extends State<SettingsPage> {
         },
       );
 
+  Widget buildToggleMap() => SimpleSettingsTile(
+    title: "Toggle Map Type",
+    leading: IconWidget(
+        icon: Icons.map, color: Colors.grey, size: icon_size),
+    onTap: () {
+      toggleMapType();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("The Map appearance has been changed"),
+            duration: const Duration(milliseconds: 2000)),
+      );
+    },
+  );
+
   Widget buildDevMode() => SwitchSettingsTile(
         title: "Developer Mode",
         subtitle: "",
         settingKey: keyDevMode,
         leading: IconWidget(
             icon: Icons.developer_mode, color: Colors.grey, size: icon_size),
-        onChange: (value) {
+        onChange: (value) async {
+          await Settings.setValue<bool>(keyDevMode, value);
           debugPrint(keyDevMode + ": $value");
         },
       );
