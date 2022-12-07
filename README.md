@@ -11,7 +11,7 @@ Have you ever wondered if you were missing out on seeing all that campus has to 
 VERSION 1.0
 
 Demo:
-[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://docs.google.com/file/d/126rxzYUa39pv1cqkHi5JH8OsyX-D50nV/preview)
+[![Watch the video](https://drive.google.com/file/d/1vKwaNvXDB2GFJ0jaQjOaFjo1f_UIveM8/view?usp=sharing)](https://docs.google.com/file/d/126rxzYUa39pv1cqkHi5JH8OsyX-D50nV/preview)
 
 Installation (BETA, Android Only):
     - On your device you will need to enable developer mode and allow installation from unknown sources
