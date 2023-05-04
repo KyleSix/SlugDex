@@ -118,7 +118,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
                     tiltGesturesEnabled: false,
                     zoomGesturesEnabled: true,
                     zoomControlsEnabled: false,
-                    minMaxZoomPreference: const MinMaxZoomPreference(16, 19),
+                    //minMaxZoomPreference: const MinMaxZoomPreference(16, 19),
                     markers: populateClientMarkers(context),
                     circles: populateHintCircles(context),
                     onMapCreated: (controller) {
